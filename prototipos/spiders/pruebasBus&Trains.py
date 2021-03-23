@@ -35,8 +35,8 @@ body = {
       "card_ids": [
         "14127110"
       ],
-      "departure_station_id":23787,
-      "arrival_station_id":6668,
+      "departure_station_id":33349,
+      "arrival_station_id":6627,
       "departure_date":"2021-03-29T00:00:00+01:00",
       "systems":["busbud"]
     }
