@@ -8,11 +8,17 @@ def getPlaceStations(Place):
     url+='&q={Place}'.format(Place=Place)
 
     postform=requests.get(url)
+
     print(postform.json())
+    for station in postform.json()['stations']:
+      print(station['id'])
+      print(station['name'])
+      print(station['latitude'])
+      print(station['longitude'])
     
 
 
-print(getPlaceStations("Madrid"))
+#print(getPlaceStations("Madrid"))
 print(getPlaceStations("Burgos"))
 
 url='https://www.trainline.eu/api/v5_1/search'
@@ -38,23 +44,29 @@ body = {
       "departure_station_id":33349,
       "arrival_station_id":6627,
       "departure_date":"2021-03-29T00:00:00+01:00",
-      "systems":["busbud"]
+      "systems":["busbud"] #Busbud o Renfe
     }
 }
-#alfkdjs
-#      "systems":["sncf","db","busbud","idtgv","ouigo","trenitalia","ntv","hkx","renfe","timetable"]
 
-#2021-03-27T22:00:00
-#print(json.dumps(body))
-response=requests.post(url,headers=headers,data=json.dumps(body))
-print(dt.now().isoformat())
-Json=(response.json())
-for i in response.json():
-  print(i)
+def BuscaTrips(system,departure_station_id,arrival_station_id,departure_date):
+  body['search']['systems']=[system]
+  body['search']['departure_station_id']=departure_station_id
+  body['search']['arrival_station_id']=arrival_station_id
+  body['search']['departure_date']=departure_date
+  print(body)
+  try:  
+    response=requests.post(url,headers=headers,data=json.dumps(body))
+    for trip in response.json()['trips']:
+      print(trip['cents'])
+      print(trip['departure_date'])
+      print(trip['arrival_date'])
+      print('\n')
+
+  except Exception:
+    print("hola")
+    
+  
 
 
-for trip in Json['trips']:
-  print(trip['cents'])
-  print(trip['departure_date'])
-  print(trip['arrival_date'])
-  print('\n')
+fechaprueba=dt(2021,3,29)
+BuscaTrips("renfe",33349,9627,fechaprueba.isoformat())

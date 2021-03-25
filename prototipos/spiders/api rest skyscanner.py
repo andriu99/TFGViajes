@@ -3,7 +3,7 @@ import json
 import datetime
 from datetime import datetime as dt
 from scrapy.crawler import CrawlerProcess
-
+from scrapy import Request
 
 
 import scrapy
@@ -11,22 +11,19 @@ class scrapySkyscanner(scrapy.Spider):
     name = 'skyscannerspider'
     start_urls = ['https://www.skyscanner.es/transporte/vuelos']
 
-    prices=list()
-    arrivalTimes=list()
-    departureTimes=list()
+    
 
     def __init__(self,origin,destination,date):
-        self.origin=origin
-        self.destination=destination
-        self.date=date
+    
+        Strorigen=self.ProcesaString(self.FindAirport(origin))
+        Strdestino=self.ProcesaString(self.FindAirport(destination))
+        self.start_urls=[self.getUrl(Strorigen,Strdestino,date)]
 
-    def start_requests(self):
-        pass
+        
     
 
     """
     Encuentra el código del aeropuerto vía API-REST
-
     """
     def FindAirport(self,StrPlaceName):
         url = "https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/autosuggest/v1.0/ES/EUR/es-ES/"
@@ -55,40 +52,27 @@ class scrapySkyscanner(scrapy.Spider):
     """
     def getUrl(self,strAirportStart,strAirportEnd,date):
         url='https://www.skyscanner.es/transporte/vuelos'
-        url+='/{startPlace}/{endPlace}/{year}{month}{day}'.format(startPlace=strAirportStart,endPlace=strAirportEnd,year=date.year,month=str(date.month).zfill(2),day=date.day)
+        url+='/{startPlace}/{endPlace}/{year}{month}{day}'.format(startPlace=strAirportStart,endPlace=strAirportEnd,year=str(date.year)[2:],month=str(date.month).zfill(2),day=str(date.day).zfill(2))
         return url
 
-    def parse(self, response):
-        for title in response.css('.oxy-post-title'):
-            yield {'title': title.css('::text').get()}
+    def parse(self,response):
 
-        for next_page in response.css('a.next'):
-            yield response.follow(next_page, self.parse)
+        
+        print(response.url)
 
+    #def parse(self, response):
+     #   print('hola')
+        # for title in response.css('.oxy-post-title'):
+        #     yield {'title': title.css('::text').get()}
 
-
-
- 
-
-
-
-# print(ProcesaString(FindAirport('Sevilla')))
-# print(FindAirport('Barcelona'))
-
-# date=dt(2021,3,21)
-# url=(getUrl(ProcesaString(FindAirport('Sevilla')),ProcesaString(FindAirport('Barcelona')),date))
-# print(gethtml(url))
+        # for next_page in response.css('a.next'):
+        #     yield response.follow(next_page, self.parse)
 
 
 
-
-
-
-
-# if __name__=="__main__":
-#     process= CrawlerProcess()
-#     date=dt(2021,3,16)
-#     spider = BusTrainsScraper(True,str(date.isoformat()))
-#     process.crawl(BusTrainsScraper,True,str(date.isoformat()))
-    
-#     process.start()
+if __name__=="__main__":
+    process = CrawlerProcess({'USER_AGENT': 'AdsBot-Google'})
+    date=dt(2021,3,30)
+    process.crawl(scrapySkyscanner,origin='Madrid',destination='Barcelona',date=date)
+    process.start()
+    print("eoo")
