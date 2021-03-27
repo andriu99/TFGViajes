@@ -3,23 +3,19 @@ import json
 import requests
 from datetime import datetime as dt
 
+"""
+Nos devuelve id, nombre, latitud y longitud de la estación buscada
+"""
 def getPlaceStations(Place):
     url='https://www.trainline.eu/api/v5/stations?context=search'
     url+='&q={Place}'.format(Place=Place)
 
     postform=requests.get(url)
 
-    print(postform.json())
     for station in postform.json()['stations']:
-      print(station['id'])
-      print(station['name'])
-      print(station['latitude'])
-      print(station['longitude'])
-    
+      yield station['id'],station['name'],station['latitude'],station['longitude']
+   
 
-
-#print(getPlaceStations("Madrid"))
-print(getPlaceStations("Burgos"))
 
 url='https://www.trainline.eu/api/v5_1/search'
 headers = {
@@ -48,25 +44,27 @@ body = {
     }
 }
 
+"""
+Obtenemos precio, fecha de salida y fecha de llegada para cada viaje.
+"""
 def BuscaTrips(system,departure_station_id,arrival_station_id,departure_date):
   body['search']['systems']=[system]
   body['search']['departure_station_id']=departure_station_id
   body['search']['arrival_station_id']=arrival_station_id
   body['search']['departure_date']=departure_date
-  print(body)
   try:  
     response=requests.post(url,headers=headers,data=json.dumps(body))
     for trip in response.json()['trips']:
-      print(trip['cents'])
-      print(trip['departure_date'])
-      print(trip['arrival_date'])
-      print('\n')
-
+      yield trip['cents'],trip['departure_date'],trip['arrival_date']
+   
   except Exception:
-    print("hola")
+    print("Fallo")
     
   
+if __name__=="__main__":
+  for id,name,latitude,longitude in (getPlaceStations("Madrid")):
+    print(name,id,latitude,longitude)
 
-
-fechaprueba=dt(2021,3,29)
-BuscaTrips("renfe",33349,9627,fechaprueba.isoformat())
+  fechaprueba=dt(2021,3,29)
+  for price,fechaSal,fechaLlegada in BuscaTrips("renfe",33349,6627,fechaprueba.isoformat()):
+    print(price,fechaSal,fechaLlegada)

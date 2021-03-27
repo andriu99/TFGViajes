@@ -45,8 +45,8 @@ def ProcesaJsonBlablaCar(response_json):
 
   
 
-
-# fecha=dt(2021,3,20)
-# json=ResultadosBlablaCar(['41.3887900','2.1589900'],['40.416775','-3.703791'],fecha)
-# for i in ProcesaJsonBlablaCar(json):
-#     print(i)
+if __name__=="__main__":
+    fecha=dt(2021,3,30)
+    json=ResultadosBlablaCar(['41.3887900','2.1589900'],['40.416775','-3.703791'],fecha)
+    for link,salida,llegada,precio in ProcesaJsonBlablaCar(json):
+        print(link,salida,llegada,precio)
