@@ -13,6 +13,7 @@ def getPlaceStations(Place):
     postform=requests.get(url)
 
     for station in postform.json()['stations']:
+      print(station)
       yield station['id'],station['name'],station['latitude'],station['longitude']
    
 
@@ -40,7 +41,7 @@ body = {
       "departure_station_id":33349,
       "arrival_station_id":6627,
       "departure_date":"2021-03-29T00:00:00+01:00",
-      "systems":["busbud"] #Busbud o Renfe
+      "systems":[]
     }
 }
 
@@ -48,7 +49,7 @@ body = {
 Obtenemos precio, fecha de salida y fecha de llegada para cada viaje.
 """
 def BuscaTrips(system,departure_station_id,arrival_station_id,departure_date):
-  body['search']['systems']=[system]
+  body['search']['systems']=system
   body['search']['departure_station_id']=departure_station_id
   body['search']['arrival_station_id']=arrival_station_id
   body['search']['departure_date']=departure_date
@@ -65,6 +66,6 @@ if __name__=="__main__":
   for id,name,latitude,longitude in (getPlaceStations("Madrid")):
     print(name,id,latitude,longitude)
 
-  fechaprueba=dt(2021,3,29)
-  for price,fechaSal,fechaLlegada in BuscaTrips("renfe",33349,6627,fechaprueba.isoformat()):
+  fechaprueba=dt(2021,4,13)
+  for price,fechaSal,fechaLlegada in BuscaTrips(["busbud"],6663,24410,fechaprueba.isoformat()):
     print(price,fechaSal,fechaLlegada)
