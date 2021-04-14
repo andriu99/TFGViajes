@@ -7,9 +7,15 @@ import urllib.parse
 Encuentra el código del aeropuerto de la ciudad deseada vía API-REST
 """
 def FindAirport(token,StrPlaceName):
-    url='https://partners.api.skyscanner.net/apiservices/autosuggest/v1.0/'
-    url+='{country}/{currency}/{locale}?query={query}&apiKey={apiKey}'.format(country='ES',currency='EUR',locale='es-ES',query=StrPlaceName,apiKey=token)
-    response = requests.request("GET", url)
+    params = (
+      ('query',StrPlaceName),
+      ('apiKey',token.json()),
+    )
+    response = requests.get('https://partners.api.skyscanner.net/apiservices/autosuggest/v1.0/ES/EUR/es-ES', params=params)
+    # print(response.url)
+    # url='https://partners.api.skyscanner.net/apiservices/autosuggest/v1.0/'
+    # url+='{country}/{currency}/{locale}?query={query}&apiKey={apiKey}'.format(country='ES',currency='EUR',locale='es-ES',query=StrPlaceName,apiKey=token)
+      # response = requests.request("GET", url)
     responseJSON=response.json()
     lugares=responseJSON['Places']
     return lugares[0]['PlaceId']
@@ -52,7 +58,7 @@ def getFlights(token,headers,originplace,destinationplace,date,nadults,nchildren
       'adults': '{numadul}'.format(numadul=nadults),
       'children': '{numchildren}'.format(numchildren=nchildren),
       'infants': '{numinfants}'.format(numinfants=ninfants),
-      'apikey': '{key}'.format(key=token)
+      'apikey': '{key}'.format(key=token.json())
 
   }
   Json=getJson(headers,data)
@@ -74,12 +80,11 @@ def getFlights(token,headers,originplace,destinationplace,date,nadults,nchildren
 
 if __name__=="__main__":
   token=requests.get("https://partners.api.skyscanner.net/apiservices/token/v2/gettoken?apiKey=ra66933236979928")
-  token=urllib.parse.quote(token.json())
+  #token=urllib.parse.quote(token.json())
   headers = {
       'Content-Type': 'application/x-www-form-urlencoded',
 
   }
-  print(headers)
 
   print(FindAirport(token,"Burgos"))
   FlightGenerator=(getFlights(token,headers,"MAD-sky","BCN-sky",dt(2021,4,20),1,0,0))
