@@ -13,11 +13,7 @@ def FindAirport(token,StrPlaceName):
       ('apiKey',token.json()),
     )
     response = requests.get('https://partners.api.skyscanner.net/apiservices/autosuggest/v1.0/ES/EUR/es-ES', params=params)
-    print(response.text)
-    # print(response.url)
-    # url='https://partners.api.skyscanner.net/apiservices/autosuggest/v1.0/'
-    # url+='{country}/{currency}/{locale}?query={query}&apiKey={apiKey}'.format(country='ES',currency='EUR',locale='es-ES',query=StrPlaceName,apiKey=token)
-      # response = requests.request("GET", url)
+  
     responseJSON=response.json()
     lugares=responseJSON['Places']
     return lugares[0]['PlaceId']
@@ -26,19 +22,18 @@ def FindAirport(token,StrPlaceName):
 Obtengo el Json con la información de los vuelos según los parámetros dados
 """
 def getJson(headers,data):
-  print(data)
   session=requests.Session()
 
   response = session.post('https://partners.api.skyscanner.net/apiservices/pricing/v1.0', headers=headers, data=data)
   respuestaDict=response.__dict__ #Obtengo el diccionario para posteriormente encontrar la SessionKey
-  print(respuestaDict)
   CadenaConSessionKey=respuestaDict['headers']['Location']
   posComienzoSessionKey = np.where(np.array(list(CadenaConSessionKey)) == '/')[0][-1]+1 #Encuentra la posición del último / de la cadena
   SessionKey=CadenaConSessionKey[posComienzoSessionKey:] #La Session Key será desde la última / hasta el final
   params={
       'stops':0, #Sólo busco vuelos directos
+      'apiKey':data['apikey'],
   }
-  response=session.get('https://partners.api.skyscanner.net/apiservices/pricing/v1.0/{SK}?apiKey={token}'.format(SK=SessionKey,token=data['apikey']),params=params)
+  response=session.get('https://partners.api.skyscanner.net/apiservices/pricing/v1.0/{SK}'.format(SK=SessionKey),params=params)
 
   return response.json()
 
@@ -82,7 +77,6 @@ def getFlights(token,headers,originplace,destinationplace,date,nadults,nchildren
 
 if __name__=="__main__":
   token=requests.get("https://partners.api.skyscanner.net/apiservices/token/v2/gettoken?apiKey=prtl6749387986743898559646983194")
-  #token=urllib.parse.quote(token.json())
   print(token)
   headers = {
       'Content-Type': 'application/x-www-form-urlencoded',
