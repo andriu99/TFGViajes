@@ -1,6 +1,6 @@
 from django.db import models
 import requests 
-import json
+from json import dumps
 
 #help: https://stackoverflow.com/questions/58558989/what-does-djangos-property-do
 class request(models.Model):
@@ -30,7 +30,7 @@ class request(models.Model):
             return requests.get(baseUrl+self.PartToaddToBaseUrl,params=structureWithValues)
         else:
             if typeOfData=='str':
-                structureWithValues=json.dumps(structureWithValues)
+                structureWithValues=dumps(structureWithValues)
 
             return requests.post(baseUrl+self.PartToaddToBaseUrl,data=structureWithValues,headers=dict(self.headers))
 
@@ -45,6 +45,26 @@ class RESTApi(models.Model):
     BaseUrl=models.CharField(max_length=50)
     APIKey=models.CharField(max_length=50)
     Requests = models.ForeignKey(request, on_delete=models.CASCADE)
+
+
+class node(models.Model):
+    code=models.CharField(max_length=10)
+    latitude=models.CharField(max_length=30)
+    longitude=models.CharField(max_length=30)
+    name=models.CharField(max_length=70)
+
+class bustrainStations(models.Model):
+    latitude=models.CharField(max_length=30)
+    longitude=models.CharField(max_length=30)
+    name=models.CharField(max_length=70)
+    idTrainline=models.IntegerField()
+    
+
+class airports(models.Model):
+    latitude=models.CharField(max_length=30)
+    longitude=models.CharField(max_length=30)
+    placeName=models.CharField(max_length=70)
+    airportCode=models.CharField(max_length=5)
     
   
 
