@@ -1,6 +1,9 @@
 from django.db import models
 import requests 
 from json import dumps
+from .funtionsRequest.airportsRequests import *
+from .funtionsRequest.blablacarRequests import *
+from .funtionsRequest.bustrainRequests import *
 
 #help: https://stackoverflow.com/questions/58558989/what-does-djangos-property-do
 class request(models.Model):
