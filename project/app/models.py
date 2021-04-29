@@ -9,7 +9,7 @@ class request(models.Model):
     PartToaddToBaseUrl=models.CharField(max_length=200)
     funcToExtractDataFromJsonName=models.CharField(max_length=100)
     ParamsOrDataDictStructure=models.JSONField()
-    headers=models.JSONField(null=True)
+    headers=models.JSONField(blank=True)
 
     class Suit(models.TextChoices):
         GET = 'GET'
