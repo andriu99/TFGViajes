@@ -49,22 +49,18 @@ class RESTApi(models.Model):
 
 class node(models.Model):
     code=models.CharField(max_length=10)
-    latitude=models.CharField(max_length=30)
-    longitude=models.CharField(max_length=30)
     name=models.CharField(max_length=70)
-
-class bustrainStations(models.Model):
     latitude=models.CharField(max_length=30)
     longitude=models.CharField(max_length=30)
-    name=models.CharField(max_length=70)
-    idTrainline=models.IntegerField()
-    
+    class Suit(models.TextChoices):
+        STATION = 'S'
+        AIRPORT = 'A'
+     
 
-class airports(models.Model):
-    latitude=models.CharField(max_length=30)
-    longitude=models.CharField(max_length=30)
-    placeName=models.CharField(max_length=70)
-    airportCode=models.CharField(max_length=5)
+    nodeType = models.CharField(choices=Suit.choices,max_length=5)
+
+
+
     
   
 
