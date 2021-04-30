@@ -1,9 +1,9 @@
 from django.db import models
 import requests 
 from json import dumps
-from .funtionsRequest.airportsRequests import *
-from .funtionsRequest.blablacarRequests import *
-from .funtionsRequest.bustrainRequests import *
+from funtionsRequest.airportsRequests import *
+from funtionsRequest.blablacarRequests import *
+from funtionsRequest.bustrainRequests import *
 
 #help: https://stackoverflow.com/questions/58558989/what-does-djangos-property-do
 class request(models.Model):
@@ -22,7 +22,7 @@ class request(models.Model):
     typeRequests = models.CharField(choices=Suit.choices,max_length=5)
 
     @property
-    def getJson(self,baseUrl,listParamsValues,typeOfData=""):
+    def getResponse(self,baseUrl,listParamsValues,typeOfData=""):
         structureWithValues=dict(self.ParamsOrDataDictStructure)
         contIndex=0
         for key in structureWithValues.keys():
@@ -40,8 +40,8 @@ class request(models.Model):
 
     @property
     def executeFunction(self):
-        json=self.getJson()
-        return exec(self.funcToExtractDataFromJsonName+'(json)')
+        response=self.getResponse()
+        return exec("""self.funcToExtractDataFromJsonName(response)""")
 
 
 class RESTApi(models.Model):

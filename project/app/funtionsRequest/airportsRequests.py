@@ -1,5 +1,5 @@
-
 import numpy as np
+
 
 def getTokenOrFlightData(response):
     return response.json()
