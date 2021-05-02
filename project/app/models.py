@@ -16,7 +16,7 @@ class RESTApi(models.Model):
     APIKey=models.CharField(max_length=50)
 
 
-    def __str__:
+    def __str__(self):
         return self.name
 
 
@@ -36,7 +36,6 @@ class Request(models.Model):
     headers=models.JSONField(blank=True)
 
     RApi = models.ForeignKey(RESTApi, on_delete=models.CASCADE,related_name='requests')
-
 
     
     @property
@@ -63,8 +62,10 @@ class Request(models.Model):
         return exec("""functionName(response)""")
 
     
-    def __str__:
+    def __str__(self):
         return self.name
+    
+   
 
 
 
