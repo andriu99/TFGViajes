@@ -11,12 +11,17 @@ from json import dumps
 
 
 class RESTApi(models.Model):
+    name=models.CharField(max_length=50)
     BaseUrl=models.CharField(max_length=50)
     APIKey=models.CharField(max_length=50)
 
 
+    def __str__:
+        return self.name
+
+
 class Request(models.Model):
-    
+    name=models.CharField(max_length=50)
     description=models.CharField(max_length=200)
     PartToaddToBaseUrl=models.CharField(max_length=200)
     funcToExtractDataFromJsonName=models.CharField(max_length=100)
@@ -30,7 +35,7 @@ class Request(models.Model):
     typeRequests = models.CharField(choices=Suit.choices,max_length=5)
     headers=models.JSONField(blank=True)
 
-    RApi = models.ForeignKey(RESTApi, on_delete=models.CASCADE)
+    RApi = models.ForeignKey(RESTApi, on_delete=models.CASCADE,related_name='requests')
 
 
     
@@ -56,6 +61,11 @@ class Request(models.Model):
         response=self.getResponse(baseUrl,listParamsValues,typeOfData)
         functionName=self.funcToExtractDataFromJsonName
         return exec("""functionName(response)""")
+
+    
+    def __str__:
+        return self.name
+
 
 
 class Node(models.Model):
