@@ -1,12 +1,11 @@
-from .funtionsRequest.airportsRequests import getAirportID,getFlightInformation,getSessionKey,getTokenOrFlightData
-from .funtionsRequest.blablacarRequests import findBlablaTrips
-from .funtionsRequest.bustrainRequests import findTrips
+from funtionsRequest.airportsRequests import getAirportID,getFlightInformation,getSessionKey,getTokenOrFlightData
+from funtionsRequest.blablacarRequests import findBlablaTrips
+from funtionsRequest.bustrainRequests import findbustrainTrips
 
 
 from django.db import models
 import requests 
 from json import dumps
-
 #help: https://stackoverflow.com/questions/58558989/what-does-djangos-property-do
 
 
@@ -59,7 +58,7 @@ class Request(models.Model):
     def executeFunction(self,baseUrl,listParamsValues,typeOfData=""):
         response=self.getResponse(baseUrl,listParamsValues,typeOfData)
         functionName=self.funcToExtractDataFromJsonName
-        return exec("""functionName(response)""")
+        return globals()[functionName](response)
 
     
     def __str__(self):

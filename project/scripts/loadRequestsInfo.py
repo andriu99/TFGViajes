@@ -50,15 +50,20 @@ datagetSessionKey={
 getFlightInformationparams={
       'stops':0, #Sólo busco vuelos directos
       'apiKey':'token',
-  }
+}
+
+getGeoCatalogparams={
+  'apiKey':'token',
+}
 
 getToken=Request('getToken','Get a token with the API-key','token/v2/gettoken','getTokenOrFlightData',paramsGetSkyscToken,'GET',RApi=skyscannerRESTApi)
-findAirport=Request('getAirportID','Find an airport ID','autosuggest/v1.0/ES/EUR/es-ES','getAirportID',paramsFindAirport,'GET',RApi=skyscannerRESTApi)
+#findAirport=Request('getAirportID','Find an airport ID','autosuggest/v1.0/ES/EUR/es-ES','getAirportID',paramsFindAirport,'GET',RApi=skyscannerRESTApi)
 getSessionKey=Request('getSessionKey','Get the session key','pricing/v1.0','getSessionKey',datagetSessionKey,'POST',headers={'Content-Type': 'application/x-www-form-urlencoded'},RApi=skyscannerRESTApi)
 getFlightsInformation=Request('getFlightsInformation','Get information about flights','pricing/v1.0/',getFlightInformationparams,'GET',RApi=skyscannerRESTApi)##
+getGeoCatalogInformation=Request('getGeoCatalogInformation','Get information about airports','geo/v1.0',getGeoCatalogparams,'GET',RApi=skyscannerRESTApi)
 
 getToken.save()
-findAirport.save()
+#findAirport.save()
 getSessionKey.save()
 getFlightsInformation.save()
 
