@@ -1,26 +1,39 @@
+from .funtionsRequest.airportsRequests import getAirportID,getFlightInformation,getSessionKey,getTokenOrFlightData
+from .funtionsRequest.blablacarRequests import findBlablaTrips
+from .funtionsRequest.bustrainRequests import findTrips
+
+
 from django.db import models
 import requests 
 from json import dumps
-from funtionsRequest.airportsRequests import *
-from funtionsRequest.blablacarRequests import *
-from funtionsRequest.bustrainRequests import *
 
 #help: https://stackoverflow.com/questions/58558989/what-does-djangos-property-do
-class request(models.Model):
+
+
+class RESTApi(models.Model):
+    BaseUrl=models.CharField(max_length=50)
+    APIKey=models.CharField(max_length=50)
+
+
+class Request(models.Model):
     
     description=models.CharField(max_length=200)
     PartToaddToBaseUrl=models.CharField(max_length=200)
     funcToExtractDataFromJsonName=models.CharField(max_length=100)
     ParamsOrDataDictStructure=models.JSONField()
-    headers=models.JSONField(blank=True)
-
+    
     class Suit(models.TextChoices):
         GET = 'GET'
         POST = 'POST'
      
 
     typeRequests = models.CharField(choices=Suit.choices,max_length=5)
+    headers=models.JSONField(blank=True)
 
+    RApi = models.ForeignKey(RESTApi, on_delete=models.CASCADE)
+
+
+    
     @property
     def getResponse(self,baseUrl,listParamsValues,typeOfData=""):
         structureWithValues=dict(self.ParamsOrDataDictStructure)
@@ -39,18 +52,13 @@ class request(models.Model):
 
 
     @property
-    def executeFunction(self):
-        response=self.getResponse()
-        return exec("""self.funcToExtractDataFromJsonName(response)""")
+    def executeFunction(self,baseUrl,listParamsValues,typeOfData=""):
+        response=self.getResponse(baseUrl,listParamsValues,typeOfData)
+        functionName=self.funcToExtractDataFromJsonName
+        return exec("""functionName(response)""")
 
 
-class RESTApi(models.Model):
-    BaseUrl=models.CharField(max_length=50)
-    APIKey=models.CharField(max_length=50)
-    Requests = models.ForeignKey(request, on_delete=models.CASCADE)
-
-
-class node(models.Model):
+class Node(models.Model):
     code=models.CharField(max_length=10)
     name=models.CharField(max_length=70)
     latitude=models.CharField(max_length=30)
