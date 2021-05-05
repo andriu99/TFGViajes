@@ -1,4 +1,4 @@
-from .funtionsRequest.airportsRequests import getAirportID,getFlightInformation,getSessionKey,getTokenOrFlightData
+from .funtionsRequest.airportsRequests import getFlightInformation,getSessionKey,getTokenOrFlightData,getAirportsData
 from .funtionsRequest.blablacarRequests import findBlablaTrips
 from .funtionsRequest.bustrainRequests import findbustrainTrips
 
@@ -43,7 +43,7 @@ class Request(models.Model):
     
     
     def getResponse(self,baseUrl,listParamsValues,typeOfData=""):
-        structureWithValues=json.load(self.ParamsOrDataDictStructure)
+        structureWithValues=dict(self.ParamsOrDataDictStructure)
         contIndex=0
         for key in structureWithValues.keys():
             structureWithValues[key]=listParamsValues[contIndex]
