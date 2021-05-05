@@ -2,6 +2,7 @@ from .funtionsRequest.airportsRequests import getAirportID,getFlightInformation,
 from .funtionsRequest.blablacarRequests import findBlablaTrips
 from .funtionsRequest.bustrainRequests import findbustrainTrips
 
+import json
 
 from django.db import models
 import requests 
@@ -10,7 +11,7 @@ from json import dumps
 
 
 class RESTApi(models.Model):
-    name=models.CharField(max_length=50)
+    name=models.CharField(unique=True,max_length=50)
     BaseUrl=models.CharField(max_length=50)
     APIKey=models.CharField(max_length=50)
 
@@ -19,8 +20,9 @@ class RESTApi(models.Model):
         return self.name
 
 
+
 class Request(models.Model):
-    name=models.CharField(max_length=50)
+    name=models.CharField(unique=True,max_length=50)
     description=models.CharField(max_length=200)
     PartToaddToBaseUrl=models.CharField(max_length=200)
     funcToExtractDataFromJsonName=models.CharField(max_length=100)
@@ -40,9 +42,8 @@ class Request(models.Model):
         return self.name
     
     
-    @property
     def getResponse(self,baseUrl,listParamsValues,typeOfData=""):
-        structureWithValues=dict(self.ParamsOrDataDictStructure)
+        structureWithValues=json.load(self.ParamsOrDataDictStructure)
         contIndex=0
         for key in structureWithValues.keys():
             structureWithValues[key]=listParamsValues[contIndex]
@@ -57,7 +58,6 @@ class Request(models.Model):
             return requests.post(baseUrl+self.PartToaddToBaseUrl,data=structureWithValues,headers=dict(self.headers))
 
 
-    @property
     def executeFunction(self,baseUrl,listParamsValues,typeOfData=""):
         response=self.getResponse(baseUrl,listParamsValues,typeOfData)
         functionName=self.funcToExtractDataFromJsonName

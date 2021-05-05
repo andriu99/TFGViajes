@@ -13,7 +13,7 @@ paramsblabla={
     'end_date_local': '2021-05-06T00:00:00'
     }
 
-findBlablaTrips=Request(name='BlablaRequest',description='Find blablacar´s trips with dates and coordinates',PartToaddToBaseUrl='/api/v3/trips',
+findBlablaTrips=Request(name='getBlablaCarTrips',description='Find blablacar´s trips with dates and coordinates',PartToaddToBaseUrl='/api/v3/trips',
                         funcToExtractDataFromJsonName='findBlablaTrips',ParamsOrDataDictStructure=paramsblabla,typeRequests='GET',RApi=blablaCarRESTApi)
 
 findBlablaTrips.save()
@@ -26,10 +26,7 @@ paramsGetSkyscToken={
     'apiKey':'prtl6749387986743898559646983194',
 }
 
-paramsFindAirport={
-    'query': 'Burgos',
-    'apiKey': 'example'
-}
+
 
 datagetSessionKey={
       'cabinclass': 'Economy',
@@ -56,21 +53,22 @@ getGeoCatalogparams={
   'apiKey':'token',
 }
 
-getToken=Request(name='getToken',description='Get a token with the API-key',PartToaddToBaseUrl='token/v2/gettoken',
+getToken=Request(name='getTokenSkyscanner',description='Get a token with the API-key',PartToaddToBaseUrl='token/v2/gettoken',
                  funcToExtractDataFromJsonName='getTokenOrFlightData',ParamsOrDataDictStructure=paramsGetSkyscToken,typeRequests='GET',RApi=skyscannerRESTApi)
 
-getSessionKey=Request(name='getSessionKey',description='Get the session key',PartToaddToBaseUrl='pricing/v1.0',
+getSessionKey=Request(name='getSessionKeySkyscanner',description='Get the session key',PartToaddToBaseUrl='pricing/v1.0',
                       funcToExtractDataFromJsonName='getSessionKey',ParamsOrDataDictStructure=datagetSessionKey,typeRequests='POST',headers={'Content-Type': 'application/x-www-form-urlencoded'},RApi=skyscannerRESTApi)
 
-getFlightsInformation=Request(name='getFlightsInformation',description='Get information about flights',PartToaddToBaseUrl='pricing/v1.0/',
+getFlightsInformation=Request(name='getFlightsInformationSkyscanner',description='Get information about flights',PartToaddToBaseUrl='pricing/v1.0/',
                               funcToExtractDataFromJsonName='getFlightInformation',ParamsOrDataDictStructure=getFlightInformationparams,typeRequests='GET',RApi=skyscannerRESTApi)##
 
-getGeoCatalogInformation=Request(name='getGeoCatalogInformation',description='Get information about airports',PartToaddToBaseUrl='geo/v1.0',
+getGeoCatalogInformation=Request(name='getSkyscannerGeocatalog',description='Get information about airports',PartToaddToBaseUrl='geo/v1.0',
                                  funcToExtractDataFromJsonName='getAirportsData',ParamsOrDataDictStructure=getGeoCatalogparams,typeRequests='GET',RApi=skyscannerRESTApi)
 
 getToken.save()
 getSessionKey.save()
 getFlightsInformation.save()
+getGeoCatalogInformation.save()
 
 
 
@@ -79,7 +77,7 @@ trainlineRESTApi.save()
 paramsgetStation={
     'q':'Place',
 }
-getStationInformation=Request(name='getStationInformation',description='Get information about a station',PartToaddToBaseUrl='stations?context=search',
+getStationInformation=Request(name='getStationInformationTrainline',description='Get information about a station',PartToaddToBaseUrl='stations?context=search',
                               funcToExtractDataFromJsonName='getStationInformation',ParamsOrDataDictStructure=paramsgetStation,typeRequests='GET',RApi=trainlineRESTApi)
 
 dataFindTrip = {
@@ -108,7 +106,7 @@ headersTrainline = {
     'authorization': 'Token token="{token}"'.format(token=trainlineRESTApi.APIKey),
 }
 
-getbustrainTripsInformation=Request(name='getbustrainTripsInformation',description='Get trips information by train or bus',PartToaddToBaseUrl='search',
+getbustrainTripsInformation=Request(name='getbustrainTripsInformationTrainline',description='Get trips information by train or bus',PartToaddToBaseUrl='search',
                                     funcToExtractDataFromJsonName='findbustrainTrips',ParamsOrDataDictStructure=dataFindTrip,typeRequests='POST',headers=headersTrainline,RApi=trainlineRESTApi)
 getStationInformation.save()
 getbustrainTripsInformation.save()
