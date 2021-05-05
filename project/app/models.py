@@ -36,6 +36,9 @@ class Request(models.Model):
 
     RApi = models.ForeignKey(RESTApi, on_delete=models.CASCADE,related_name='requests')
 
+    def __str__(self):
+        return self.name
+    
     
     @property
     def getResponse(self,baseUrl,listParamsValues,typeOfData=""):
@@ -61,9 +64,7 @@ class Request(models.Model):
         return globals()[functionName](response)
 
     
-    def __str__(self):
-        return self.name
-    
+  
    
 
 

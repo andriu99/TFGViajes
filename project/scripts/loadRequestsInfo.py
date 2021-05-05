@@ -1,10 +1,8 @@
-import csv
 from app.models import Request,RESTApi,Node
 
- #$ python manage.py runscript example
 
 
-blablaCarRESTApi=RESTApi('BlablaCarRESTApi','https://public-api.blablacar.com','UIbM2vkhEdrrTLiLnrQkBqgPxrv7S4mI')
+blablaCarRESTApi=RESTApi(name='BlablaCarRESTApi',BaseUrl='https://public-api.blablacar.com',APIKey='UIbM2vkhEdrrTLiLnrQkBqgPxrv7S4mI')
 blablaCarRESTApi.save()
 paramsblabla={
     'key': 'example', 
@@ -15,12 +13,14 @@ paramsblabla={
     'end_date_local': '2021-05-06T00:00:00'
     }
 
-findBlablaTrips=Request('BlablaRequest','Find blablacar´s trips with dates and coordinates','/api/v3/trips','findBlablaTrips',paramsblabla,'GET',RApi=blablaCarRESTApi)
+findBlablaTrips=Request(name='BlablaRequest',description='Find blablacar´s trips with dates and coordinates',PartToaddToBaseUrl='/api/v3/trips',
+                        funcToExtractDataFromJsonName='findBlablaTrips',ParamsOrDataDictStructure=paramsblabla,typeRequests='GET',RApi=blablaCarRESTApi)
+
 findBlablaTrips.save()
 
 
 
-skyscannerRESTApi=RESTApi('SkyscannerRESTApi','https://partners.api.skyscanner.net/apiservices/','prtl6749387986743898559646983194')
+skyscannerRESTApi=RESTApi(name='SkyscannerRESTApi',BaseUrl='https://partners.api.skyscanner.net/apiservices/',APIKey='prtl6749387986743898559646983194')
 skyscannerRESTApi.save()
 paramsGetSkyscToken={
     'apiKey':'prtl6749387986743898559646983194',
@@ -56,25 +56,31 @@ getGeoCatalogparams={
   'apiKey':'token',
 }
 
-getToken=Request('getToken','Get a token with the API-key','token/v2/gettoken','getTokenOrFlightData',paramsGetSkyscToken,'GET',RApi=skyscannerRESTApi)
-#findAirport=Request('getAirportID','Find an airport ID','autosuggest/v1.0/ES/EUR/es-ES','getAirportID',paramsFindAirport,'GET',RApi=skyscannerRESTApi)
-getSessionKey=Request('getSessionKey','Get the session key','pricing/v1.0','getSessionKey',datagetSessionKey,'POST',headers={'Content-Type': 'application/x-www-form-urlencoded'},RApi=skyscannerRESTApi)
-getFlightsInformation=Request('getFlightsInformation','Get information about flights','pricing/v1.0/',getFlightInformationparams,'GET',RApi=skyscannerRESTApi)##
-getGeoCatalogInformation=Request('getGeoCatalogInformation','Get information about airports','geo/v1.0',getGeoCatalogparams,'GET',RApi=skyscannerRESTApi)
+getToken=Request(name='getToken',description='Get a token with the API-key',PartToaddToBaseUrl='token/v2/gettoken',
+                 funcToExtractDataFromJsonName='getTokenOrFlightData',ParamsOrDataDictStructure=paramsGetSkyscToken,typeRequests='GET',RApi=skyscannerRESTApi)
+
+getSessionKey=Request(name='getSessionKey',description='Get the session key',PartToaddToBaseUrl='pricing/v1.0',
+                      funcToExtractDataFromJsonName='getSessionKey',ParamsOrDataDictStructure=datagetSessionKey,typeRequests='POST',headers={'Content-Type': 'application/x-www-form-urlencoded'},RApi=skyscannerRESTApi)
+
+getFlightsInformation=Request(name='getFlightsInformation',description='Get information about flights',PartToaddToBaseUrl='pricing/v1.0/',
+                              funcToExtractDataFromJsonName='getFlightInformation',ParamsOrDataDictStructure=getFlightInformationparams,typeRequests='GET',RApi=skyscannerRESTApi)##
+
+getGeoCatalogInformation=Request(name='getGeoCatalogInformation',description='Get information about airports',PartToaddToBaseUrl='geo/v1.0',
+                                 funcToExtractDataFromJsonName='getAirportsData',ParamsOrDataDictStructure=getGeoCatalogparams,typeRequests='GET',RApi=skyscannerRESTApi)
 
 getToken.save()
-#findAirport.save()
 getSessionKey.save()
 getFlightsInformation.save()
 
 
 
-trainlineRESTApi=RESTApi('TrainlineRESTApi','https://www.trainline.eu/api/v5_1/','A8fQLJDF94cPUKEu3Vpi')
+trainlineRESTApi=RESTApi(name='TrainlineRESTApi',BaseUrl='https://www.trainline.eu/api/v5_1/',APIKey='A8fQLJDF94cPUKEu3Vpi')
 trainlineRESTApi.save()
 paramsgetStation={
     'q':'Place',
 }
-getStationInformation=Request('getStationInformation','Get information about a station','stations?context=search','getStationInformation',paramsgetStation,'GET',RApi=trainlineRESTApi)
+getStationInformation=Request(name='getStationInformation',description='Get information about a station',PartToaddToBaseUrl='stations?context=search',
+                              funcToExtractDataFromJsonName='getStationInformation',ParamsOrDataDictStructure=paramsgetStation,typeRequests='GET',RApi=trainlineRESTApi)
 
 dataFindTrip = {
   
@@ -102,6 +108,7 @@ headersTrainline = {
     'authorization': 'Token token="{token}"'.format(token=trainlineRESTApi.APIKey),
 }
 
-getbustrainTripsInformation=Request('getbustrainTripsInformation','Get trips information by train or bus','search','findbustrainTrips',dataFindTrip,'POST',headers=headersTrainline,RApi=trainlineRESTApi)
+getbustrainTripsInformation=Request(name='getbustrainTripsInformation',description='Get trips information by train or bus',PartToaddToBaseUrl='search',
+                                    funcToExtractDataFromJsonName='findbustrainTrips',ParamsOrDataDictStructure=dataFindTrip,typeRequests='POST',headers=headersTrainline,RApi=trainlineRESTApi)
 getStationInformation.save()
 getbustrainTripsInformation.save()
