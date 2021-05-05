@@ -3,6 +3,12 @@ import requests
 import urllib.parse
 from app.models import Node
 
+ trainlineRESTApi=RESTApi.objects.get(name='TrainlineRESTApi') 
+
+geoCatalogRequests=Request.objects.get(name='getSkyscannerGeocatalog')
+    getTokenRequest=Request.objects.get(name='getTokenSkyscanner')
+
+
 
 # # Se crea un objeto que abre el fichero y representa su contenido
 csvfile = open('stationsData.txt', 'r',encoding='utf-8')

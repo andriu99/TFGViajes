@@ -2,12 +2,8 @@ from .funtionsRequest.airportsRequests import getFlightInformation,getSessionKey
 from .funtionsRequest.blablacarRequests import findBlablaTrips
 from .funtionsRequest.bustrainRequests import findbustrainTrips
 
-import json
-
 from django.db import models
 import requests 
-from json import dumps
-#help: https://stackoverflow.com/questions/58558989/what-does-djangos-property-do
 
 
 class RESTApi(models.Model):
