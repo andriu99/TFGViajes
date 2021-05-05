@@ -42,7 +42,7 @@ class Migration(migrations.Migration):
                 ('funcToExtractDataFromJsonName', models.CharField(max_length=100)),
                 ('ParamsOrDataDictStructure', models.JSONField()),
                 ('typeRequests', models.CharField(choices=[('GET', 'Get'), ('POST', 'Post')], max_length=5)),
-                ('headers', models.JSONField(blank=True)),
+                ('headers', models.JSONField(null=True)),
                 ('RApi', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='requests', to='app.restapi')),
             ],
         ),

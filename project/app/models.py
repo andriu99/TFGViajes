@@ -32,7 +32,7 @@ class Request(models.Model):
      
 
     typeRequests = models.CharField(choices=Suit.choices,max_length=5)
-    headers=models.JSONField(blank=True)
+    headers=models.JSONField(null=True)
 
     RApi = models.ForeignKey(RESTApi, on_delete=models.CASCADE,related_name='requests')
 
