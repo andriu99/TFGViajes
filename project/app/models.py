@@ -72,14 +72,17 @@ class Request(models.Model):
 class Node(models.Model):
     code=models.CharField(max_length=10)
     name=models.CharField(max_length=70)
-    latitude=models.CharField(max_length=30)
-    longitude=models.CharField(max_length=30)
+    latitude=models.FloatField()
+    longitude=models.FloatField()
     class Suit(models.TextChoices):
         STATION = 'S'
         AIRPORT = 'A'
      
 
     nodeType = models.CharField(choices=Suit.choices,max_length=5)
+
+    def __str__(self):
+        return self.name
 
 
 
