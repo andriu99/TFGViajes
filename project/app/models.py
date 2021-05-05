@@ -4,7 +4,7 @@ from .funtionsRequest.bustrainRequests import findbustrainTrips
 
 from django.db import models
 import requests 
-
+import json 
 
 class RESTApi(models.Model):
     name=models.CharField(unique=True,max_length=50)
@@ -49,7 +49,7 @@ class Request(models.Model):
             return requests.get(baseUrl+self.PartToaddToBaseUrl,params=structureWithValues)
         else:
             if typeOfData=='str':
-                structureWithValues=dumps(structureWithValues)
+                structureWithValues=json.dumps(structureWithValues)
 
             return requests.post(baseUrl+self.PartToaddToBaseUrl,data=structureWithValues,headers=dict(self.headers))
 
@@ -60,13 +60,10 @@ class Request(models.Model):
         return globals()[functionName](response)
 
     
-  
-   
-
 
 
 class Node(models.Model):
-    code=models.CharField(max_length=10)
+    code=models.CharField(unique=True,max_length=10)
     name=models.CharField(max_length=70)
     latitude=models.FloatField()
     longitude=models.FloatField()
