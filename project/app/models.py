@@ -75,7 +75,7 @@ class Node(models.Model):
     nodeType = models.CharField(choices=Suit.choices,max_length=5)
 
     def __str__(self):
-        return self.name
+        return self.name,self.nodeType
 
 
 
