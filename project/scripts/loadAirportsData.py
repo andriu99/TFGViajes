@@ -18,9 +18,10 @@ def run():
 
     #Airports information
     airportsInfo=geoCatalogRequests.executeFunction(skyscannerRESTApi.BaseUrl,[token])
-
+    
     for ID,name,lat,lon in airportsInfo:
-        getProvinceAndLocationThroughCoordinates(lat,lon)
-        # airportNode=Node(code=ID,name=name,latitude=float(lat),longitude=float(lon),nodeType='A')
-        # airportNode.save()
+        location,province=getProvinceAndLocationThroughCoordinates(lat,lon)
+        
+        airportNode=Node(code=ID,name=name,latitude=float(lat),longitude=float(lon),nodeType='A',location=location,province=province)
+        airportNode.save()
 

@@ -1,12 +1,10 @@
 import requests
 url='https://maps.googleapis.com/maps/api/geocode/json'
-params={
-    'latlng':'40.43536,-3.71914',
-     'key':'AIzaSyCaR0xc4Xiv3rHEV-HkFD-4Dt7hsIx3aT0'
-}
+params={'latlng': '43.302778,-2.921667', 'key': 'AIzaSyCaR0xc4Xiv3rHEV-HkFD-4Dt7hsIx3aT0'}
 
 json=requests.get(url,params=params).json()
 for i in (json['results'][0]['address_components']):
+    print(i)
     if list(i['types']).__contains__('locality'):
         location=(i['long_name'])
 

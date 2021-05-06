@@ -47,8 +47,7 @@ class Request(models.Model):
             contIndex+=1
 
         if self.typeRequests=="GET":
-            print(baseUrl+self.PartToaddToBaseUrl)
-            print(requests.get(baseUrl+self.PartToaddToBaseUrl,params=structureWithValues).status_code)
+            print(structureWithValues)
             return requests.get(baseUrl+self.PartToaddToBaseUrl,params=structureWithValues)
         else:
             if typeOfData=='str':
@@ -70,6 +69,9 @@ class Node(models.Model):
     name=models.CharField(max_length=70)
     latitude=models.FloatField()
     longitude=models.FloatField()
+    location=models.CharField(max_length=50)
+    province=models.CharField(max_length=50)
+
     class Suit(models.TextChoices):
         STATION = 'S'
         AIRPORT = 'A'
