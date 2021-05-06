@@ -31,7 +31,7 @@ def run():
                     longitude=jsonEstaciones['stations'][0]['longitude']
                 
                 new_node=Node(name=name,code=Id,latitude=float(latitude),longitude=float(longitude),nodeType='S')
-                print("Bien: {name}".format(name=name))
+                #print("Bien: {name}".format(name=name))
                 new_node.save()
             except:
                 print("Error en: "+fila[1])
