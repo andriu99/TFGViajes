@@ -1,6 +1,7 @@
 from .funtionsRequest.airportsRequests import getFlightInformation,getSessionKey,getTokenOrFlightData,getAirportsData
 from .funtionsRequest.blablacarRequests import findBlablaTrips
 from .funtionsRequest.bustrainRequests import findbustrainTrips
+from .funtionsRequest.googleMapsRequests import getProvinceLocation
 
 from django.db import models
 import requests 

@@ -6,6 +6,20 @@ def run():
   importSkyscannerInfo()
   importTrainlineInfo()
 
+
+def importGoogleMapsInfo():
+  googleMapsRESTApi=RESTApi(name='googleMapsRESTApi',BaseUrl='https://www.google.com/maps/',APIKey='AIzaSyCaR0xc4Xiv3rHEV-HkFD-4Dt7hsIx3aT0')
+  googleMapsRESTApi.save()
+  paramsGeocodeReverseGoogleMaps={
+    'latlng':'41.99727014224525,-3.959531186634048',
+    'key':'example'
+  }
+  getProvinceLocation=Request(name='getDirectionwithCoordinates',description='Find an andress with coordinates',PartToaddToBaseUrl='/api/geocode/json',
+                              funcToExtractDataFromJsonName='getProvinceLocation',ParamsOrDataDictStructure=paramsGeocodeReverseGoogleMaps,typeRequests='GET',RApi=googleMapsRESTApi)
+  getProvinceLocation.save()
+
+
+
 def importBlablacarInfo():
   blablaCarRESTApi=RESTApi(name='BlablaCarRESTApi',BaseUrl='https://public-api.blablacar.com',APIKey='UIbM2vkhEdrrTLiLnrQkBqgPxrv7S4mI')
   blablaCarRESTApi.save()
@@ -58,7 +72,7 @@ def importSkyscannerInfo():
   }
 
   getToken=Request(name='getTokenSkyscanner',description='Get a token with the API-key',PartToaddToBaseUrl='token/v2/gettoken',
-                  funcToExtractDataFromJsonName='getTokenOrFlightData',ParamsOrDataDictStructure=paramsGetSkyscToken,typeRequests='GET',RApi=skyscannerRESTApi)
+                   funcToExtractDataFromJsonName='getTokenOrFlightData',ParamsOrDataDictStructure=paramsGetSkyscToken,typeRequests='GET',RApi=skyscannerRESTApi)
 
   getSessionKey=Request(name='getSessionKeySkyscanner',description='Get the session key',PartToaddToBaseUrl='pricing/v1.0',
                         funcToExtractDataFromJsonName='getSessionKey',ParamsOrDataDictStructure=datagetSessionKey,typeRequests='POST',headers={'Content-Type': 'application/x-www-form-urlencoded'},RApi=skyscannerRESTApi)
