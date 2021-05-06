@@ -31,7 +31,7 @@ class Request(models.Model):
      
 
     typeRequests = models.CharField(choices=Suit.choices,max_length=5)
-    headers=models.JSONField(null=True)
+    headers=models.JSONField(null=True,blank=True)
 
     RApi = models.ForeignKey(RESTApi, on_delete=models.CASCADE,related_name='requests')
 
@@ -47,6 +47,8 @@ class Request(models.Model):
             contIndex+=1
 
         if self.typeRequests=="GET":
+            print(baseUrl+self.PartToaddToBaseUrl)
+            print(requests.get(baseUrl+self.PartToaddToBaseUrl,params=structureWithValues).status_code)
             return requests.get(baseUrl+self.PartToaddToBaseUrl,params=structureWithValues)
         else:
             if typeOfData=='str':
