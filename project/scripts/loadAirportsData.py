@@ -8,10 +8,10 @@ def run():
     getTokenRequest=Request.objects.get(name='getTokenSkyscanner')
 
     #Token
-    token=getTokenRequest.executeFunction(getTokenRequest.RApi.BaseUrl,[getTokenRequest.RApi.APIKey])
+    token=getTokenRequest.executeFunction([getTokenRequest.RApi.APIKey])
 
     #Airports information
-    airportsInfo=geoCatalogRequests.executeFunction(geoCatalogRequests.RApi.BaseUrl,[token])
+    airportsInfo=geoCatalogRequests.executeFunction([token])
     
     
     for ID,name,lat,lon in airportsInfo:

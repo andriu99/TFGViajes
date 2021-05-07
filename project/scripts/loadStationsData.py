@@ -10,7 +10,6 @@ from .usefulFunctions import getProvinceAndLocationThroughCoordinates
 
 def run():
     workpath = os.path.dirname(os.path.abspath(__file__)) #Returns the Path your .py file is in
-    trainlineRESTApi=RESTApi.objects.get(name='TrainlineRESTApi') 
     getStationInformation=Request.objects.get(name='getStationInformationTrainline')
 
     # # Se crea un objeto que abre el fichero y representa su contenido
@@ -29,7 +28,7 @@ def run():
                 name=fila[1]
                 Id=fila[0]
                 if latitude=='' or longitude=='' or name=='' or Id=='':
-                    jsonEstaciones=getStationInformation(trainlineRESTApi.BaseUrl,'{Place}'.format(Place=urllib.parse.quote(fila[1])))
+                    jsonEstaciones=getStationInformation('{Place}'.format(Place=urllib.parse.quote(fila[1])))
                     Id=jsonEstaciones['stations'][0]['id']
                     latitude=jsonEstaciones['stations'][0]['latitude']
                     longitude=jsonEstaciones['stations'][0]['longitude']

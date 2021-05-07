@@ -54,7 +54,8 @@ class Request(models.Model):
             return requests.post(baseUrl+self.PartToaddToBaseUrl,data=structureWithValues,headers=dict(self.headers))
 
 
-    def executeFunction(self,baseUrl,listParamsValues,typeOfData=""):
+    def executeFunction(self,listParamsValues,typeOfData=""):
+        baseUrl=self.RApi.BaseUrl
         response=self.getResponse(baseUrl,listParamsValues,typeOfData)
         functionName=self.funcToExtractDataFromJsonName
         return globals()[functionName](response)
