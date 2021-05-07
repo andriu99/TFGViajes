@@ -3,5 +3,10 @@
 {% block content %}
 
         <h1>Welcome</h1>
+        <form method="post">
+		{% csrf_token %}
+		{{ form }}
+		<button>Enviar</button>
+	</form>
 
 {% endblock %}
