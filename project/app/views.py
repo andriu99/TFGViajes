@@ -1,14 +1,20 @@
 from django.shortcuts import render
+from .forms import userRequest
+
 
 def home(request):
     
     if request.method == 'POST':
+        
         form = userRequest(request.POST)
-
+        
         if form.is_valid():
-		    tarea = form.cleaned_data["tarea"]
+           print(form.cleaned_data)
+       
+
     else:
         form = userRequest()
+    
 
-
-    return render(request,'app/home.html')
+    context = {'form' : form}
+    return render(request,'app/home.html',context)
