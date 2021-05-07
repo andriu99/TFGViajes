@@ -5,6 +5,8 @@ import requests
 import urllib.parse
 from app.models import Node,Request,RESTApi
 import os
+from .usefulFunctions import getProvinceAndLocationThroughCoordinates
+
 
 def run():
     workpath = os.path.dirname(os.path.abspath(__file__)) #Returns the Path your .py file is in
@@ -15,6 +17,8 @@ def run():
     csvfile = open(os.path.join(workpath, 'stationsData.txt'), 'r',encoding='utf-8')
     # # Se crea un objeto que formatea el contenido como CSV
     reader = csv.reader(csvfile, delimiter=';')
+
+
 
     # # Se accede a cada registro del fichero
     for fila in reader:
@@ -30,8 +34,9 @@ def run():
                     latitude=jsonEstaciones['stations'][0]['latitude']
                     longitude=jsonEstaciones['stations'][0]['longitude']
                 
-                new_node=Node(name=name,code=Id,latitude=float(latitude),longitude=float(longitude),nodeType='S')
-                #print("Bien: {name}".format(name=name))
+                location,province=getProvinceAndLocationThroughCoordinates(latitude,longitude)
+
+                new_node=Node(name=name,code=Id,latitude=float(latitude),longitude=float(longitude),nodeType='S',location=location,province=province)
                 new_node.save()
             except:
                 print("Error en: "+fila[1])
