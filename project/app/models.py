@@ -12,7 +12,6 @@ class RESTApi(models.Model):
     BaseUrl=models.CharField(max_length=50)
     APIKey=models.CharField(max_length=50)
 
-
     def __str__(self):
         return self.name
 
@@ -47,7 +46,6 @@ class Request(models.Model):
             contIndex+=1
 
         if self.typeRequests=="GET":
-            print(structureWithValues)
             return requests.get(baseUrl+self.PartToaddToBaseUrl,params=structureWithValues)
         else:
             if typeOfData=='str':
@@ -69,8 +67,8 @@ class Node(models.Model):
     name=models.CharField(max_length=70)
     latitude=models.FloatField()
     longitude=models.FloatField()
-    location=models.CharField(max_length=50)
-    province=models.CharField(max_length=50)
+    location=models.CharField(max_length=50,default='Unknown')
+    province=models.CharField(max_length=50,default='Unknown')
 
     class Suit(models.TextChoices):
         STATION = 'S'

@@ -1,27 +1,25 @@
 from app.models import Request,RESTApi,Node
+from .usefulFunctions import getProvinceAndLocationThroughCoordinates
 
 
-def getProvinceAndLocationThroughCoordinates(latitude,longitude):
-    geoCatalogRequests=Request.objects.get(name='getProLocatDataThroughCoordinates')
-    location,province=geoCatalogRequests.executeFunction(geoCatalogRequests.RApi.BaseUrl,[latitude+','+longitude,geoCatalogRequests.RApi.APIKey])
-    return province,location
 
 def run():
-    skyscannerRESTApi=RESTApi.objects.get(name='SkyscannerRESTApi') 
-
     geoCatalogRequests=Request.objects.get(name='getSkyscannerGeocatalog')
     getTokenRequest=Request.objects.get(name='getTokenSkyscanner')
 
     #Token
-    token=getTokenRequest.executeFunction(skyscannerRESTApi.BaseUrl,[skyscannerRESTApi.APIKey])
-    token
+    token=getTokenRequest.executeFunction(getTokenRequest.RApi.BaseUrl,[getTokenRequest.RApi.APIKey])
 
     #Airports information
-    airportsInfo=geoCatalogRequests.executeFunction(skyscannerRESTApi.BaseUrl,[token])
+    airportsInfo=geoCatalogRequests.executeFunction(geoCatalogRequests.RApi.BaseUrl,[token])
+
+    gMapsGeocodingReverse=Request.objects.get(name='getProLocatDataThroughCoordinates')
     
     for ID,name,lat,lon in airportsInfo:
-        location,province=getProvinceAndLocationThroughCoordinates(lat,lon)
+        location,province=gMapsGeocodingReverse.executeFunction(gMapsGeocodingReverse.RApi.BaseUrl,[lat+','+lon,gMapsGeocodingReverse.RApi.APIKey])
+      
+        if location=='Unknown':
+            location=name
         
         airportNode=Node(code=ID,name=name,latitude=float(lat),longitude=float(lon),nodeType='A',location=location,province=province)
         airportNode.save()
-
