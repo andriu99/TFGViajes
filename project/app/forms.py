@@ -2,9 +2,10 @@ from django import forms
 
 class DateInput(forms.DateInput):
     input_type='date'
+    
 class userRequest(forms.Form):
-    latOrigen = forms.FloatField()
-    lonOrigen = forms.FloatField()
-    latDest = forms.FloatField()
-    lonDest = forms.FloatField()
+    lat_Origin = forms.FloatField()
+    lon_Origin = forms.FloatField()
+    lat_Dest = forms.FloatField()
+    lon_Dest = forms.FloatField()
     date=forms.DateField(widget=DateInput)
