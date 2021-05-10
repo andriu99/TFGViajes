@@ -20,8 +20,15 @@ def home(request):
 
             end_coordinates=str(form.cleaned_data['lat_Dest'])+','+str(form.cleaned_data['lon_Dest'])
             iterableBlablaCar=getBlablaCarTrips.executeFunction([getBlablaCarTrips.RApi.APIKey,start_coordinates,end_coordinates,'EUR',start_date_local_string,end_date_local_string])
-            for url,b,c,price in iterableBlablaCar:
-                print(url,b,c,price)
+            for (url,
+                 startData_date,startData_city,startData_address,startData_latitude,startData_longitude,
+                 endDatadate,endDatacity,endDataaddress,endDatalatitude,endDatalongitude,
+                 price
+            ) in iterableBlablaCar:
+                print(url)
+                print(startData_date,startData_city,startData_address,startData_latitude,startData_longitude)
+                print(endDatadate,endDatacity,endDataaddress,endDatalatitude,endDatalongitude)
+                print(price)
     else:
         form = userRequest()
     
