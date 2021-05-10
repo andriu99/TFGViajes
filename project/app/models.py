@@ -45,6 +45,8 @@ class Request(models.Model):
             structureWithValues[key]=listParamsValues[contIndex]
             contIndex+=1
 
+        print(structureWithValues)
+
         if self.typeRequests=="GET":
             return requests.get(baseUrl+self.PartToaddToBaseUrl,params=structureWithValues)
         else:

@@ -10,16 +10,18 @@ def home(request):
             getBlablaCarTrips=Request.objects.get(name='getBlablaCarTrips')
             # print(form.cleaned_data['date'])
             # print(form.cleaned_data['date']+datetime.timedelta(days=1))
+            originalDate=form.cleaned_data['date']
+            start_date_local=datetime.datetime(originalDate.year,originalDate.month,originalDate.day)
+            start_date_local_string=start_date_local.isoformat()
 
-            end_date_local=form.cleaned_data['date']+datetime.timedelta(days=1)
-            print(end_date_local)
-            
+            end_date_local_string=(start_date_local+datetime.timedelta(days=1)).isoformat()
+          
             start_coordinates=str(form.cleaned_data['lat_Origin'])+','+str(form.cleaned_data['lon_Origin'])
 
             end_coordinates=str(form.cleaned_data['lat_Dest'])+','+str(form.cleaned_data['lon_Dest'])
-            iterableBlablaCar=getBlablaCarTrips.executeFunction([getBlablaCarTrips.RApi.APIKey,start_coordinates,end_coordinates,'EUR',form.cleaned_data['date'].isoformat(),end_date_local])
-            for a,b,c,d in iterableBlablaCar:
-                print(a,b,c,d)
+            iterableBlablaCar=getBlablaCarTrips.executeFunction([getBlablaCarTrips.RApi.APIKey,start_coordinates,end_coordinates,'EUR',start_date_local_string,end_date_local_string])
+            for url,b,c,price in iterableBlablaCar:
+                print(url,b,c,price)
     else:
         form = userRequest()
     
