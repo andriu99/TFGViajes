@@ -8,12 +8,18 @@ def home(request):
         form = userRequest(request.POST)
         if form.is_valid():
             getBlablaCarTrips=Request.objects.get(name='getBlablaCarTrips')
-            print(type(form.cleaned_data['date']))
+            # print(form.cleaned_data['date'])
+            # print(form.cleaned_data['date']+datetime.timedelta(days=1))
+
             end_date_local=form.cleaned_data['date']+datetime.timedelta(days=1)
+            print(end_date_local)
             
-            #getBlablaCarTrips.execute([getBlablaCarTrips.RApi.APIKey,,,'EUR',form.cleaned_data['date'].isoformat(),form.])
-            print(form.cleaned_data['date'].isoformat())
-       
+            start_coordinates=str(form.cleaned_data['lat_Origin'])+','+str(form.cleaned_data['lon_Origin'])
+
+            end_coordinates=str(form.cleaned_data['lat_Dest'])+','+str(form.cleaned_data['lon_Dest'])
+            iterableBlablaCar=getBlablaCarTrips.executeFunction([getBlablaCarTrips.RApi.APIKey,start_coordinates,end_coordinates,'EUR',form.cleaned_data['date'].isoformat(),end_date_local])
+            for a,b,c,d in iterableBlablaCar:
+                print(a,b,c,d)
     else:
         form = userRequest()
     
