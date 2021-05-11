@@ -2,7 +2,7 @@ from .funtionsRequest.airportsRequests import getFlightInformation,getSessionKey
 from .funtionsRequest.blablacarRequests import findBlablaTrips
 from .funtionsRequest.bustrainRequests import findbustrainTrips
 from .funtionsRequest.googleMapsRequests import getProvinceLocationThroughCoordinates
-
+from .models import DateInput
 from django.db import models
 import requests 
 import json 
@@ -82,10 +82,37 @@ class Node(models.Model):
     def __str__(self):
         return self.name+' ('+self.nodeType+')'
 
+class Trip(models.Model):
+    departureDate=models.DateField(widget=DateInput)
+    arrivalDate=models.DateField(widget=DateInput)
+    duration=models.IntegerField() #in seconds
+    price=models.FloatField()
+
+class blablaTrip(models.Model):
+    trip=models.OneToOneField(Trip,on_delete=models.CASCADE)
+    link=models.CharField(max_length=150)
+    departureCity=models.CharField(max_length=30)
+    departureAddress=models.CharField(max_length=30)
+    departureLatitude=models.FloatField()
+    departureLongitude=models.FloatField()
+
+    arrivalCity=models.CharField(max_length=30)
+    arrivalAddress=models.CharField(max_length=30)
+    arrivalLatitude=models.FloatField()
+    arrivalLongitude=models.FloatField()
 
 
-    
+class skyscannerTrip(models.Model):
+    trip=models.OneToOneField(Trip,on_delete=models.CASCADE)
+    urlPago=models.CharField(max_length=1500)
+    AirlineName=models.CharField(max_length=50)
+    AirlineUrlImage=models.CharField(max_length=50)
   
+class busOrTrainTrip(models.Model):
+    trip=models.OneToOneField(Trip,on_delete=models.CASCADE)
+    departureNode=models.OneToOneField(Node)
+    arrivalNode=models.OneToOneField(Node)
+
 
 
 

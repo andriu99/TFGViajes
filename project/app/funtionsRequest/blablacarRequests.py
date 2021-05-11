@@ -6,6 +6,6 @@ def findBlablaTrips(response):
         endData=trip['waypoints'][1]
         yield (trip['link'],
                startData['date_time'],startData['place']['city'],startData['place']['address'],startData['place']['latitude'],startData['place']['longitude'],
-               startData['date_time'],endData['place']['city'],endData['place']['address'],endData['place']['latitude'],endData['place']['longitude'],
+               endData['date_time'],endData['place']['city'],endData['place']['address'],endData['place']['latitude'],endData['place']['longitude'],
                trip['price']['amount']
         )
