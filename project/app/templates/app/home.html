@@ -10,14 +10,38 @@
 
 
 
-		 <h2>Lista de viajes en blablaCar</h2>
+		<h2>Lista de viajes en blablaCar</h2>
         <ul>
-            {% for blablatrip in blablatrips %}
+            {% for blablaTrip in blablaTrips %}
 			
             <li>
-                {{blablatrip.trip.departureDate}}
-				{{blablatrip.trip.arrivalDate}}
-				{{blablatrip.link}}
+                {{blablaTrip.trip.departureDate}}
+				{{blablaTrip.trip.arrivalDate}}
+                {{blablaTrip.trip.price}}
+
+				{{blablaTrip.link}}
+
+            </li>
+          
+            {% endfor %}
+        </ul>
+
+
+
+        <h2>Lista de viajes en avión (Skyscanner)</h2>
+        <ul>
+            {% for skyscannerTrip in skyscannerTrips %}
+			
+            <li>
+                {{skyscannerTrip.trip.departureDate}}
+				{{skyscannerTrip.trip.arrivalDate}}
+                {{skyscannerTrip.trip.price}}
+
+				{{skyscannerTrip.airlineName}}
+                {{skyscannerTrip.Node.name}}
+                {{skyscannerTrip.Node.code}}
+
+
 
             </li>
           

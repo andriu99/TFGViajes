@@ -106,9 +106,9 @@ class blablaTrip(models.Model):
 
 class skyscannerTrip(models.Model):
     trip=models.OneToOneField(Trip,on_delete=models.CASCADE)
-    urlPago=models.URLField(max_length=1500)
-    AirlineName=models.CharField(max_length=50)
-    AirlineUrlImage=models.CharField(max_length=50)
+    urlPay=models.URLField(max_length=1500)
+    airlineName=models.CharField(max_length=50)
+    airlineUrlImage=models.CharField(max_length=50)
   
 class busOrTrainTrip(models.Model):
     trip=models.OneToOneField(Trip,on_delete=models.CASCADE)

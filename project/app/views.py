@@ -1,7 +1,7 @@
 #from project.app.models import blablaTrip
 from django.shortcuts import render
 from .forms import userRequest
-from app.models import Request,Trip,blablaTrip,Node
+from app.models import Request,Trip,blablaTrip,skyscannerTrip,Node
 from datetime import datetime as dt
 from datetime import timedelta
 from .otherFunctions.dateFunctions import parseStrDate
@@ -76,8 +76,14 @@ def home(request):
 
 
                     for price,urlPay,departure_date,arrival_date,duration,airlineName,airlineUrlImage in results:
-                        print(price,departure_date,arrival_date,duration,airlineName,airlineUrlImage)
-                        print(len(urlPay))
+
+                        startData_date = parseStrDate(departure_date,float(startData_latitude),float(startData_latitude)) 
+                        endData_date = parseStrDate(arrival_date,float(endData_latitude),float(endData_longitude))
+                        new_trip=Trip(departureDate=startData_date,arrivalDate=endData_date,duration=duration,price=float(price))
+                        new_trip.save()
+                        print(airlineName)
+                        new_skyscannerTrip=skyscannerTrip(urlPay=urlPay,airlineName=airlineName,airlineUrlImage=airlineUrlImage,trip=new_trip)
+                        new_skyscannerTrip.save()
 
                     
             
@@ -86,6 +92,7 @@ def home(request):
         Trip.objects.all().delete()
         form = userRequest()
     
-    blablatrips=blablaTrip.objects.all()
-    context = {'form' : form,'blablatrips':blablatrips}
+    blablaTrips=blablaTrip.objects.all()
+    skyscannerTrips=skyscannerTrip.objects.all()
+    context = {'form' : form,'blablaTrips':blablaTrips,'skyscannerTrips':skyscannerTrips}
     return render(request,'app/home.html',context)
