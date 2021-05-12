@@ -3,13 +3,16 @@ from django.shortcuts import render
 from .forms import userRequest
 from app.models import Request,Trip,blablaTrip
 import datetime
-
+import pytz
+from django.utils.dateparse import parse_datetime
+from .otherFunctions.dateFunctions import parseStrDate
+from timezonefinder import TimezoneFinder
 
 def home(request):
     if request.method == 'POST':
+        Trip.objects.all().delete()
         form = userRequest(request.POST)
         if form.is_valid():
-            Trip.objects.all().delete()
             getBlablaCarTrips=Request.objects.get(name='getBlablaCarTrips')
           
             originalDate=form.cleaned_data['date']
@@ -28,11 +31,13 @@ def home(request):
                  price
 
             ) in iterableBlablaCar:
-                startData_date = datetime.datetime.strptime(startData_str, '%Y-%m-%dT%H:%M:%S')
-                endData_date = datetime.datetime.strptime(endData_str, '%Y-%m-%dT%H:%M:%S')
-
+                startData_date = parseStrDate(startData_str,float(startData_latitude),float(startData_latitude)) 
+                endData_date = parseStrDate(endData_str,float(endData_latitude),float(endData_longitude)) 
+                
                 diffDate=endData_date-startData_date
                 duration=diffDate.seconds
+
+                
              
                 new_trip=Trip(departureDate=startData_date,arrivalDate=endData_date,duration=duration,price=float(price))
                 new_trip.save()
@@ -46,11 +51,8 @@ def home(request):
                 new_blablatrip.save()
                
 
-                # print(url)
-                # print(startData_date,startData_city,startData_address,startData_latitude,startData_longitude)
-                # print(endData_date,endDatacity,endDataaddress,endDatalatitude,endDatalongitude)
-                # print(price)
     else:
+        Trip.objects.all().delete()
         form = userRequest()
     
     blablatrips=blablaTrip.objects.all()
