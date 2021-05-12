@@ -44,7 +44,7 @@ def importSkyscannerInfo():
   skyscannerRESTApi=RESTApi(name='SkyscannerRESTApi',BaseUrl='https://partners.api.skyscanner.net/apiservices/',APIKey='prtl6749387986743898559646983194')
   skyscannerRESTApi.save()
   paramsGetSkyscToken={
-      'apiKey':'prtl6749387986743898559646983194',
+      'apiKey':'example',
   }
 
   datagetSessionKey={

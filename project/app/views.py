@@ -1,12 +1,12 @@
 #from project.app.models import blablaTrip
 from django.shortcuts import render
 from .forms import userRequest
-from app.models import Request,Trip,blablaTrip
-import datetime
-import pytz
-from django.utils.dateparse import parse_datetime
+from app.models import Request,Trip,blablaTrip,Node
+from datetime import datetime as dt
+from datetime import timedelta
 from .otherFunctions.dateFunctions import parseStrDate
-from timezonefinder import TimezoneFinder
+from .otherFunctions.nodesFunctions import filterAirportsNodes
+
 
 def home(request):
     if request.method == 'POST':
@@ -16,10 +16,10 @@ def home(request):
             getBlablaCarTrips=Request.objects.get(name='getBlablaCarTrips')
           
             originalDate=form.cleaned_data['date']
-            start_date_local=datetime.datetime(originalDate.year,originalDate.month,originalDate.day)
+            start_date_local=dt(originalDate.year,originalDate.month,originalDate.day)
             start_date_local_string=start_date_local.isoformat()
 
-            end_date_local_string=(start_date_local+datetime.timedelta(days=1)).isoformat()
+            end_date_local_string=(start_date_local+timedelta(days=1)).isoformat()
           
             start_coordinates=str(form.cleaned_data['lat_Origin'])+','+str(form.cleaned_data['lon_Origin'])
 
@@ -49,7 +49,38 @@ def home(request):
 
                 )
                 new_blablatrip.save()
-               
+
+
+            
+            getskyscannerTrips=Request.objects.get(name='getTokenSkyscanner')
+            token=getskyscannerTrips.executeFunction([getskyscannerTrips.RApi.APIKey])
+
+            getSessionKeySkyscanner=Request.objects.get(name='getSessionKeySkyscanner')
+            getFlightsInformationSkyscanner=Request.objects.get(name='getFlightsInformationSkyscanner')
+            
+            outboundDate='{y}-{m}-{d}'.format(y=str(start_date_local.year),m=str(start_date_local.month).zfill(2),d=str(start_date_local.day).zfill(2))
+            
+            filter_DepartureNodes=filterAirportsNodes(start_coordinates)
+            filter_ArrivalNodes=filterAirportsNodes(end_coordinates)
+            for departureNode in filter_DepartureNodes:
+                for arrivalNode in filter_ArrivalNodes:
+                    paramsList=['Economy','ES','EUR','es-ES','iata',departureNode.code,arrivalNode.code,outboundDate,1,0,0,token]
+                    SessionKey=getSessionKeySkyscanner.executeFunction(paramsList)
+                    getFlightsInformationSkyscanner.PartToaddToBaseUrl+=SessionKey
+                    results=getFlightsInformationSkyscanner.executeFunction([0,token])
+
+
+                    urlList=(getFlightsInformationSkyscanner.PartToaddToBaseUrl.split('/'))
+                    urlList.pop()
+                    getFlightsInformationSkyscanner.PartToaddToBaseUrl="/".join(urlList)
+
+
+                    for price,urlPay,departure_date,arrival_date,duration,airlineName,airlineUrlImage in results:
+                        print(price,departure_date,arrival_date,duration,airlineName,airlineUrlImage)
+                        print(len(urlPay))
+
+                    
+            
 
     else:
         Trip.objects.all().delete()
