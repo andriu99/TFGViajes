@@ -2,7 +2,6 @@ from .funtionsRequest.airportsRequests import getFlightInformation,getSessionKey
 from .funtionsRequest.blablacarRequests import findBlablaTrips
 from .funtionsRequest.bustrainRequests import findbustrainTrips
 from .funtionsRequest.googleMapsRequests import getProvinceLocationThroughCoordinates
-from .models import DateInput
 from django.db import models
 import requests 
 import json 
@@ -83,8 +82,8 @@ class Node(models.Model):
         return self.name+' ('+self.nodeType+')'
 
 class Trip(models.Model):
-    departureDate=models.DateField(widget=DateInput)
-    arrivalDate=models.DateField(widget=DateInput)
+    departureDate=models.DateField()
+    arrivalDate=models.DateField()
     duration=models.IntegerField() #in seconds
     price=models.FloatField()
 
@@ -110,8 +109,14 @@ class skyscannerTrip(models.Model):
   
 class busOrTrainTrip(models.Model):
     trip=models.OneToOneField(Trip,on_delete=models.CASCADE)
-    departureNode=models.OneToOneField(Node)
-    arrivalNode=models.OneToOneField(Node)
+    departureNode=models.OneToOneField(Node,on_delete=models.CASCADE,related_name='departureNode')
+    arrivalNode=models.OneToOneField(Node,on_delete=models.CASCADE,related_name='arrivalNode')
+    class Suit(models.TextChoices):
+        TRAIN = 'T'
+        BUS = 'B'
+     
+
+    system = models.CharField(choices=Suit.choices,max_length=5)
 
 
 
