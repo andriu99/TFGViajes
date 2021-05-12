@@ -81,7 +81,6 @@ def home(request):
                         endData_date = parseStrDate(arrival_date,float(endData_latitude),float(endData_longitude))
                         new_trip=Trip(departureDate=startData_date,arrivalDate=endData_date,duration=duration,price=float(price))
                         new_trip.save()
-                        print(airlineName)
                         new_skyscannerTrip=skyscannerTrip(urlPay=urlPay,airlineName=airlineName,airlineUrlImage=airlineUrlImage,trip=new_trip)
                         new_skyscannerTrip.save()
 
