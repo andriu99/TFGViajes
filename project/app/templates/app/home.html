@@ -7,6 +7,22 @@
 		{% csrf_token %}
 		{{ form }}
 		<button>Enviar</button>
+
+
+
+		 <h2>Lista de tareas</h2>
+        <ul>
+            {% for blablatrip in blablatrips %}
+			
+            <li>
+                {{blablatrip.trip.departureDate}}
+				{{blablatrip.trip.arrivalDate}}
+				{{blablatrip.link}}
+
+            </li>
+          
+            {% endfor %}
+        </ul>
 	</form>
 
 {% endblock %}

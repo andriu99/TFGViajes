@@ -1,6 +1,7 @@
+#from project.app.models import blablaTrip
 from django.shortcuts import render
 from .forms import userRequest
-from app.models import Request,Trip
+from app.models import Request,Trip,blablaTrip
 import datetime
 
 
@@ -23,19 +24,27 @@ def home(request):
             iterableBlablaCar=getBlablaCarTrips.executeFunction([getBlablaCarTrips.RApi.APIKey,start_coordinates,end_coordinates,'EUR',start_date_local_string,end_date_local_string])
             for (url,
                  startData_str,startData_city,startData_address,startData_latitude,startData_longitude,
-                 endData_str,endDatacity,endDataaddress,endDatalatitude,endDatalongitude,
+                 endData_str,endData_city,endData_address,endData_latitude,endData_longitude,
                  price
+
             ) in iterableBlablaCar:
                 startData_date = datetime.datetime.strptime(startData_str, '%Y-%m-%dT%H:%M:%S')
                 endData_date = datetime.datetime.strptime(endData_str, '%Y-%m-%dT%H:%M:%S')
 
                 diffDate=endData_date-startData_date
                 duration=diffDate.seconds
-                print(duration)
-                print(price)
-                print(type(price))
-                #new_trip=Trip(departureDate=startData_date,arrivalDate=endData_date,duration=duration,price=)
+             
+                new_trip=Trip(departureDate=startData_date,arrivalDate=endData_date,duration=duration,price=float(price))
+                new_trip.save()
 
+                new_blablatrip=blablaTrip(link=url,
+                                          departureCity=startData_city,departureAddress=startData_address,departureLatitude=float(startData_latitude),departureLongitude=float(startData_longitude),
+                                          arrivalCity=endData_city,arrivalAddress=endData_address,arrivalLatitude=float(endData_latitude),arrivalLongitude=float(endData_longitude),
+                                          trip=new_trip
+
+                )
+                new_blablatrip.save()
+               
 
                 # print(url)
                 # print(startData_date,startData_city,startData_address,startData_latitude,startData_longitude)
@@ -44,6 +53,6 @@ def home(request):
     else:
         form = userRequest()
     
-
-    context = {'form' : form}
+    blablatrips=blablaTrip.objects.all()
+    context = {'form' : form,'blablatrips':blablatrips}
     return render(request,'app/home.html',context)

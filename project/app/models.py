@@ -82,14 +82,17 @@ class Node(models.Model):
         return self.name+' ('+self.nodeType+')'
 
 class Trip(models.Model):
-    departureDate=models.DateField()
-    arrivalDate=models.DateField()
+    departureDate=models.DateTimeField()
+    arrivalDate=models.DateTimeField()
     duration=models.IntegerField() #in seconds
     price=models.FloatField()
 
+    # def __str__(self):
+    #     return str(self.arrivalDate)
+
 class blablaTrip(models.Model):
     trip=models.OneToOneField(Trip,on_delete=models.CASCADE)
-    link=models.CharField(max_length=150)
+    link=models.URLField(max_length=150)
     departureCity=models.CharField(max_length=30)
     departureAddress=models.CharField(max_length=30)
     departureLatitude=models.FloatField()
@@ -103,7 +106,7 @@ class blablaTrip(models.Model):
 
 class skyscannerTrip(models.Model):
     trip=models.OneToOneField(Trip,on_delete=models.CASCADE)
-    urlPago=models.CharField(max_length=1500)
+    urlPago=models.URLField(max_length=1500)
     AirlineName=models.CharField(max_length=50)
     AirlineUrlImage=models.CharField(max_length=50)
   
