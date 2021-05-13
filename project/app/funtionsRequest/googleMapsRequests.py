@@ -13,3 +13,7 @@ def getProvinceLocationThroughCoordinates(response):
             province=i['long_name']
     
     return location,province
+
+
+def getTimeZone(response):
+    return response.json()['timeZoneId']

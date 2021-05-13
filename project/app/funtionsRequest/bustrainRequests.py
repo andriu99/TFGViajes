@@ -8,5 +8,8 @@ def getStationInformation(response):
 
 
 def findbustrainTrips(response):
-    for trip in response.json()['trips']:
-      yield trip['cents'],trip['departure_date'],trip['arrival_date']
+    try:
+        for trip in response.json()['trips']:
+            yield trip['cents'],trip['departure_date'],trip['arrival_date']
+    except:
+        return None 

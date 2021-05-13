@@ -1,7 +1,7 @@
 from .funtionsRequest.airportsRequests import getFlightInformation,getSessionKey,getTokenOrFlightData,getAirportsData
 from .funtionsRequest.blablacarRequests import findBlablaTrips
 from .funtionsRequest.bustrainRequests import findbustrainTrips
-from .funtionsRequest.googleMapsRequests import getProvinceLocationThroughCoordinates
+from .funtionsRequest.googleMapsRequests import getProvinceLocationThroughCoordinates,getTimeZone
 from django.db import models
 import requests 
 import json 
@@ -43,6 +43,7 @@ class Request(models.Model):
         for key in structureWithValues.keys():
             structureWithValues[key]=listParamsValues[contIndex]
             contIndex+=1
+
 
 
         if self.typeRequests=="GET":

@@ -7,6 +7,8 @@ from datetime import timedelta
 from .otherFunctions.dateFunctions import parseStrDate
 from .otherFunctions.nodesFunctions import filterAirportsNodes
 
+import pytz
+
 
 def home(request):
     if request.method == 'POST':
@@ -31,9 +33,10 @@ def home(request):
                  price
 
             ) in iterableBlablaCar:
-                startData_date = parseStrDate(startData_str,float(startData_latitude),float(startData_latitude)) 
-                endData_date = parseStrDate(endData_str,float(endData_latitude),float(endData_longitude)) 
-                
+            
+                startData_date = parseStrDate(startData_str,startData_latitude,startData_longitude) 
+                endData_date = parseStrDate(endData_str,endData_latitude,endData_longitude)
+
                 diffDate=endData_date-startData_date
                 duration=diffDate.seconds
 
@@ -52,40 +55,75 @@ def home(request):
 
 
             
-            getskyscannerTrips=Request.objects.get(name='getTokenSkyscanner')
-            token=getskyscannerTrips.executeFunction([getskyscannerTrips.RApi.APIKey])
+            # getskyscannerTrips=Request.objects.get(name='getTokenSkyscanner')
+            # token=getskyscannerTrips.executeFunction([getskyscannerTrips.RApi.APIKey])
 
-            getSessionKeySkyscanner=Request.objects.get(name='getSessionKeySkyscanner')
-            getFlightsInformationSkyscanner=Request.objects.get(name='getFlightsInformationSkyscanner')
+            # getSessionKeySkyscanner=Request.objects.get(name='getSessionKeySkyscanner')
+            # getFlightsInformationSkyscanner=Request.objects.get(name='getFlightsInformationSkyscanner')
             
-            outboundDate='{y}-{m}-{d}'.format(y=str(start_date_local.year),m=str(start_date_local.month).zfill(2),d=str(start_date_local.day).zfill(2))
+            # outboundDate='{y}-{m}-{d}'.format(y=str(start_date_local.year),m=str(start_date_local.month).zfill(2),d=str(start_date_local.day).zfill(2))
             
-            filter_DepartureNodes=filterAirportsNodes(start_coordinates)
-            filter_ArrivalNodes=filterAirportsNodes(end_coordinates)
-            for departureNode in filter_DepartureNodes:
-                for arrivalNode in filter_ArrivalNodes:
-                    paramsList=['Economy','ES','EUR','es-ES','iata',departureNode.code,arrivalNode.code,outboundDate,1,0,0,token]
-                    SessionKey=getSessionKeySkyscanner.executeFunction(paramsList)
-                    getFlightsInformationSkyscanner.PartToaddToBaseUrl+=SessionKey
-                    results=getFlightsInformationSkyscanner.executeFunction([0,token])
+            # filter_DepartureNodes=filterAirportsNodes(start_coordinates)
+            # filter_ArrivalNodes=filterAirportsNodes(end_coordinates)
+            # for departureNode in filter_DepartureNodes:
+            #     for arrivalNode in filter_ArrivalNodes:
+            #         paramsList=['Economy','ES','EUR','es-ES','iata',departureNode.code,arrivalNode.code,outboundDate,1,0,0,token]
+            #         SessionKey=getSessionKeySkyscanner.executeFunction(paramsList)
+            #         getFlightsInformationSkyscanner.PartToaddToBaseUrl+=SessionKey
+            #         results=getFlightsInformationSkyscanner.executeFunction([0,token])
 
 
-                    urlList=(getFlightsInformationSkyscanner.PartToaddToBaseUrl.split('/'))
-                    urlList.pop()
-                    getFlightsInformationSkyscanner.PartToaddToBaseUrl="/".join(urlList)
+            #         urlList=(getFlightsInformationSkyscanner.PartToaddToBaseUrl.split('/'))
+            #         urlList.pop()
+            #         getFlightsInformationSkyscanner.PartToaddToBaseUrl="/".join(urlList)
 
 
-                    for price,urlPay,departure_date,arrival_date,duration,airlineName,airlineUrlImage in results:
+            #         for price,urlPay,departure_date,arrival_date,duration,airlineName,airlineUrlImage in results:
+            #             startData_date = parseStrDate(departure_date,departureNode.latitude,departureNode.longitude)
 
-                        startData_date = parseStrDate(departure_date,float(startData_latitude),float(startData_latitude)) 
-                        endData_date = parseStrDate(arrival_date,float(endData_latitude),float(endData_longitude))
-                        new_trip=Trip(departureDate=startData_date,arrivalDate=endData_date,duration=duration,price=float(price))
-                        new_trip.save()
-                        new_skyscannerTrip=skyscannerTrip(urlPay=urlPay,airlineName=airlineName,airlineUrlImage=airlineUrlImage,trip=new_trip)
-                        new_skyscannerTrip.save()
+            #             endData_date = parseStrDate(arrival_date,arrivalNode.latitude,arrivalNode.longitude)
 
-                    
-            
+            #             new_trip=Trip(departureDate=startData_date,arrivalDate=endData_date,duration=duration,price=float(price))
+            #             new_trip.save()
+            #             new_skyscannerTrip=skyscannerTrip(urlPay=urlPay,airlineName=airlineName,airlineUrlImage=airlineUrlImage,trip=new_trip)
+            #             new_skyscannerTrip.save()
+
+
+
+
+
+
+            # getBusTrainTrips=Request.objects.get(name='getbustrainTripsInformationTrainline')
+            # searchDict={
+            #     "passenger_ids": [
+            #     "314892886"
+            #     ],
+            #     "card_ids": [
+            #     "14127110"
+            #     ],
+            #     "departure_station_id":0,
+            #     "arrival_station_id":0,
+            #     "departure_date":"2021-03-29T00:00:00+01:00",
+            #     "systems":[]
+            # }
+            # filter_departureNodes=filterAirportsNodes(start_coordinates,nodeType='S')
+            # filter_arrivalNodes=filterAirportsNodes(end_coordinates,nodeType='S')
+
+            # for departureNode in filter_departureNodes:
+            #     for arrivalNode in filter_arrivalNodes:
+            #         searchDict['departure_station_id']=int(departureNode.code)
+            #         searchDict['arrival_station_id']=int(arrivalNode.code)
+            #         searchDict['departure_date']=start_date_local_string
+            #         searchDict['systems']=['renfe']
+            #         tripGenerator=getBusTrainTrips.executeFunction(['EUR',searchDict],typeOfData='str')
+            #         # print(departureNode.code)
+            #         # print(arrivalNode.code)
+
+            #         #print(a)
+            #         if tripGenerator!=None:
+            #             for price,departureDate,arrivalDate in tripGenerator:
+            #                 print(price,departure_date,arrivalDate)
+                
 
     else:
         Trip.objects.all().delete()
