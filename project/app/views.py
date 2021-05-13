@@ -1,20 +1,17 @@
 #from project.app.models import blablaTrip
 from django.shortcuts import render
 from .forms import userRequest
-from app.models import Request,Trip,blablaTrip,skyscannerTrip,Node
+from app.models import Trip,blablaTrip,skyscannerTrip
 from datetime import datetime as dt
-from datetime import timedelta
-from .otherFunctions.dateFunctions import parseStrDate
-from .otherFunctions.nodesFunctions import filterAirportsNodes
 
 from .viewFunctions.homeviewFunctions import saveBlablacarTrips,saveSkyscannerFlights,save_train_bus_trips
 
-import pytz
 
 
 def home(request):
+    Trip.objects.all().delete()
+
     if request.method == 'POST':
-        Trip.objects.all().delete()
         form = userRequest(request.POST)
         if form.is_valid():
 
@@ -32,7 +29,6 @@ def home(request):
 
 
     else:
-        Trip.objects.all().delete()
         form = userRequest()
     
     blablaTrips=blablaTrip.objects.all()
