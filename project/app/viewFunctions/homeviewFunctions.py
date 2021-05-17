@@ -92,6 +92,7 @@ def save_train_bus_trips(start_coordinates,end_coordinates,start_date_local):
 
     for departureNode in filter_departureNodes:
         for arrivalNode in filter_arrivalNodes:
+     
             searchDict['departure_station_id']=int(departureNode.code)
             searchDict['arrival_station_id']=int(arrivalNode.code)
             searchDict['departure_date']=start_date_local.isoformat()
@@ -115,9 +116,8 @@ def save_train_bus_trips(start_coordinates,end_coordinates,start_date_local):
 
                         new_trip=Trip(departureDate=departureDate,arrivalDate=arrivalDate,duration=duration.seconds,price=price)
                         new_trip.save()
-                        print(departureNode)
-                        print(arrivalNode)
-                        bus_trains_trips=busOrTrainTrip(departureNode=departureNode,arrivalNode=arrivalNode,system=system_transport[system],trip=new_trip)
+                       
+                        bus_trains_trips=busOrTrainTrip(departureNode=departureNode,arrivalNode=arrivalNode,system=system,trip=new_trip)
                         bus_trains_trips.save()
         
 

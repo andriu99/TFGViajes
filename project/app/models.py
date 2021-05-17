@@ -5,7 +5,6 @@ from .funtionsRequest.googleMapsRequests import getProvinceLocationThroughCoordi
 from django.db import models
 import requests 
 import json 
-from time import time
 class RESTApi(models.Model):
     name=models.CharField(unique=True,max_length=50)
     BaseUrl=models.CharField(max_length=50)
@@ -51,12 +50,9 @@ class Request(models.Model):
         else:
             if typeOfData=='str':
                 structureWithValues=json.dumps(structureWithValues)
-            start_time = time()
 
             rq=requests.post(baseUrl+self.PartToaddToBaseUrl,data=structureWithValues,headers=dict(self.headers))
-            elapsed_time = time() - start_time
 
-            print(str(elapsed_time))
 
             return rq
 
@@ -119,8 +115,10 @@ class skyscannerTrip(models.Model):
   
 class busOrTrainTrip(models.Model):
     trip=models.OneToOneField(Trip,on_delete=models.CASCADE)
-    departureNode=models.OneToOneField(Node,on_delete=models.CASCADE,related_name='departureNode')
-    arrivalNode=models.OneToOneField(Node,on_delete=models.CASCADE,related_name='arrivalNode')
+    
+    departureNode=models.ForeignKey(Node,on_delete=models.CASCADE,related_name='departureNode')
+    arrivalNode=models.ForeignKey(Node,on_delete=models.CASCADE,related_name='arrivalNode')
+
     
     class Suit(models.TextChoices):
         TRAIN = 'T'
