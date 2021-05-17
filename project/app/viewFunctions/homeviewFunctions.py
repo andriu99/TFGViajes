@@ -109,10 +109,12 @@ def save_train_bus_trips(start_coordinates,end_coordinates,start_date_local):
 
                 if tripGenerator!=None:
                     for price,departureDate,arrivalDate in tripGenerator:
+
                         departureDate = parseStrDate(departureDate,departureNode.latitude,departureNode.longitude) 
                         arrivalDate = parseStrDate(arrivalDate,arrivalNode.latitude,arrivalNode.longitude)
-
+                      
                         duration=calculateDuration(departureDate,arrivalDate)
+                        print(departureDate,arrivalDate,system)
 
                         new_trip=Trip(departureDate=departureDate,arrivalDate=arrivalDate,duration=duration.seconds,price=price)
                         new_trip.save()

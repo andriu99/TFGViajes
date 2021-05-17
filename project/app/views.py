@@ -35,12 +35,12 @@ def home(request):
     blablaTrips=blablaTrip.objects.all()
     skyscannerTrips=skyscannerTrip.objects.all()
     try:
-        busTrips=busOrTrainTrip.objects.get(system='B')
+        busTrips=busOrTrainTrip.objects.filter(system='B')
     except:
         busTrips={}
 
     try:
-        trainTrips=busOrTrainTrip.objects.get(system='T')
+        trainTrips=busOrTrainTrip.objects.filter(system='T')
     except:
         trainTrips={}
 
