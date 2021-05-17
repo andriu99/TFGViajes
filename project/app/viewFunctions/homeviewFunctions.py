@@ -115,8 +115,10 @@ def save_train_bus_trips(start_coordinates,end_coordinates,start_date_local):
 
                         new_trip=Trip(departureDate=departureDate,arrivalDate=arrivalDate,duration=duration.seconds,price=price)
                         new_trip.save()
-                        busOrTrainTrip(departureNode=departureNode,arrivalNode=arrivalNode,system=system_transport[system],trip=new_trip)
-                        busOrTrainTrip.save()
+                        print(departureNode)
+                        print(arrivalNode)
+                        bus_trains_trips=busOrTrainTrip(departureNode=departureNode,arrivalNode=arrivalNode,system=system_transport[system],trip=new_trip)
+                        bus_trains_trips.save()
         
 
 
