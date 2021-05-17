@@ -1,7 +1,8 @@
-url='https://www.trainline.eu/api/v5/stations?context=search'
-params={
-    'q':"Burgos"
+
+system_transport={
+                'T':['renfe'],
+                'B':['busbud']
 }
-import requests
-response=requests.get(url,params=params)
-print(response.json())
+for key in system_transport:
+    print(key)
+    print(system_transport[key])

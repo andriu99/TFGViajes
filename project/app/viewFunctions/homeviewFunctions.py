@@ -1,8 +1,9 @@
-from app.models import Request,Trip,blablaTrip,skyscannerTrip
+from app.models import Request,Trip,blablaTrip,skyscannerTrip,busOrTrainTrip
 from datetime import datetime as dt
 from datetime import timedelta
-from ..otherFunctions.dateFunctions import parseStrDate
-from ..otherFunctions.nodesFunctions import filterAirportsNodes
+from ..otherFunctions.dateFunctions import parseStrDate,calculateDuration
+from ..otherFunctions.nodesFunctions import filterNodes
+
 
 def saveBlablacarTrips(start_coordinates,end_coordinates,start_date_local):
     getBlablaCarTrips=Request.objects.get(name='getBlablaCarTrips')
@@ -18,18 +19,12 @@ def saveBlablacarTrips(start_coordinates,end_coordinates,start_date_local):
 
     ) in iterableBlablaCar:
 
+
         startData_date = parseStrDate(startData_str,startData_latitude,startData_longitude) 
         endData_date = parseStrDate(endData_str,endData_latitude,endData_longitude)
 
-        
-        difHours_departure_withUT0=int(startData_date.isoformat()[-6]+startData_date.isoformat()[-4]) #diference between 00:00 time zone and departure time zone
-        difHours_arrival_withUT0=int(startData_date.isoformat()[-6]+endData_date.isoformat()[-4])
-        
-        difHours_arrival_departure=difHours_arrival_withUT0-difHours_departure_withUT0
+        duration=calculateDuration(startData_date,endData_date)
 
-        duration=endData_date-startData_date
-        duration=duration+timedelta(hours=(-1)*difHours_arrival_departure)
-        
         
         new_trip=Trip(departureDate=startData_date,arrivalDate=endData_date,duration=duration.seconds,price=float(price))
         new_trip.save()
@@ -52,8 +47,8 @@ def saveSkyscannerFlights(start_coordinates,end_coordinates,start_date_local):
     
     outboundDate='{y}-{m}-{d}'.format(y=str(start_date_local.year),m=str(start_date_local.month).zfill(2),d=str(start_date_local.day).zfill(2))
     
-    filter_DepartureNodes=filterAirportsNodes(start_coordinates)
-    filter_ArrivalNodes=filterAirportsNodes(end_coordinates)
+    filter_DepartureNodes=filterNodes(start_coordinates)
+    filter_ArrivalNodes=filterNodes(end_coordinates)
     for departureNode in filter_DepartureNodes:
         for arrivalNode in filter_ArrivalNodes:
             paramsList=['Economy','ES','EUR','es-ES','iata',departureNode.code,arrivalNode.code,outboundDate,1,0,0,token]
@@ -92,19 +87,32 @@ def save_train_bus_trips(start_coordinates,end_coordinates,start_date_local):
         "departure_date":"2021-03-29T00:00:00+01:00",
         "systems":[]
     }
-    filter_departureNodes=filterAirportsNodes(start_coordinates,nodeType='S')
-    filter_arrivalNodes=filterAirportsNodes(end_coordinates,nodeType='S')
+    filter_departureNodes=filterNodes(start_coordinates,nodeType='S')
+    filter_arrivalNodes=filterNodes(end_coordinates,nodeType='S')
 
     for departureNode in filter_departureNodes:
         for arrivalNode in filter_arrivalNodes:
             searchDict['departure_station_id']=int(departureNode.code)
             searchDict['arrival_station_id']=int(arrivalNode.code)
             searchDict['departure_date']=start_date_local.isoformat()
-            searchDict['systems']=['renfe']
-            tripGenerator=getBusTrainTrips.executeFunction(['EUR',searchDict],typeOfData='str')
             
-            if tripGenerator!=None:
-                for price,departureDate,arrivalDate in tripGenerator:
-                    print(price,departureDate,arrivalDate)
+         
+            system_transport={
+                'T':['renfe'],
+                'B':['busbud']
+            }
+
+            for system in system_transport:
+                searchDict['systems']=system_transport[system]
+                tripGenerator=getBusTrainTrips.executeFunction(['EUR',searchDict],typeOfData='str')
+
+                if tripGenerator!=None:
+                    for price,departureDate,arrivalDate in tripGenerator:
+                        new_trip=Trip(departureDate=departureDate,arrivalDate=arrivalDate,duration=duration*60,price=price)
+                        new_trip.save()
+                        duration=calculateDuration(departureDate,arrivalDate)
+                        busOrTrainTrip(departureNode=departureNode,arrivalNode=arrivalNode,system=system_transport[system],trip=new_trip)
+                        busOrTrainTrip.save()
+        
 
 

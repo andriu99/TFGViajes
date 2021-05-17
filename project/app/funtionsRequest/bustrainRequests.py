@@ -10,6 +10,6 @@ def getStationInformation(response):
 def findbustrainTrips(response):
     try:
         for trip in response.json()['trips']:
-            yield trip['cents'],trip['departure_date'],trip['arrival_date']
+            yield trip['cents']/100,trip['departure_date'],trip['arrival_date']
     except:
         return None 

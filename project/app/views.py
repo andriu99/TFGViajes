@@ -1,7 +1,8 @@
 #from project.app.models import blablaTrip
+#from project.app.models import busOrTrainTrip
 from django.shortcuts import render
 from .forms import userRequest
-from app.models import Trip,blablaTrip,skyscannerTrip
+from app.models import Trip,blablaTrip,skyscannerTrip,busOrTrainTrip
 from datetime import datetime as dt
 
 from .viewFunctions.homeviewFunctions import saveBlablacarTrips,saveSkyscannerFlights,save_train_bus_trips
@@ -23,8 +24,8 @@ def home(request):
             end_coordinates=str(form.cleaned_data['lat_Dest'])+','+str(form.cleaned_data['lon_Dest'])
 
 
-            saveBlablacarTrips(start_coordinates,end_coordinates,start_date_local)
-            saveSkyscannerFlights(start_coordinates,end_coordinates,start_date_local)
+            # saveBlablacarTrips(start_coordinates,end_coordinates,start_date_local)
+            # saveSkyscannerFlights(start_coordinates,end_coordinates,start_date_local)
             save_train_bus_trips(start_coordinates,end_coordinates,start_date_local)
 
 
@@ -33,5 +34,15 @@ def home(request):
     
     blablaTrips=blablaTrip.objects.all()
     skyscannerTrips=skyscannerTrip.objects.all()
-    context = {'form' : form,'blablaTrips':blablaTrips,'skyscannerTrips':skyscannerTrips}
+    try:
+        busTrips=busOrTrainTrip.objects.get(system='B')
+    except:
+        busTrips={}
+
+    try:
+        trainTrips=busOrTrainTrip.objects.get(system='T')
+    except:
+        trainTrips={}
+
+    context = {'form' : form,'blablaTrips':blablaTrips,'skyscannerTrips':skyscannerTrips,'busTrips':busTrips,'trainTrips':trainTrips}
     return render(request,'app/home.html',context)

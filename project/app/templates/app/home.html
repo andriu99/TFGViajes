@@ -47,6 +47,47 @@
           
             {% endfor %}
         </ul>
+
+        <h2>Lista de viajes en bus</h2>
+            <ul>
+                {% for busTrip in busTrips %}
+                
+                <li>
+                    {{busTrip.trip.departureDate}}
+				    {{busTrip.trip.arrivalDate}}
+                    {{busTrip.trip.price}}
+
+                    {{busTrip.Node.departureNode.name}}
+                    {{busTrip.Node.arrivalNode.name}}
+
+                   
+
+                </li>
+            
+                {% endfor %}
+        </ul>
+
+
+
+        <h2>Lista de viajes en tren</h2>
+            <ul>
+                {% for trainTrip in trainTrips %}
+                
+                <li>
+                    {{trainTrip.trip.departureDate}}
+				    {{trainTrip.trip.arrivalDate}}
+                    {{trainTrip.trip.price}}
+
+                    {{trainTrip.Node.departureNode.name}}
+                    {{trainTrip.Node.arrivalNode.name}}
+
+                   
+
+                </li>
+            
+                {% endfor %}
+        </ul>
+
 	</form>
 
 {% endblock %}

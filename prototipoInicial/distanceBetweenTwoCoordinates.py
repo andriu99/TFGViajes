@@ -16,4 +16,17 @@ def haversine(lat1, lon1, lat2, lon2):
     r = 6371 # Radius of earth in kilometers. Use 3956 for miles
     return c * r
 
-#hola
+
+d=haversine(40.4043078,-3.6896317615447,41.37901205,2.13996016646417)
+print(d)
+url='https://maps.googleapis.com/maps/api/distancematrix/json'
+params={
+    'origins':'40.4043078,-3.6896317615447',
+    'destinations':'41.37901205,2.13996016646417',
+    'key':'AIzaSyCaR0xc4Xiv3rHEV-HkFD-4Dt7hsIx3aT0',
+    'avoid':'tolls'
+}
+
+import requests
+rq=requests.get(url,params=params)
+print(rq.json())
