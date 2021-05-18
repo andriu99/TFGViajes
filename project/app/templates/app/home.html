@@ -1,8 +1,7 @@
 {% extends 'app/layout.html' %}
 
 {% block content %}
-
-        <h1>Welcome</h1>
+        
         <form method="post">
 		{% csrf_token %}
 		{{ form }}
@@ -15,8 +14,8 @@
             {% for blablaTrip in blablaTrips %}
 			
             <li>
-                {{blablaTrip.trip.departureDate}}
-				{{blablaTrip.trip.arrivalDate}}
+                {{blablaTrip.trip.departureDate|time:"H:i"}}
+				{{blablaTrip.trip.arrivalDate|time:"H:i"}}
                 {{blablaTrip.trip.price}}
 
 				{{blablaTrip.link}}
@@ -29,64 +28,78 @@
 
 
         <h2>Lista de viajes en avión (Skyscanner)</h2>
-        <ul>
+        <table id="customers">
+            <tr>
+                    <th>Hora Salida</th>
+                    <th>Hora Llegada</th>
+                    <th>Precio</th>
+                    <th>Nombre de la Estación de Salida</th>
+                    <th>Nombre de la estación de llegada</th>
+            </tr>
             {% for skyscannerTrip in skyscannerTrips %}
 			
-            <li>
-                {{skyscannerTrip.trip.departureDate}}
-				{{skyscannerTrip.trip.arrivalDate}}
+                {{skyscannerTrip.trip.departureDate|time:"H:i"}}
+				{{skyscannerTrip.trip.arrivalDate|time:"H:i"}}
                 {{skyscannerTrip.trip.price}}
 
 				{{skyscannerTrip.airlineName}}
                 {{skyscannerTrip.Node.name}}
                 {{skyscannerTrip.Node.code}}
-
-
-
-            </li>
-          
             {% endfor %}
-        </ul>
+
+        </table>
+
 
         <h2>Lista de viajes en bus</h2>
-            <ul>
+            <table id="customers">
+                <tr>
+                    <th>Hora Salida</th>
+                    <th>Hora Llegada</th>
+                    <th>Precio</th>
+                    <th>Nombre de la Estación de Salida</th>
+                    <th>Nombre de la estación de llegada</th>
+                </tr>
                 {% for busTrip in busTrips %}
-                
-                <li>
-                    {{busTrip.trip.departureDate}}
-				    {{busTrip.trip.arrivalDate}}
-                    {{busTrip.trip.price}}
+                    <tr>
+                        <td>{{ busTrip.trip.departureDate|time:"H:i" }}</td>
+                        <td>{{ busTrip.trip.arrivalDate|time:"H:i" }}</td>
+                        <td>{{busTrip.trip.price}}</td>
+                        <td>{{busTrip.departureNode.name}}</td>
+                        <td>{{busTrip.arrivalNode.name}}</td>
+                    </tr>
 
-                    {{busTrip.Node.departureNode.name}}
-                    {{busTrip.Node.arrivalNode.name}}
-
-                   
-
-                </li>
-            
                 {% endfor %}
-        </ul>
+
+
+            </table>
+
 
 
 
         <h2>Lista de viajes en tren</h2>
-            <ul>
+            <table id="customers">
+                <tr>
+                    <th>Hora Salida</th>
+                    <th>Hora Llegada</th>
+                    <th>Precio</th>
+                    <th>Nombre de la Estación de Salida</th>
+                    <th>Nombre de la estación de llegada</th>
+                </tr>
                 {% for trainTrip in trainTrips %}
-                
-                <li>
-                    {{trainTrip.trip.departureDate}}
-				    {{trainTrip.trip.arrivalDate}}
-                    {{trainTrip.trip.price}}
+                    <tr>
+                        <td>{{ trainTrip.trip.departureDate|time:"H:i" }}</td>
+                        <td>{{ trainTrip.trip.arrivalDate|time:"H:i" }}</td>
+                        <td>{{trainTrip.trip.price}}</td>
+                        <td>{{trainTrip.departureNode.name}}</td>
+                        <td>{{trainTrip.arrivalNode.name}}</td>
+                    </tr>
 
-                    {{trainTrip.Node.departureNode.name}}
-                    {{trainTrip.Node.arrivalNode.name}}
-
-                   
-
-                </li>
-            
                 {% endfor %}
-        </ul>
+
+
+            </table>
+
+           
 
 	</form>
 

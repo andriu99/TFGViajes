@@ -1,0 +1,29 @@
+
+body {
+  background-color:#000000;
+  color:rgb(248, 242, 242);
+
+}
+.titles{
+  background-color:gray;
+  color:rgb(248, 242, 242);
+
+}
+
+#customers {
+    font-family: Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+  }
+  
+ 
+  #customers tr:nth-child(even){background-color: rebeccapurple;}
+
+  #customers tr:hover {background-color:red;}
+  #customers th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color:grey;
+    color:whitesmoke;
+  }
