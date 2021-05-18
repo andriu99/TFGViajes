@@ -26,7 +26,7 @@ def saveBlablacarTrips(start_coordinates,end_coordinates,start_date_local):
         duration=calculateDuration(startData_date,endData_date)
 
         
-        new_trip=Trip(departureDate=startData_date,arrivalDate=endData_date,duration=duration.seconds,price=float(price))
+        new_trip=Trip(departureNode=None,arrivalNode=None,departureDate=startData_date,arrivalDate=endData_date,duration=duration.seconds,price=float(price))
         new_trip.save()
 
         new_blablatrip=blablaTrip(link=url,
@@ -67,7 +67,7 @@ def saveSkyscannerFlights(start_coordinates,end_coordinates,start_date_local):
                 endData_date = parseStrDate(arrival_date,arrivalNode.latitude,arrivalNode.longitude)
                 
 
-                new_trip=Trip(departureDate=startData_date,arrivalDate=endData_date,duration=duration*60,price=float(price))
+                new_trip=Trip(departureNode=departureNode,arrivalNode=arrivalNode,departureDate=startData_date,arrivalDate=endData_date,duration=duration*60,price=float(price))
                 new_trip.save()
                 new_skyscannerTrip=skyscannerTrip(urlPay=urlPay,airlineName=airlineName,airlineUrlImage=airlineUrlImage,trip=new_trip)
                 new_skyscannerTrip.save()
@@ -89,39 +89,37 @@ def save_train_bus_trips(start_coordinates,end_coordinates,start_date_local):
     }
     filter_departureNodes=filterNodes(start_coordinates,nodeType='S')
     filter_arrivalNodes=filterNodes(end_coordinates,nodeType='S')
-
-    for departureNode in filter_departureNodes:
-        for arrivalNode in filter_arrivalNodes:
-     
-            searchDict['departure_station_id']=int(departureNode.code)
-            searchDict['arrival_station_id']=int(arrivalNode.code)
-            searchDict['departure_date']=start_date_local.isoformat()
-            
-         
-            system_transport={
+    system_transport={
                 'T':['renfe'],
                 'B':['busbud']
-            }
-
-            for system in system_transport:
-                searchDict['systems']=system_transport[system]
+    }
+    for system in system_transport:
+        searchDict['systems']=system_transport[system]
+            
+        for departureNode in filter_departureNodes:
+            for arrivalNode in filter_arrivalNodes:
+     
+                searchDict['departure_station_id']=int(departureNode.code)
+                searchDict['arrival_station_id']=int(arrivalNode.code)
+                searchDict['departure_date']=start_date_local.isoformat()
+                
                 tripGenerator=getBusTrainTrips.executeFunction(['EUR',searchDict],typeOfData='str')
+                
 
                 if tripGenerator!=None:
                     for price,departureDate,arrivalDate in tripGenerator:
 
                         departureDate = parseStrDate(departureDate,departureNode.latitude,departureNode.longitude) 
                         arrivalDate = parseStrDate(arrivalDate,arrivalNode.latitude,arrivalNode.longitude)
-                      
+                    
                         duration=calculateDuration(departureDate,arrivalDate)
-                        print(departureDate,arrivalDate,system)
 
-                        new_trip=Trip(departureDate=departureDate,arrivalDate=arrivalDate,duration=duration.seconds,price=price)
+                        new_trip=Trip(departureNode=departureNode,arrivalNode=arrivalNode,departureDate=departureDate,arrivalDate=arrivalDate,duration=duration.seconds,price=price)
                         new_trip.save()
                         
-                       
-                        bus_trains_trips=busOrTrainTrip(departureNode=departureNode,arrivalNode=arrivalNode,system=system,trip=new_trip)
+                    
+                        bus_trains_trips=busOrTrainTrip(system=system,trip=new_trip)
                         bus_trains_trips.save()
-        
+    
 
 

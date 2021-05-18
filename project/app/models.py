@@ -90,8 +90,9 @@ class Trip(models.Model):
     duration=models.IntegerField() #in seconds
     price=models.FloatField()
 
-    # def __str__(self):
-    #     return str(self.arrivalDate)
+    departureNode=models.ForeignKey(Node,on_delete=models.CASCADE,related_name='departureNode',null=True)
+    arrivalNode=models.ForeignKey(Node,on_delete=models.CASCADE,related_name='arrivalNode',null=True)
+
 
 class blablaTrip(models.Model):
     trip=models.OneToOneField(Trip,on_delete=models.CASCADE)
@@ -107,18 +108,19 @@ class blablaTrip(models.Model):
     arrivalLongitude=models.FloatField()
 
 
+
 class skyscannerTrip(models.Model):
     trip=models.OneToOneField(Trip,on_delete=models.CASCADE)
     urlPay=models.URLField(max_length=1500)
     airlineName=models.CharField(max_length=50)
     airlineUrlImage=models.CharField(max_length=50)
+
+    
   
 class busOrTrainTrip(models.Model):
     trip=models.OneToOneField(Trip,on_delete=models.CASCADE)
     
-    departureNode=models.ForeignKey(Node,on_delete=models.CASCADE,related_name='departureNode')
-    arrivalNode=models.ForeignKey(Node,on_delete=models.CASCADE,related_name='arrivalNode')
-
+ 
     
     class Suit(models.TextChoices):
         TRAIN = 'T'
