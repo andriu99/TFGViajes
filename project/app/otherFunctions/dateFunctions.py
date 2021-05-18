@@ -14,9 +14,7 @@ def parseStrDate(str_date,lat,lon):
     now = dt.now()
     timestamp = dt.timestamp(now)   
     strtimezone=rqGETTimeZone.executeFunction([str(lat)+','+str(lon),str(timestamp),rqGETTimeZone.RApi.APIKey])
-    #pytz.timezone(strtimezone).localize(date_date, is_dst=None)
     date_date=date_date.astimezone(timezone(strtimezone))
-    print(date_date.tzinfo)
     return date_date
 
 

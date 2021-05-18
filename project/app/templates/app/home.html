@@ -8,50 +8,60 @@
 		<button>Enviar</button>
 
 
-
-		<h2>Lista de viajes en blablaCar</h2>
-        <ul>
-            {% for blablaTrip in blablaTrips %}
-			
-            <li>
-                {{blablaTrip.trip.departureDate|time:"H:i"}}
-				{{blablaTrip.trip.arrivalDate|time:"H:i"}}
-                {{blablaTrip.trip.price}}
-
-				{{blablaTrip.link}}
-
-            </li>
-          
-            {% endfor %}
-        </ul>
-
-
-
-        <h2>Lista de viajes en avión (Skyscanner)</h2>
-        <table id="customers">
-            <tr>
+        {% if blablaTrips %}
+            <h2>Lista de viajes en blablaCar</h2>
+            <table id="trips">
+                <tr>
                     <th>Hora Salida</th>
                     <th>Hora Llegada</th>
                     <th>Precio</th>
-                    <th>Nombre de la Estación de Salida</th>
-                    <th>Nombre de la estación de llegada</th>
-            </tr>
-            {% for skyscannerTrip in skyscannerTrips %}
-			
-                {{skyscannerTrip.trip.departureDate|time:"H:i"}}
-				{{skyscannerTrip.trip.arrivalDate|time:"H:i"}}
-                {{skyscannerTrip.trip.price}}
+                    <th>Link al viaje</th>
+                </tr>
+                {% for blablaTrip in blablaTrips %}
+                    <tr>
+                        <td>{{blablaTrip.trip.departureDate|time:"H:i"}}</td>
+                        <td>{{blablaTrip.trip.arrivalDate|time:"H:i"}}</td>
+                        <td>{{blablaTrip.trip.price}}</td>
+                        <td>{{blablaTrip.link}}</td>
+                    </tr>
+            
+                {% endfor %}
 
-				{{skyscannerTrip.airlineName}}
-                {{skyscannerTrip.Node.name}}
-                {{skyscannerTrip.Node.code}}
-            {% endfor %}
+            </table>
 
-        </table>
+        {% endif %}
 
 
-        <h2>Lista de viajes en bus</h2>
-            <table id="customers">
+        {% if skyscannerTrips %}
+            <h2>Lista de viajes en avión (Skyscanner)</h2>
+            <table id="trips">
+                <tr>
+                        <th>Hora Salida</th>
+                        <th>Hora Llegada</th>
+                        <th>Precio</th>
+                        <th>Compañía aerea</th>
+                        <th>Nombre del aeropuerto de Salida</th>
+                        <th>Nombre del aeropuerto de llegada</th>
+                </tr>
+                {% for skyscannerTrip in skyscannerTrips %}
+                    <tr>
+                        <td>{{skyscannerTrip.trip.departureDate|time:"H:i"}}</td>
+                        <td>{{skyscannerTrip.trip.arrivalDate|time:"H:i"}}</td>
+                        <td>{{skyscannerTrip.trip.price}}</td>
+
+                        <td>{{skyscannerTrip.airlineName}}</td>
+                        <td>{{skyscannerTrip.trip.departureNode.name}}</td>
+                        <td>{{skyscannerTrip.trip.arrivalNode.name}}</td>
+                    </tr>
+                {% endfor %}
+
+            </table>
+        {% endif %}
+
+
+        {% if busTrips %}
+            <h2>Lista de viajes en bus</h2>
+            <table id="trips">
                 <tr>
                     <th>Hora Salida</th>
                     <th>Hora Llegada</th>
@@ -63,9 +73,9 @@
                     <tr>
                         <td>{{ busTrip.trip.departureDate|time:"H:i" }}</td>
                         <td>{{ busTrip.trip.arrivalDate|time:"H:i" }}</td>
-                        <td>{{busTrip.trip.price}}</td>
-                        <td>{{busTrip.departureNode.name}}</td>
-                        <td>{{busTrip.arrivalNode.name}}</td>
+                        <td>{{ busTrip.trip.price}}</td>
+                        <td>{{ busTrip.trip.departureNode.name}}</td>
+                        <td>{{ busTrip.trip.arrivalNode.name}}</td>
                     </tr>
 
                 {% endfor %}
@@ -73,11 +83,12 @@
 
             </table>
 
+        {% endif %}
 
 
-
-        <h2>Lista de viajes en tren</h2>
-            <table id="customers">
+        {% if trainTrips %}
+            <h2>Lista de viajes en tren</h2>
+            <table id="trips">
                 <tr>
                     <th>Hora Salida</th>
                     <th>Hora Llegada</th>
@@ -90,8 +101,8 @@
                         <td>{{ trainTrip.trip.departureDate|time:"H:i" }}</td>
                         <td>{{ trainTrip.trip.arrivalDate|time:"H:i" }}</td>
                         <td>{{trainTrip.trip.price}}</td>
-                        <td>{{trainTrip.departureNode.name}}</td>
-                        <td>{{trainTrip.arrivalNode.name}}</td>
+                        <td>{{trainTrip.trip.departureNode.name}}</td>
+                        <td>{{trainTrip.trip.arrivalNode.name}}</td>
                     </tr>
 
                 {% endfor %}
@@ -99,8 +110,11 @@
 
             </table>
 
-           
 
+        {% endif %}
+
+
+		
 	</form>
 
 {% endblock %}

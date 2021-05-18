@@ -12,7 +12,7 @@ def saveBlablacarTrips(start_coordinates,end_coordinates,start_date_local):
     
 
     iterableBlablaCar=getBlablaCarTrips.executeFunction([getBlablaCarTrips.RApi.APIKey,start_coordinates,end_coordinates,'EUR',start_date_local.isoformat(),end_date_local_string])
-    for (url,
+    for (   url,
             startData_str,startData_city,startData_address,startData_latitude,startData_longitude,
             endData_str,endData_city,endData_address,endData_latitude,endData_longitude,
             price
@@ -24,7 +24,6 @@ def saveBlablacarTrips(start_coordinates,end_coordinates,start_date_local):
         endData_date = parseStrDate(endData_str,endData_latitude,endData_longitude)
 
         duration=calculateDuration(startData_date,endData_date)
-
         
         new_trip=Trip(departureNode=None,arrivalNode=None,departureDate=startData_date,arrivalDate=endData_date,duration=duration.seconds,price=float(price))
         new_trip.save()
@@ -98,26 +97,23 @@ def save_train_bus_trips(start_coordinates,end_coordinates,start_date_local):
             
         for departureNode in filter_departureNodes:
             for arrivalNode in filter_arrivalNodes:
-     
                 searchDict['departure_station_id']=int(departureNode.code)
                 searchDict['arrival_station_id']=int(arrivalNode.code)
                 searchDict['departure_date']=start_date_local.isoformat()
                 
                 tripGenerator=getBusTrainTrips.executeFunction(['EUR',searchDict],typeOfData='str')
-                
 
                 if tripGenerator!=None:
                     for price,departureDate,arrivalDate in tripGenerator:
+                        print(departureDate,system)
 
-                        departureDate = parseStrDate(departureDate,departureNode.latitude,departureNode.longitude) 
+                        departureDate = parseStrDate(departureDate,departureNode.latitude,departureNode.longitude)
                         arrivalDate = parseStrDate(arrivalDate,arrivalNode.latitude,arrivalNode.longitude)
                     
                         duration=calculateDuration(departureDate,arrivalDate)
-
                         new_trip=Trip(departureNode=departureNode,arrivalNode=arrivalNode,departureDate=departureDate,arrivalDate=arrivalDate,duration=duration.seconds,price=price)
                         new_trip.save()
                         
-                    
                         bus_trains_trips=busOrTrainTrip(system=system,trip=new_trip)
                         bus_trains_trips.save()
     

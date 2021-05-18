@@ -5,6 +5,7 @@ from .funtionsRequest.googleMapsRequests import getProvinceLocationThroughCoordi
 from django.db import models
 import requests 
 import json 
+
 class RESTApi(models.Model):
     name=models.CharField(unique=True,max_length=50)
     BaseUrl=models.CharField(max_length=50)
