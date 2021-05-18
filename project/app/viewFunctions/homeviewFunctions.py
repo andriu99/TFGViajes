@@ -1,8 +1,10 @@
 from app.models import Request,Trip,blablaTrip,skyscannerTrip,busOrTrainTrip
 from datetime import datetime as dt
 from datetime import timedelta
-from ..otherFunctions.dateFunctions import parseStrDate,calculateDuration
+from ..otherFunctions.dateFunctions import parseDate_withTimeZone,calculateDuration
 from ..otherFunctions.nodesFunctions import filterNodes
+from django.utils.dateparse import parse_datetime
+from time import sleep
 
 
 def saveBlablacarTrips(start_coordinates,end_coordinates,start_date_local):
@@ -19,13 +21,18 @@ def saveBlablacarTrips(start_coordinates,end_coordinates,start_date_local):
 
     ) in iterableBlablaCar:
 
+        departureDate_date=parse_datetime(startData_str)
+        arrivalDate_date=parse_datetime(endData_str)
 
-        startData_date = parseStrDate(startData_str,startData_latitude,startData_longitude) 
-        endData_date = parseStrDate(endData_str,endData_latitude,endData_longitude)
+        startData_date_withTimeZone = parseDate_withTimeZone(departureDate_date,startData_latitude,startData_longitude) 
+        endData_date_withTimeZone = parseDate_withTimeZone(arrivalDate_date,endData_latitude,endData_longitude)
 
-        duration=calculateDuration(startData_date,endData_date)
+        duration=calculateDuration(startData_date_withTimeZone,endData_date_withTimeZone)
+
         
-        new_trip=Trip(departureNode=None,arrivalNode=None,departureDate=startData_date,arrivalDate=endData_date,duration=duration.seconds,price=float(price))
+
+        
+        new_trip=Trip(departureNode=None,arrivalNode=None,departureDate=departureDate_date,arrivalDate=arrivalDate_date,duration=duration.seconds,price=float(price))
         new_trip.save()
 
         new_blablatrip=blablaTrip(link=url,
@@ -61,15 +68,46 @@ def saveSkyscannerFlights(start_coordinates,end_coordinates,start_date_local):
             getFlightsInformationSkyscanner.PartToaddToBaseUrl="/".join(urlList)
 
 
-            for price,urlPay,departure_date,arrival_date,duration,airlineName,airlineUrlImage in results:
-                startData_date = parseStrDate(departure_date,departureNode.latitude,departureNode.longitude)
-                endData_date = parseStrDate(arrival_date,arrivalNode.latitude,arrivalNode.longitude)
+            for price,urlPay,departure_date_str,arrival_date_str,duration,airlineName,airlineUrlImage in results:
+                startData_date = parse_datetime(departure_date_str)
+                endData_date = parse_datetime(arrival_date_str)
                 
 
                 new_trip=Trip(departureNode=departureNode,arrivalNode=arrivalNode,departureDate=startData_date,arrivalDate=endData_date,duration=duration*60,price=float(price))
                 new_trip.save()
                 new_skyscannerTrip=skyscannerTrip(urlPay=urlPay,airlineName=airlineName,airlineUrlImage=airlineUrlImage,trip=new_trip)
                 new_skyscannerTrip.save()
+
+
+
+def save_tripInfo(searchDict,system_transport_dict,filter_departureNodes,filter_arrivalNodes,start_date_local,getBusTrainTrips):
+    for system in system_transport_dict:
+        searchDict['systems']=system_transport_dict[system]
+            
+        for departureNode in filter_departureNodes:
+            for arrivalNode in filter_arrivalNodes:
+                searchDict['departure_station_id']=int(departureNode.code)
+                searchDict['arrival_station_id']=int(arrivalNode.code)
+                searchDict['departure_date']=start_date_local.isoformat()
+                
+                tripGenerator=getBusTrainTrips.executeFunction(['EUR',searchDict],typeOfData='str')
+
+                if tripGenerator!=None:
+                    for price,departureDate_str,arrivalDate_str in tripGenerator:
+                        departureDate_date=parse_datetime(departureDate_str)
+                        arrivalDate_date=parse_datetime(arrivalDate_str)
+
+                        departureDate_withTimeZone = parseDate_withTimeZone(departureDate_date,departureNode.latitude,departureNode.longitude)
+                        arrivalDate_withTimeZone = parseDate_withTimeZone(arrivalDate_date,arrivalNode.latitude,arrivalNode.longitude)
+                    
+                        duration=calculateDuration(departureDate_withTimeZone,arrivalDate_withTimeZone)
+
+                        new_trip=Trip(departureNode=departureNode,arrivalNode=arrivalNode,departureDate=departureDate_date.replace(tzinfo=None),arrivalDate=arrivalDate_date.replace(tzinfo=None),duration=duration.seconds,price=price)
+                        new_trip.save()
+                        
+                        bus_trains_trips=busOrTrainTrip(system=system,trip=new_trip)
+                        bus_trains_trips.save()
+
 
 
 def save_train_bus_trips(start_coordinates,end_coordinates,start_date_local):
@@ -92,30 +130,9 @@ def save_train_bus_trips(start_coordinates,end_coordinates,start_date_local):
                 'T':['renfe'],
                 'B':['busbud']
     }
-    for system in system_transport:
-        searchDict['systems']=system_transport[system]
-            
-        for departureNode in filter_departureNodes:
-            for arrivalNode in filter_arrivalNodes:
-                searchDict['departure_station_id']=int(departureNode.code)
-                searchDict['arrival_station_id']=int(arrivalNode.code)
-                searchDict['departure_date']=start_date_local.isoformat()
-                
-                tripGenerator=getBusTrainTrips.executeFunction(['EUR',searchDict],typeOfData='str')
+    save_tripInfo(searchDict,{'B':['busbud']},filter_departureNodes,filter_arrivalNodes,start_date_local,getBusTrainTrips)
+    sleep(5)
+    save_tripInfo(searchDict,{'T':['renfe']},filter_departureNodes,filter_arrivalNodes,start_date_local,getBusTrainTrips)
 
-                if tripGenerator!=None:
-                    for price,departureDate,arrivalDate in tripGenerator:
-                        print(departureDate,system)
-
-                        departureDate = parseStrDate(departureDate,departureNode.latitude,departureNode.longitude)
-                        arrivalDate = parseStrDate(arrivalDate,arrivalNode.latitude,arrivalNode.longitude)
-                    
-                        duration=calculateDuration(departureDate,arrivalDate)
-                        new_trip=Trip(departureNode=departureNode,arrivalNode=arrivalNode,departureDate=departureDate,arrivalDate=arrivalDate,duration=duration.seconds,price=price)
-                        new_trip.save()
-                        
-                        bus_trains_trips=busOrTrainTrip(system=system,trip=new_trip)
-                        bus_trains_trips.save()
-    
 
 

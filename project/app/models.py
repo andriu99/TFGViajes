@@ -120,9 +120,7 @@ class skyscannerTrip(models.Model):
   
 class busOrTrainTrip(models.Model):
     trip=models.OneToOneField(Trip,on_delete=models.CASCADE)
-    
- 
-    
+
     class Suit(models.TextChoices):
         TRAIN = 'T'
         BUS = 'B'
