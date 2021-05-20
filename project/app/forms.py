@@ -17,8 +17,8 @@ class userRequest(forms.Form):
         
     #a=forms.CharField(choices=[],required=True)
     
-    origin_address=forms.CharField(max_length=200,widget=forms.TextInput(attrs={"id":"origin_address"}))
-    destination_address=forms.CharField(max_length=200,widget=forms.TextInput(attrs={"id":"destination_address"}))
+    origin_address=forms.CharField(max_length=200,widget=forms.TextInput(attrs={"class":"data","id":"origin_address"}))
+    destination_address=forms.CharField(max_length=200,widget=forms.TextInput(attrs={"class":"data","id":"destination_address"}))
 
     #destination_address=forms.CharField(label='Dirección de llegada')
-    date=forms.DateField(widget=DateInput)
+    date=forms.DateField(widget=DateInput(attrs={"class":"data"}))
