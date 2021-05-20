@@ -1,5 +1,3 @@
-
-
 let autocomplete
 function initAutocomplete() {
     autocomplete_id("origin_address")
