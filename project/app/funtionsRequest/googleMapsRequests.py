@@ -17,3 +17,6 @@ def getProvinceLocationThroughCoordinates(response):
 
 def getTimeZone(response):
     return response.json()['timeZoneId']
+
+def getLatLong_address(json):
+    return json[0]['geometry']['location']['lat'],json[0]['geometry']['location']['lng']
