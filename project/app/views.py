@@ -2,7 +2,7 @@
 #from project.app.models import busOrTrainTrip
 from django.shortcuts import render
 from .forms import userRequest
-from app.models import Trip,blablaTrip,skyscannerTrip,busOrTrainTrip,Request
+from app.models import Trip,blablaTrip,skyscannerTrip,busOrTrainTrip,RESTApi
 import googlemaps
 
 from .viewFunctions.homeviewFunctions import saveBlablacarTrips,saveSkyscannerFlights,save_train_bus_trips
@@ -15,11 +15,10 @@ def home(request):
     if request.method == 'POST':
         form = userRequest(request.POST)
         if form.is_valid():
-            gmaps=googlemaps.Client(Request.objects.get('googleMapsRESTApi').APIKey)
+            gmaps=googlemaps.Client(RESTApi.objects.all().get(name='googleMapsRESTApi').APIKey)
 
             form.cleaned_data['lat_Origin'],form.cleaned_data['lon_Origin']=getLatLong_address(gmaps.geocode(form.cleaned_data['origin_address']))
             form.cleaned_data['lat_Dest'],form.cleaned_data['lon_Dest']=getLatLong_address(gmaps.geocode(form.cleaned_data['destination_address']))
-            print('hola')
 
             # originalDate=form.cleaned_data['date']
             # start_date_local=dt(originalDate.year,originalDate.month,originalDate.day)
