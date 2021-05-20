@@ -15,18 +15,17 @@ def home(request):
     if request.method == 'POST':
         form = userRequest(request.POST)
         if form.is_valid():
+            a=1
+            # originalDate=form.cleaned_data['date']
+            # start_date_local=dt(originalDate.year,originalDate.month,originalDate.day)
+
+            # start_coordinates=str(form.cleaned_data['lat_Origin'])+','+str(form.cleaned_data['lon_Origin'])
+            # end_coordinates=str(form.cleaned_data['lat_Dest'])+','+str(form.cleaned_data['lon_Dest'])
 
 
-            originalDate=form.cleaned_data['date']
-            start_date_local=dt(originalDate.year,originalDate.month,originalDate.day)
-
-            start_coordinates=str(form.cleaned_data['lat_Origin'])+','+str(form.cleaned_data['lon_Origin'])
-            end_coordinates=str(form.cleaned_data['lat_Dest'])+','+str(form.cleaned_data['lon_Dest'])
-
-
-            saveBlablacarTrips(start_coordinates,end_coordinates,start_date_local)
-            saveSkyscannerFlights(start_coordinates,end_coordinates,start_date_local)
-            save_train_bus_trips(start_coordinates,end_coordinates,start_date_local)
+            # saveBlablacarTrips(start_coordinates,end_coordinates,start_date_local)
+            # saveSkyscannerFlights(start_coordinates,end_coordinates,start_date_local)
+            # save_train_bus_trips(start_coordinates,end_coordinates,start_date_local)
 
 
     else:

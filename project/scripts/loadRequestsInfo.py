@@ -16,6 +16,8 @@ def importGoogleMapsInfo():
     'latlng':'41.99727014224525,-3.959531186634048',
     'key':'example'
   }
+
+  
   getProvinceLocation=Request(name='getProLocatDataThroughCoordinates',description='Find an andress with coordinates',PartToaddToBaseUrl='api/geocode/json',
                               funcToExtractDataFromJsonName='getProvinceLocationThroughCoordinates',ParamsOrDataDictStructure=paramsGeocodeReverseGoogleMaps,typeRequests='GET',RApi=googleMapsRESTApi)
   getProvinceLocation.save()

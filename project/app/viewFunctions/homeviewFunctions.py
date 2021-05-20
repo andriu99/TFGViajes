@@ -126,10 +126,10 @@ def save_train_bus_trips(start_coordinates,end_coordinates,start_date_local):
     }
     filter_departureNodes=filterNodes(start_coordinates,nodeType='S')
     filter_arrivalNodes=filterNodes(end_coordinates,nodeType='S')
-    system_transport={
-                'T':['renfe'],
-                'B':['busbud']
-    }
+    # system_transport={
+    #             'T':['renfe'],
+    #             'B':['busbud']
+    # }
     save_tripInfo(searchDict,{'B':['busbud']},filter_departureNodes,filter_arrivalNodes,start_date_local,getBusTrainTrips)
     sleep(5)
     save_tripInfo(searchDict,{'T':['renfe']},filter_departureNodes,filter_arrivalNodes,start_date_local,getBusTrainTrips)

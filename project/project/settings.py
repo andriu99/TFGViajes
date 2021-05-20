@@ -39,7 +39,24 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    'places',
+
+    'location_field.apps.DefaultConfig',
 ]
+PLACES_MAP_WIDGET_HEIGHT=480
+PLACES_MAP_OPTIONS='{"center": { "lat": 38.971584, "lng": -95.235072 }, "zoom": 10}'
+PLACES_MARKER_OPTIONS='{"draggable": true}'
+PLACES_MAPS_API_KEY='AIzaSyCaR0xc4Xiv3rHEV-HkFD-4Dt7hsIx3aT0'
+
+
+
+LOCATION_FIELD = {
+    'provider.google.api': '//maps.google.com/maps/api/js?sensor=false',
+    'provider.google.api_key': 'AIzaSyCaR0xc4Xiv3rHEV-HkFD-4Dt7hsIx3aT0',
+    'provider.google.api_libraries': '',
+    'provider.google.map.type': 'ROADMAP',
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

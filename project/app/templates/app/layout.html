@@ -5,9 +5,10 @@
     <head>
         {% load static %}
         <link rel="stylesheet" type="text/css" href="{% static 'style.css'%}">
-
-        
-        
+       
+       
+      
+      
     </head>
     <div class="titles">
             <h1>TravelApp</h1>
@@ -18,6 +19,10 @@
         {% block content %}
 
         {% endblock %}
+
+        {% block extend_footer %}
+
+        {% endblock%}
        
     </body>
 </html>

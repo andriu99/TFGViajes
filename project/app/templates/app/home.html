@@ -1,15 +1,31 @@
 {% extends 'app/layout.html' %}
 
 {% block content %}
-        
-        <form method="post">
+    
+ 
+    <form method="post">
 		{% csrf_token %}
 		{{ form }}
+
+
+        {% block extend_footer %}
+            {% load static %}
+            <script src="{% static 'google_places.js'%}"></script> 
+            <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCaR0xc4Xiv3rHEV-HkFD-4Dt7hsIx3aT0&libraries=places&callback=initAutocomplete"></script>       
+
+
+        {% endblock %}
+
 		<button>Enviar</button>
+       
 
-
+        
+{% comment %} 
+       
         {% if blablaTrips %}
+        <div class="titles">
             <h2>Lista de viajes en blablaCar</h2>
+        </div>
             <table id="trips">
                 <tr>
                     <th>Hora Salida</th>
@@ -33,7 +49,10 @@
 
 
         {% if skyscannerTrips %}
-            <h2>Lista de viajes en avión (Skyscanner)</h2>
+            <div class="titles">
+
+                <h2>Lista de viajes en avión</h2>
+            </div>
             <table id="trips">
                 <tr>
                         <th>Hora Salida</th>
@@ -60,7 +79,9 @@
 
 
         {% if busTrips %}
-            <h2>Lista de viajes en bus</h2>
+            <div class="titles">
+                <h2>Lista de viajes en bus</h2>
+            </div>
             <table id="trips">
                 <tr>
                     <th>Hora Salida</th>
@@ -87,7 +108,11 @@
 
 
         {% if trainTrips %}
-            <h2>Lista de viajes en tren</h2>
+            <div class="titles">
+
+                <h2>Lista de viajes en tren</h2>
+            </div>
+
             <table id="trips">
                 <tr>
                     <th>Hora Salida</th>
@@ -111,9 +136,9 @@
             </table>
 
 
-        {% endif %}
+        {% endif %} {% endcomment %}
 
-
+    
 		
 	</form>
 
