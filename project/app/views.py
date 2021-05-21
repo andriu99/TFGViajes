@@ -15,14 +15,11 @@ def home(request):
     if request.method == 'POST':
         form = userRequest(request.POST)
         if form.is_valid():
-            # gmaps=googlemaps.Client(RESTApi.objects.all().get(name='googleMapsRESTApi').APIKey)
-            # try:
-            #     form.cleaned_data['lat_Origin'],form.cleaned_data['lon_Origin']=getLatLong_address(gmaps.geocode(form.cleaned_data['origin_address']))
-            #     form.cleaned_data['lat_Dest'],form.cleaned_data['lon_Dest']=getLatLong_address(gmaps.geocode(form.cleaned_data['destination_address']))
 
-            # except:
-            #     print("Error")
-            a=1
+
+            
+            print(form.cleaned_data)
+
             # originalDate=form.cleaned_data['date']
             # start_date_local=dt(originalDate.year,originalDate.month,originalDate.day)
 
@@ -36,7 +33,9 @@ def home(request):
 
 
     else:
+
         form = userRequest()
+
     
     blablaTrips=blablaTrip.objects.all()
     skyscannerTrips=skyscannerTrip.objects.all()

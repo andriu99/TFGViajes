@@ -5,15 +5,14 @@ class DateInput(forms.DateTimeInput):
     input_type='date'
     
 class userRequest(forms.Form):
-    lat_Origin = forms.FloatField(widget=forms.HiddenInput(attrs={"id":"latO"}),required=False,)
-    lon_Origin = forms.FloatField(widget=forms.HiddenInput(attrs={"id":"lonO"}),required=False)
-    lat_Dest = forms.FloatField(widget=forms.HiddenInput(attrs={"id":"latD"}),required=False)
-    lon_Dest = forms.FloatField(widget=forms.HiddenInput(attrs={"id":"lonD"}),required=False)
-    
     def __init__(self, *args, **kwargs):
         super(userRequest,self).__init__(*args, **kwargs)
-        
-    
+
+    lat_Origin = forms.FloatField(widget=forms.HiddenInput(attrs={"id":"lat_Origin"}),required=False,initial=181)
+    lon_Origin = forms.FloatField(widget=forms.HiddenInput(attrs={"id":"lon_Origin"}),required=False,initial=181)
+    lat_Dest = forms.FloatField(widget=forms.HiddenInput(attrs={"id":"lat_Dest"}),required=False,initial=181)
+    lon_Dest = forms.FloatField(widget=forms.HiddenInput(attrs={"id":"lon_Dest"}),required=False,initial=181)
+
     origin_address=forms.CharField(max_length=200,widget=forms.TextInput(attrs={"class":"data","id":"origin_address"}))
     destination_address=forms.CharField(max_length=200,widget=forms.TextInput(attrs={"class":"data","id":"destination_address"}))
 

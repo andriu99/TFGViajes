@@ -8,20 +8,7 @@
 		{{ form }}
 
         <button id="id_button">Send</button>
-        
-        
-
-     
-
-
-
-
-
-
-
-
-
-
+   
         {% if blablaTrips %}
         <div class="titles">
             <h2>Lista de viajes en blablaCar</h2>
@@ -134,7 +121,7 @@
 
 
             </table>
-            {% endif %}
+        {% endif %}
 
         
 
@@ -149,19 +136,10 @@
 {% block extend_footer %}
     {% load static %}
     <script src="{% static 'google_maps.js'%}"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCaR0xc4Xiv3rHEV-HkFD-4Dt7hsIx3aT0&libraries=places&callback=initAutocomplete_map" ></script> 
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCaR0xc4Xiv3rHEV-HkFD-4Dt7hsIx3aT0&libraries=places&callback=init_autocomplete_map" ></script> 
     
 
 
 {% endblock %}
 
 
-{% comment %} 
-{% block extend_footer2 %}
-    {% load static %}
-   
-    <script src="{% static 'display_map.js'%}"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCaR0xc4Xiv3rHEV-HkFD-4Dt7hsIx3aT0&libraries=places&callback=initMap" async defer></script> 
-
-
-{% endblock %} {% endcomment %}
