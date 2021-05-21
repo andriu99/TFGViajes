@@ -15,11 +15,14 @@ def home(request):
     if request.method == 'POST':
         form = userRequest(request.POST)
         if form.is_valid():
-            gmaps=googlemaps.Client(RESTApi.objects.all().get(name='googleMapsRESTApi').APIKey)
+            # gmaps=googlemaps.Client(RESTApi.objects.all().get(name='googleMapsRESTApi').APIKey)
+            # try:
+            #     form.cleaned_data['lat_Origin'],form.cleaned_data['lon_Origin']=getLatLong_address(gmaps.geocode(form.cleaned_data['origin_address']))
+            #     form.cleaned_data['lat_Dest'],form.cleaned_data['lon_Dest']=getLatLong_address(gmaps.geocode(form.cleaned_data['destination_address']))
 
-            form.cleaned_data['lat_Origin'],form.cleaned_data['lon_Origin']=getLatLong_address(gmaps.geocode(form.cleaned_data['origin_address']))
-            form.cleaned_data['lat_Dest'],form.cleaned_data['lon_Dest']=getLatLong_address(gmaps.geocode(form.cleaned_data['destination_address']))
-
+            # except:
+            #     print("Error")
+            a=1
             # originalDate=form.cleaned_data['date']
             # start_date_local=dt(originalDate.year,originalDate.month,originalDate.day)
 
@@ -49,3 +52,7 @@ def home(request):
 
     context = {'form' : form,'blablaTrips':blablaTrips,'skyscannerTrips':skyscannerTrips,'busTrips':busTrips,'trainTrips':trainTrips}
     return render(request,'app/home.html',context)
+
+
+def new(request):
+    return render(request,'app/new.html')

@@ -1,28 +1,27 @@
 {% extends 'app/layout.html' %}
 
 {% block content %}
-    
- 
+
+
     <form method="post">
 		{% csrf_token %}
 		{{ form }}
 
-
-        {% block extend_footer %}
-            {% load static %}
-            <script src="{% static 'google_places.js'%}"></script> 
-            <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCaR0xc4Xiv3rHEV-HkFD-4Dt7hsIx3aT0&libraries=places&callback=initAutocomplete"></script>       
-
-
-        {% endblock %}
-
-		<button id="id_button">Send</button>
-
-       
-
+        <button id="id_button">Send</button>
         
-{% comment %} 
-       
+        
+
+     
+
+
+
+
+
+
+
+
+
+
         {% if blablaTrips %}
         <div class="titles">
             <h2>Lista de viajes en blablaCar</h2>
@@ -41,7 +40,7 @@
                         <td>{{blablaTrip.trip.price}}</td>
                         <td>{{blablaTrip.link}}</td>
                     </tr>
-            
+
                 {% endfor %}
 
             </table>
@@ -135,12 +134,34 @@
 
 
             </table>
+            {% endif %}
 
+        
 
-        {% endif %} {% endcomment %}
-
+        
     
-		
+
 	</form>
+   <div id="google_map" style="width:85%; height: 500px;"></div>
 
 {% endblock %}
+
+{% block extend_footer %}
+    {% load static %}
+    <script src="{% static 'google_maps.js'%}"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCaR0xc4Xiv3rHEV-HkFD-4Dt7hsIx3aT0&libraries=places&callback=initAutocomplete_map" ></script> 
+    
+
+
+{% endblock %}
+
+
+{% comment %} 
+{% block extend_footer2 %}
+    {% load static %}
+   
+    <script src="{% static 'display_map.js'%}"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCaR0xc4Xiv3rHEV-HkFD-4Dt7hsIx3aT0&libraries=places&callback=initMap" async defer></script> 
+
+
+{% endblock %} {% endcomment %}
