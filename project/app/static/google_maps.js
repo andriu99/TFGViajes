@@ -49,28 +49,48 @@ function initMap(){
     lonD=document.getElementById("lon_Dest").value
 
     let list_location=[]
+    let point={}
+    if (latO === 181){
+        point={lat:40.4165, lng:-3.70256}
+
+    }else{
+        point={lat:latO,lng:lonO}
+    }
+    document.write(point.lat)
     var map = new google.maps.Map(document.getElementById("google_map"), {
         scaleControl: true,
-        center: {lat:40.4165, lng:-3.70256},
+        center: point,
         zoom: 10,
     });
    
     try{
         list_location.push({lat:latO,lng:lonO});
         list_location.push({lat:latD,lng:lonD});
+
+        list_location.forEach((element,index)=>{
+             const infowindow = new google.maps.InfoWindow();
+            infowindow.setContent( document.getElementById(list_address[index]).value);
+            const marker = new google.maps.Marker({ map, position: element });
+
+               marker.addListener("click", () => {
+                infowindow.open(map, marker);
+                });
     
-        list_location.forEach((element, index) => {
+        })
+    
+        // list_location.forEach((element, index) => {
             
     
-        const infowindow = new google.maps.InfoWindow();
-        infowindow.setContent( document.getElementById(list_address[index]).value);
+        // const infowindow = new google.maps.InfoWindow();
+        // infowindow.setContent( document.getElementById(list_address[index]).value);
         
 
-        const marker = new google.maps.Marker({ map, position: element });
-        marker.addListener("click", () => {
-                infowindow.open(map, marker);
-        });
+        // const marker = new google.maps.Marker({ map, position: element });
 
+        // marker.addListener("click", () => {
+        //         infowindow.open(map, marker);
+        // });
+    
 
 
     }catch(error){
