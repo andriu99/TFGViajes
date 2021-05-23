@@ -1,18 +1,16 @@
-let autocomplete;
 
 function init_autocomplete_map() {
     autocomplete_id("origin_address");
     autocomplete_id("destination_address");
 
     initMap();
-
-
-    
+  
 }
 
 function save_lat_lon(id_address,id_latitude,id_longitude){
 
     var address = document.getElementById(id_address).value
+
     if (id_address=='origin_address' && address==document.getElementById('current_address').value){
         document.getElementById(id_latitude).value = document.getElementById('lat_currentLocat').value;
         document.getElementById(id_longitude).value= document.getElementById('lon_currentLocat').value;
@@ -20,7 +18,7 @@ function save_lat_lon(id_address,id_latitude,id_longitude){
         var geocoder = new google.maps.Geocoder();
 
         geocoder.geocode( { 'address': address}, function(results, status) {
-    
+
             if (status == google.maps.GeocoderStatus.OK) {
                 var latitude = results[0].geometry.location.lat();
                 var longitude = results[0].geometry.location.lng();
@@ -38,14 +36,16 @@ function initMap(){
 
     list_address=['origin_address','destination_address']
   
-    save_lat_lon(list_address[0],'lat_Origin','lon_Origin')
-    save_lat_lon(list_address[1],'lat_Dest','lon_Dest')
+    save_lat_lon(list_address[0],'lat_Origin','lon_Origin');
+    save_lat_lon(list_address[1],'lat_Dest','lon_Dest');
 
-    
     latO=parseFloat(document.getElementById("lat_Origin").value);
     lonO=parseFloat(document.getElementById("lon_Origin").value);
     latD=parseFloat(document.getElementById("lat_Dest").value);
     lonD=parseFloat(document.getElementById("lon_Dest").value);
+
+    document.write(latO+' '+lonO+'\n');
+    document.write(latD+' '+lonD+'\n');
 
     let list_location=[];
     let point_origin={lat:latO, lng:lonO};
@@ -79,7 +79,7 @@ function initMap(){
                 infowindow.open(map, marker);
                 });
 
-        })
+        });
 
     }else{
         map.setCenter({ //Madrid Coordinates
@@ -97,7 +97,7 @@ function initMap(){
 function get_currentLocation(map){
   infoWindow = new google.maps.InfoWindow();
   const locationButton = document.createElement("button");
-  locationButton.textContent = "Pan to Current Location";
+  locationButton.textContent = "Current Location";
   locationButton.classList.add("custom-map-control-button");
   map.controls[google.maps.ControlPosition.TOP_CENTER].push(locationButton);
   locationButton.addEventListener("click", () => {
@@ -195,10 +195,10 @@ function autocomplete_id(idname){
 function onPlaceChanged(){
     var place=autocomplete.getPlace();
     if (!place.geometry){
-        document.getElementById('origin_address').placeholder='Enter a place';
+        document.getElementById(idname).placeholder='Enter a place';
 
     }else{
-        document.getElementById('origin_address').innerHTML=place.name;
+        document.getElementById(idname).innerHTML=place.name;
     }
 }
 
