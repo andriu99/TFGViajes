@@ -58,8 +58,13 @@ function initMap(){
         list_location.push({lat:latD,lng:lonD});
 
         list_location.forEach((element,index)=>{
-                const infowindow = new google.maps.InfoWindow();
-            infowindow.setContent( document.getElementById(list_address[index]).value);
+            const infowindow = new google.maps.InfoWindow();
+            contentString=
+                '<div id="content-map">' +
+                    '<p>'+document.getElementById(list_address[index]).value+'</p>' +
+                "</div>";
+    
+            infowindow.setContent(contentString);
             const marker = new google.maps.Marker({ map, position: element });
 
                 marker.addListener("click", () => {
@@ -69,12 +74,13 @@ function initMap(){
         })
 
     }else{
-        get_currentLocation(map)
         map.setCenter({
             lat : 40.4165, 
             lng : -3.70256
         });
     }
+    get_currentLocation(map)
+
     
 
 
@@ -103,7 +109,12 @@ function get_currentLocation(map){
             lng : current_lng
         });
           infoWindow.setPosition(pos);
-          infoWindow.setContent("Location found.");
+          contentString=
+            '<div id="content-map">' +
+                '<p>Location Found</p>' +
+            "</div>";
+
+          infoWindow.setContent(contentString);
           infoWindow.open(map);
           map.setCenter(pos);
         },

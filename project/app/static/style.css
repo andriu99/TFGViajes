@@ -55,3 +55,8 @@ body {
   width:500px; height: 500px;
   
 }
+
+#content-map{
+  color:black;
+  font-weight: bolder;
+}
