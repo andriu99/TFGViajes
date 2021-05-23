@@ -74,7 +74,7 @@ function initMap(){
         })
 
     }else{
-        map.setCenter({
+        map.setCenter({ //Madrid Coordinates
             lat : 40.4165, 
             lng : -3.70256
         });
@@ -104,18 +104,16 @@ function get_currentLocation(map){
             lat: current_lat,
             lng: current_lng,
           };
-          map.setCenter({
-            lat : current_lat, 
-            lng : current_lng
-        });
-          infoWindow.setPosition(pos);
-          contentString=
-            '<div id="content-map">' +
-                '<p>Location Found</p>' +
-            "</div>";
+        
+          get_address_withLocation(current_lat,current_lng,infoWindow,map)
+        //   infoWindow.setPosition(pos);
+        //   contentString=
+        //     '<div id="content-map">' +
+        //         '<p>Location Found</p>' +
+        //     "</div>";
 
-          infoWindow.setContent(contentString);
-          infoWindow.open(map);
+        //   infoWindow.setContent(contentString);
+        //   infoWindow.open(map);
           map.setCenter(pos);
         },
         () => {
@@ -129,10 +127,38 @@ function get_currentLocation(map){
   });
 }
 
-// function get_address_withLocation(){
+function get_address_withLocation(lat,lng,infoWindow,map){
+    const geocoder = new google.maps.Geocoder();
+    const latlng = {
+        lat: lat,
+        lng: lng,
+    };
+
+    geocoder.geocode({ location: latlng }, (results, status) => {
+        if (status === "OK") {
+          if (results[0]) {
+            map.setZoom(7);
+            const marker = new google.maps.Marker({
+              position: latlng,
+              map: map,
+            });
+            contentString=
+            '<div id="content-map">' +
+                '<p>'+results[0].formatted_address+'</p>' +
+            "</div>";
+            infoWindow.setContent(contentString);
+            infoWindow.open(map, marker);
+          } else {
+            window.alert("No results found");
+          }
+        } else {
+          window.alert("Geocoder failed due to: " + status);
+        }
+      });
 
 
-// }
+
+}
 
 function handleLocationError(browserHasGeolocation, infoWindow, pos) {
     infoWindow.setPosition(pos);
