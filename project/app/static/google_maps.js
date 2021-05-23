@@ -1,4 +1,4 @@
-let autocomplete
+let autocomplete;
 
 function init_autocomplete_map() {
     autocomplete_id("origin_address");
@@ -11,19 +11,27 @@ function init_autocomplete_map() {
 }
 
 function save_lat_lon(id_address,id_latitude,id_longitude){
-    var geocoder = new google.maps.Geocoder()
+
     var address = document.getElementById(id_address).value
+    if (id_address=='origin_address' && address==document.getElementById('current_address').value){
+        document.getElementById(id_latitude).value = document.getElementById('lat_currentLocat').value;
+        document.getElementById(id_longitude).value= document.getElementById('lon_currentLocat').value;
+    }else{
+        var geocoder = new google.maps.Geocoder();
 
-    geocoder.geocode( { 'address': address}, function(results, status) {
+        geocoder.geocode( { 'address': address}, function(results, status) {
+    
+            if (status == google.maps.GeocoderStatus.OK) {
+                var latitude = results[0].geometry.location.lat();
+                var longitude = results[0].geometry.location.lng();
+    
+                document.getElementById(id_latitude).value = latitude;
+                document.getElementById(id_longitude).value=longitude;
+            } 
+        }); 
 
-        if (status == google.maps.GeocoderStatus.OK) {
-            var latitude = results[0].geometry.location.lat();
-            var longitude = results[0].geometry.location.lng();
-
-            document.getElementById(id_latitude).value = latitude;
-            document.getElementById(id_longitude).value=longitude;
-        } 
-    }); 
+    }
+  
 }
 
 function initMap(){
@@ -34,13 +42,13 @@ function initMap(){
     save_lat_lon(list_address[1],'lat_Dest','lon_Dest')
 
     
-    latO=parseFloat(document.getElementById("lat_Origin").value)
-    lonO=parseFloat(document.getElementById("lon_Origin").value)
-    latD=parseFloat(document.getElementById("lat_Dest").value)
-    lonD=parseFloat(document.getElementById("lon_Dest").value)
+    latO=parseFloat(document.getElementById("lat_Origin").value);
+    lonO=parseFloat(document.getElementById("lon_Origin").value);
+    latD=parseFloat(document.getElementById("lat_Dest").value);
+    lonD=parseFloat(document.getElementById("lon_Dest").value);
 
-    let list_location=[]
-    let point_origin={lat:latO, lng:lonO}
+    let list_location=[];
+    let point_origin={lat:latO, lng:lonO};
 
     let origin_exists=!(latO == 181 || lonO==181 || latD==181 || lonO==181)
 
@@ -79,7 +87,7 @@ function initMap(){
             lng : -3.70256
         });
     }
-    get_currentLocation(map)
+    get_currentLocation(map);
 
     
 
@@ -106,15 +114,11 @@ function get_currentLocation(map){
           };
         
           get_address_withLocation(current_lat,current_lng,infoWindow,map)
-        //   infoWindow.setPosition(pos);
-        //   contentString=
-        //     '<div id="content-map">' +
-        //         '<p>Location Found</p>' +
-        //     "</div>";
-
-        //   infoWindow.setContent(contentString);
-        //   infoWindow.open(map);
+      
           map.setCenter(pos);
+          document.getElementById('lat_currentLocat').value=current_lat
+          document.getElementById('lon_currentLocat').value=current_lng
+
         },
         () => {
           handleLocationError(true, infoWindow, map.getCenter());
@@ -148,6 +152,9 @@ function get_address_withLocation(lat,lng,infoWindow,map){
             "</div>";
             infoWindow.setContent(contentString);
             infoWindow.open(map, marker);
+            document.getElementById('current_address').value=results[0].formatted_address;
+            document.getElementById('origin_address').value=results[0].formatted_address;
+
           } else {
             window.alert("No results found");
           }
