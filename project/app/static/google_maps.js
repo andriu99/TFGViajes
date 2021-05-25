@@ -8,48 +8,9 @@ function init_autocomplete_map() {
 }
 
 
-function save_lat_lon(id_address, id_latitude, id_longitude, geocoder) {
-
-  var address = document.getElementById(id_address).value;
-  if (id_address != 'origin_address' || address != document.getElementById('current_address').value) {
-
-    geocoder.geocode({ 'address': address }, function (results, status) {
-      if (status === google.maps.GeocoderStatus.OK) {
-
-
-
-        save_locationData_inHTML(id_latitude, id_longitude, results[0].geometry.location.lat(), results[0].geometry.location.lng());
-
-
-      } else {
-        window.alert("Geocode was not successful for the following reason: " + status);
-      }
-
-    });
-  }
-
-}
-
-function save_locationData_inHTML(id_latitude, id_longitude, latitude, longitude) {
-
-  document.getElementById(id_latitude).value = latitude;
-  document.getElementById(id_longitude).value = longitude;
-  window.alert(latitude + '       ' + longitude);
-  window.alert(id_latitude + '    ' + id_longitude)
-
-}
-
 function initMap() {
 
   let list_address = ['origin_address', 'destination_address']
-
-  // var geocoder = new google.maps.Geocoder();
-
-
-  // save_lat_lon(list_address[0], 'lat_Origin', 'lon_Origin', geocoder);
-  // save_lat_lon(list_address[1], 'lat_Dest', 'lon_Dest', geocoder);
-
-
 
 
   let latO = parseFloat(document.getElementById("lat_Origin").value);
@@ -131,9 +92,7 @@ function get_currentLocation(map) {
           get_address_withLocation(current_lat, current_lng, infoWindow, map)
 
           map.setCenter(pos);
-          // document.getElementById('lat_currentLocat').value = current_lat
-          // document.getElementById('lon_currentLocat').value = current_lng
-
+       
         },
         () => {
           handleLocationError(true, infoWindow, map.getCenter());
@@ -169,12 +128,9 @@ function get_address_withLocation(lat, lng, infoWindow, map) {
         infoWindow.open(map, marker);
 
 
-        // document.getElementById('current_address').value = results[0].formatted_address;
         document.getElementById('origin_address').value = results[0].formatted_address;
 
-        // document.getElementById('lat_Origin').value = lat;
-        // document.getElementById('lon_Origin').value = lng;
-
+ 
       } else {
         window.alert("No results found");
       }
