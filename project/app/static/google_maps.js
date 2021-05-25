@@ -17,73 +17,6 @@ function init_autocomplete_map() {
 
   autocomplete("origin_address", "destination_address", map);
 
-
-
-
-}
-
-
-
-function initMap() {
-
-  let list_address = ['origin_address', 'destination_address']
-
-
-  let latO = parseFloat(document.getElementById("lat_Origin").value);
-  let lonO = parseFloat(document.getElementById("lon_Origin").value);
-
-  let latD = parseFloat(document.getElementById('lat_Dest').value);
-  let lonD = parseFloat(document.getElementById('lon_Dest').value);
-
-  document.write(latO + ' ' + lonO + '\n');
-  document.write(latD + ' ' + lonD + '\n');
-
-  let list_location = [];
-  let point_origin = { lat: latO, lng: lonO };
-
-  let origin_exists = !(latO == 181 || lonO == 181 || latD == 181 || lonO == 181)
-
-  var map = new google.maps.Map(document.getElementById("google_map"), {
-    scaleControl: true,
-    center: point_origin,
-    zoom: 6,
-  });
-  get_currentLocation(map);
-
-
-
-  if (origin_exists) {
-
-    point_origin = { lat: latO, lng: lonO }
-    list_location.push(point_origin);
-    list_location.push({ lat: latD, lng: lonD });
-
-    list_location.forEach((element, index) => {
-      const infowindow = new google.maps.InfoWindow();
-      contentString =
-        '<div id="content-map">' +
-        '<p>' + document.getElementById(list_address[index]).value + '</p>' +
-        "</div>";
-
-      infowindow.setContent(contentString);
-      const marker = new google.maps.Marker({ map, position: element });
-
-      marker.addListener("click", () => {
-        infowindow.open(map, marker);
-      });
-
-    });
-
-  } else {
-    map.setCenter({ //Madrid Coordinates
-      lat: 40.4165,
-      lng: -3.70256
-    });
-  }
-
-
-
-
 }
 
 function get_currentLocation(map) {
@@ -226,12 +159,12 @@ function onPlaceChanged(address_id, lat_id, long_id, map) {
 
       if (address_id == 'origin_address') {
         var marker_remove = dict_markers.origin;
-        dict_markers.origin=marker;
+        dict_markers.origin = marker;
 
       } else {
         var marker_remove = dict_markers.destination;
-        dict_markers.destination=marker;
-    
+        dict_markers.destination = marker;
+
       }
       if (marker_remove != null) {
         marker_remove.setMap(null);
