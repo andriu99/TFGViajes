@@ -18,6 +18,7 @@ class userRequest(forms.Form):
 
 
     current_address=forms.CharField(max_length=200,widget=forms.HiddenInput(attrs={"class":"data","id":"current_address"}),initial='.')
+
     origin_address=forms.CharField(max_length=200,widget=forms.TextInput(attrs={"class":"data","id":"origin_address"}))
     destination_address=forms.CharField(max_length=200,widget=forms.TextInput(attrs={"class":"data","id":"destination_address"}))
 
