@@ -1,11 +1,22 @@
 
 function init_autocomplete_map() {
-  autocomplete_id("origin_address");
-  autocomplete_id("destination_address");
+  var map = new google.maps.Map(document.getElementById("google_map"), {
+    scaleControl: true,
+    center: { //Madrid Coordinates
+      lat: 40.4165,
+      lng: -3.70256
+    },
+    zoom: 6,
+  });
+  get_currentLocation(map);
 
-  initMap();
+  autocomplete("origin_address","destination_address",map);
+
+
+  
 
 }
+
 
 
 function initMap() {
@@ -92,7 +103,8 @@ function get_currentLocation(map) {
           get_address_withLocation(current_lat, current_lng, infoWindow, map)
 
           map.setCenter(pos);
-       
+    
+
         },
         () => {
           handleLocationError(true, infoWindow, map.getCenter());
@@ -129,8 +141,10 @@ function get_address_withLocation(lat, lng, infoWindow, map) {
 
 
         document.getElementById('origin_address').value = results[0].formatted_address;
+        document.getElementById('lat_Origin').value=lat;
+        document.getElementById('lon_Origin').value=lng;
 
- 
+    
       } else {
         window.alert("No results found");
       }
@@ -138,9 +152,6 @@ function get_address_withLocation(lat, lng, infoWindow, map) {
       window.alert("Geocoder failed due to: " + status);
     }
   });
-
-
-
 }
 
 function handleLocationError(browserHasGeolocation, infoWindow, pos) {
@@ -153,30 +164,34 @@ function handleLocationError(browserHasGeolocation, infoWindow, pos) {
   infoWindow.open(map);
 }
 
+function autocomplete(id_name_origin, id_name_destination,map) {
+  var autocomplete_origin = create_autocomplete(id_name_origin);
+  var autocomplete_dest = create_autocomplete(id_name_destination);
 
-function autocomplete_id(idname) {
+  autocomplete_origin.addListener('place_changed', function () {
+    onPlaceChanged('origin_address', 'lat_Origin', 'lon_Origin',map)
+  });
 
-  autocomplete = new google.maps.places.Autocomplete(
-    document.getElementById(idname),
+  autocomplete_dest.addListener('place_changed', function () {
+    onPlaceChanged('destination_address', 'lat_Dest', 'lon_Dest',map)
+  });
+
+}
+
+function create_autocomplete(id) {
+  var autocomplete = new google.maps.places.Autocomplete(
+    document.getElementById(id),
     {
       types: ['address'],
       componentRestrictions: { 'country': ['es'] },
     });
-
-  autocomplete.addListener('place_changed', function () {
-    onPlaceChanged('origin_address','lat_Origin','lon_Origin')
-  });
-
-  autocomplete.addListener('place_changed', function () {
-    onPlaceChanged('destination_address','lat_Dest','lon_Dest')
-  });
-
-
+  return autocomplete;
 }
 
 
 
-function onPlaceChanged(address_id,lat_id,long_id) {
+
+function onPlaceChanged(address_id,lat_id,long_id,map) {
 
   var geocoder = new google.maps.Geocoder()
   var address = document.getElementById(address_id).value
@@ -184,11 +199,25 @@ function onPlaceChanged(address_id,lat_id,long_id) {
   geocoder.geocode({ 'address': address }, function (results, status) {
 
     if (status == google.maps.GeocoderStatus.OK) {
+
       var latitude = results[0].geometry.location.lat();
       var longitude = results[0].geometry.location.lng();
       document.getElementById(lat_id).value=latitude;
       document.getElementById(long_id).value=longitude;
-    
+
+      const infowindow = new google.maps.InfoWindow();
+      contentString =
+        '<div id="content-map">' +
+        '<p>' + address + '</p>' +
+        "</div>";
+
+      infowindow.setContent(contentString);
+      const marker = new google.maps.Marker({ map, position: {lat:latitude,lng:longitude} });
+
+      marker.addListener("click", () => {
+        infowindow.open(map, marker);
+      });
+
     }
   });
 
