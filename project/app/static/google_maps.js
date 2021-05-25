@@ -1,4 +1,9 @@
 
+var dict_markers={
+  origin: null,
+  destination: null 
+}
+
 function init_autocomplete_map() {
   var map = new google.maps.Map(document.getElementById("google_map"), {
     scaleControl: true,
@@ -143,6 +148,7 @@ function get_address_withLocation(lat, lng, infoWindow, map) {
         document.getElementById('origin_address').value = results[0].formatted_address;
         document.getElementById('lat_Origin').value=lat;
         document.getElementById('lon_Origin').value=lng;
+        dict_markers.origin=marker;
 
     
       } else {
@@ -190,7 +196,6 @@ function create_autocomplete(id) {
 
 
 
-
 function onPlaceChanged(address_id,lat_id,long_id,map) {
 
   var geocoder = new google.maps.Geocoder()
@@ -217,6 +222,22 @@ function onPlaceChanged(address_id,lat_id,long_id,map) {
       marker.addListener("click", () => {
         infowindow.open(map, marker);
       });
+
+      if (address_id=='origin_address'){
+
+        if (dict_markers.origin!=null){
+          dict_markers.origin.setMap(null);
+        }
+        dict_markers.origin=marker;
+
+
+      }else{
+        if (dict_markers.destination!=null){
+          dict_markers.destination.setMap(null);
+        }
+        dict_markers.destination=marker;
+
+      }
 
     }
   });
