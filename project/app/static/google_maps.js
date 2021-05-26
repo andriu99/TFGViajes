@@ -23,15 +23,15 @@ function set_origin_throughtMap(map) {
     const div_button_origin_dest = document.createElement("div");
     div_button_origin_dest.className = 'buttons_origin_dest';
 
-
-
-
     const set_originButton = document.createElement("button");
     const set_destinationButton = document.createElement("button");
+    div_button_origin_dest.appendChild(set_destinationButton);
+    div_button_origin_dest.appendChild(set_originButton);
 
     const list_buttons = [set_originButton, set_destinationButton];
     const list_names_buttons = ['Origin Location', 'Destination Location']
-    const list_is_origin = [true, false];
+    var list_is_origin = [true, false];
+    var list_is_activated = [false, false];
 
 
 
@@ -44,20 +44,31 @@ function set_origin_throughtMap(map) {
         var click = false;
         var listener = null;
         button.addEventListener("click", () => {
-            if (click) {
-                var background = "#fff";
-                listener.remove();
+            previus_index = index - 1;
+            if (previus_index == -1) previus_index = list_buttons.length - 1;
+
+            if (list_is_activated[previus_index] == false) {
+                if (click) {
+                    list_is_activated[index] = false;
+                    var background = "#fff";
+                    listener.remove();
+
+                } else {
+                    list_is_activated[index] = true;
+                    var background = "green";
+                    listener = map.addListener("click", (mapsMouseEvent) => {
+                        get_address_withLocation(mapsMouseEvent.latLng.lat(), mapsMouseEvent.latLng.lng(), map, list_is_origin[index]);
+                    });
+                }
 
             } else {
-                var background = "green";
-                listener = map.addListener("click", (mapsMouseEvent) => {
-                    get_address_withLocation(mapsMouseEvent.latLng.lat(), mapsMouseEvent.latLng.lng(), map, list_is_origin[index]);
-                });
+                window.alert("You cannot have the origin and destination buttons activated at the same time");
             }
+
+
             button.style.backgroundColor = background;
             click = !click;
         });
-
     });
 
 }
