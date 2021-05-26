@@ -18,35 +18,48 @@ function init_autocomplete_map() {
 
 }
 
+
 function set_origin_throughtMap(map) {
+    const div_button_origin_dest = document.createElement("div");
+    div_button_origin_dest.className = 'buttons_origin_dest';
+
+
+
+
     const set_originButton = document.createElement("button");
-    set_originButton.id = 'button-id';
+    const set_destinationButton = document.createElement("button");
+
+    const list_buttons = [set_originButton, set_destinationButton];
+    const list_names_buttons = ['Origin Location', 'Destination Location']
+    const list_is_origin = [true, false];
 
 
-    set_originButton.textContent = "Origin Location";
-    set_originButton.classList.add("custom-map-control-button");
-    map.controls[google.maps.ControlPosition.TOP_RIGHT].push(set_originButton);
 
-    var click = false;
-    var listener = null;
-    set_originButton.addEventListener("click", () => {
-        if (click) {
-            var background = "#fff";
-            listener.remove();
+    list_buttons.forEach((button, index) => {
 
-        } else {
-            var background = "green";
-            listener = map.addListener("click", (mapsMouseEvent) => {
-                // if (dict_markers.origin != null)
-                //     dict_markers.origin.setMap(null);
+        button.textContent = list_names_buttons[index];
+        button.classList.add("custom-map-control-button");
+        map.controls[google.maps.ControlPosition.TOP_RIGHT].push(button);
 
-                get_address_withLocation(mapsMouseEvent.latLng.lat(), mapsMouseEvent.latLng.lng(), map);
+        var click = false;
+        var listener = null;
+        button.addEventListener("click", () => {
+            if (click) {
+                var background = "#fff";
+                listener.remove();
 
-            });
-        }
-        set_originButton.style.backgroundColor = background;
-        click = !click;
+            } else {
+                var background = "green";
+                listener = map.addListener("click", (mapsMouseEvent) => {
+                    get_address_withLocation(mapsMouseEvent.latLng.lat(), mapsMouseEvent.latLng.lng(), map, list_is_origin[index]);
+                });
+            }
+            button.style.backgroundColor = background;
+            click = !click;
+        });
+
     });
+
 }
 
 
@@ -72,13 +85,8 @@ function get_currentLocation(map) {
                         lng: current_lng,
                     };
 
-                    // if (dict_markers.origin != null)
-                    //     dict_markers.origin.setMap(null);
-
-                    get_address_withLocation(current_lat, current_lng, map)
+                    get_address_withLocation(current_lat, current_lng, map, true);
                     map.setCenter(pos);
-
-
                 },
                 () => {
                     handleLocationError(true, infoWindow, map.getCenter());
@@ -91,7 +99,7 @@ function get_currentLocation(map) {
     });
 }
 
-function get_address_withLocation(lat, lng, map) {
+function get_address_withLocation(lat, lng, map, is_origin) {
     infoWindow = new google.maps.InfoWindow();
 
     const geocoder = new google.maps.Geocoder();
@@ -115,12 +123,21 @@ function get_address_withLocation(lat, lng, map) {
                 infoWindow.setContent(contentString);
                 infoWindow.open(map, marker);
 
+                if (is_origin) {
+                    document.getElementById('origin_address').value = results[0].formatted_address;
+                    document.getElementById('lat_Origin').value = lat;
+                    document.getElementById('lon_Origin').value = lng;
+                    remove_mapMarkers('origin_address', marker)
 
-                document.getElementById('origin_address').value = results[0].formatted_address;
 
-                document.getElementById('lat_Origin').value = lat;
-                document.getElementById('lon_Origin').value = lng;
-                remove_mapMarkers('origin_address', marker)
+                } else {
+                    document.getElementById('destination_address').value = results[0].formatted_address;
+                    document.getElementById('lat_Dest').value = lat;
+                    document.getElementById('lon_Dest').value = lng;
+                    remove_mapMarkers('destination_address', marker);
+
+
+                }
 
 
             } else {
@@ -203,7 +220,6 @@ function onPlaceChanged(address_id, lat_id, long_id, map) {
 
 }
 
-
 function remove_mapMarkers(id, marker) {
     if (id == 'origin_address') {
 
@@ -217,6 +233,5 @@ function remove_mapMarkers(id, marker) {
 
     }
     marker_remove.setMap(null);
-
 
 }
