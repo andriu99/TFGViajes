@@ -13,59 +13,50 @@ function init_autocomplete_map() {
         zoom: 6,
     });
     get_currentLocation(map);
-    //set_origin_throughtMap(map);
+    set_origin_throughtMap(map);
     autocomplete("origin_address", "destination_address", map);
 
 }
 
 function set_origin_throughtMap(map) {
     const set_originButton = document.createElement("button");
+    set_originButton.id = 'button-id';
 
-    set_originButton.style.backgroundColor = "#fff";
-    set_originButton.style.border = "2px solid #fff";
-    set_originButton.style.borderRadius = "3px";
-    set_originButton.style.boxShadow = "0 2px 6px rgba(0,0,0,.3)";
-    set_originButton.style.cursor = "pointer";
-    //set_originButton.style.marginTop = "8px";
-    set_originButton.style.marginBottom = "22px";
-    set_originButton.style.textAlign = "center";
-
-
-
-    // const controlText = document.createElement("div");
-    // controlText.style.color = "rgb(25,25,25)";
-    // controlText.style.fontFamily = "Roboto,Arial,sans-serif";
-    // controlText.style.fontSize = "16px";
-    // controlText.style.lineHeight = "38px";
-    // controlText.style.paddingLeft = "5px";
-    // controlText.style.paddingRight = "5px";
-
-    // set_originButton.appendChild(controlText);
 
     set_originButton.textContent = "Origin Location";
     set_originButton.classList.add("custom-map-control-button");
     map.controls[google.maps.ControlPosition.TOP_RIGHT].push(set_originButton);
 
+    var click = false;
+    var listener = null;
     set_originButton.addEventListener("click", () => {
-        window.alert('Ha pulsado el botón');
+        if (click) {
+            background = "#fff";
+            listener.remove();
+
+        } else {
+            background = "green";
+            listener = map.addListener("click", (mapsMouseEvent) => {
+
+                infoWindow = new google.maps.InfoWindow();
+                get_address_withLocation(mapsMouseEvent.latLng.lat(), mapsMouseEvent.latLng.lng(), map)
+
+            });
+
+        }
+        set_originButton.style.backgroundColor = background;
+
+        click = !click;
+
 
     });
-
-
 }
 
+
 function get_currentLocation(map) {
-    infoWindow = new google.maps.InfoWindow();
     const locationButton = document.createElement("button");
 
-    locationButton.style.backgroundColor = "#fff";
-    locationButton.style.border = "2px solid #fff";
-    locationButton.style.borderRadius = "3px";
-    locationButton.style.boxShadow = "0 2px 6px rgba(0,0,0,.3)";
-    locationButton.style.cursor = "pointer";
-    //locationButton.style.marginTop = "8px";
-    locationButton.style.marginBottom = "22px";
-    locationButton.style.textAlign = "center";
+    locationButton.id = 'button-id';
 
     locationButton.textContent = "Current Location";
     locationButton.classList.add("custom-map-control-button");
@@ -87,8 +78,7 @@ function get_currentLocation(map) {
                     if (dict_markers.origin != null)
                         dict_markers.origin.setMap(null);
 
-                    get_address_withLocation(current_lat, current_lng, infoWindow, map)
-                    window.alert(current_lat + '  ' + current_lng);
+                    get_address_withLocation(current_lat, current_lng, map)
                     map.setCenter(pos);
 
 
@@ -104,7 +94,9 @@ function get_currentLocation(map) {
     });
 }
 
-function get_address_withLocation(lat, lng, infoWindow, map) {
+function get_address_withLocation(lat, lng, map) {
+    infoWindow = new google.maps.InfoWindow();
+
     const geocoder = new google.maps.Geocoder();
     const latlng = {
         lat: lat,
@@ -189,6 +181,7 @@ function onPlaceChanged(address_id, lat_id, long_id, map) {
 
             var latitude = results[0].geometry.location.lat();
             var longitude = results[0].geometry.location.lng();
+
             document.getElementById(lat_id).value = latitude;
             document.getElementById(long_id).value = longitude;
 
