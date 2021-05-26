@@ -13,12 +13,43 @@ function init_autocomplete_map() {
         zoom: 6,
     });
     get_currentLocation(map);
+    //set_origin_throughtMap(map);
     autocomplete("origin_address", "destination_address", map);
 
 }
 
-function set_origin_throughtMap() {
-    const locationButton = document.createElement("button");
+function set_origin_throughtMap(map) {
+    const set_originButton = document.createElement("button");
+
+    set_originButton.style.backgroundColor = "#fff";
+    set_originButton.style.border = "2px solid #fff";
+    set_originButton.style.borderRadius = "3px";
+    set_originButton.style.boxShadow = "0 2px 6px rgba(0,0,0,.3)";
+    set_originButton.style.cursor = "pointer";
+    //set_originButton.style.marginTop = "8px";
+    set_originButton.style.marginBottom = "22px";
+    set_originButton.style.textAlign = "center";
+
+
+
+    // const controlText = document.createElement("div");
+    // controlText.style.color = "rgb(25,25,25)";
+    // controlText.style.fontFamily = "Roboto,Arial,sans-serif";
+    // controlText.style.fontSize = "16px";
+    // controlText.style.lineHeight = "38px";
+    // controlText.style.paddingLeft = "5px";
+    // controlText.style.paddingRight = "5px";
+
+    // set_originButton.appendChild(controlText);
+
+    set_originButton.textContent = "Origin Location";
+    set_originButton.classList.add("custom-map-control-button");
+    map.controls[google.maps.ControlPosition.TOP_RIGHT].push(set_originButton);
+
+    set_originButton.addEventListener("click", () => {
+        window.alert('Ha pulsado el botón');
+
+    });
 
 
 }
@@ -39,6 +70,7 @@ function get_currentLocation(map) {
     locationButton.textContent = "Current Location";
     locationButton.classList.add("custom-map-control-button");
     map.controls[google.maps.ControlPosition.TOP_CENTER].push(locationButton);
+
     locationButton.addEventListener("click", () => {
         // Try HTML5 geolocation.
         if (navigator.geolocation) {
@@ -51,9 +83,12 @@ function get_currentLocation(map) {
                         lat: current_lat,
                         lng: current_lng,
                     };
-                    dict_markers.origin.setMap(null);
-                    get_address_withLocation(current_lat, current_lng, infoWindow, map)
 
+                    if (dict_markers.origin != null)
+                        dict_markers.origin.setMap(null);
+
+                    get_address_withLocation(current_lat, current_lng, infoWindow, map)
+                    window.alert(current_lat + '  ' + current_lng);
                     map.setCenter(pos);
 
 
