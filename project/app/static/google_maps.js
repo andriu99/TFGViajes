@@ -31,24 +31,21 @@ function set_origin_throughtMap(map) {
     var listener = null;
     set_originButton.addEventListener("click", () => {
         if (click) {
-            background = "#fff";
+            var background = "#fff";
             listener.remove();
 
         } else {
-            background = "green";
+            var background = "green";
             listener = map.addListener("click", (mapsMouseEvent) => {
+                // if (dict_markers.origin != null)
+                //     dict_markers.origin.setMap(null);
 
-                infoWindow = new google.maps.InfoWindow();
-                get_address_withLocation(mapsMouseEvent.latLng.lat(), mapsMouseEvent.latLng.lng(), map)
+                get_address_withLocation(mapsMouseEvent.latLng.lat(), mapsMouseEvent.latLng.lng(), map);
 
             });
-
         }
         set_originButton.style.backgroundColor = background;
-
         click = !click;
-
-
     });
 }
 
@@ -75,8 +72,8 @@ function get_currentLocation(map) {
                         lng: current_lng,
                     };
 
-                    if (dict_markers.origin != null)
-                        dict_markers.origin.setMap(null);
+                    // if (dict_markers.origin != null)
+                    //     dict_markers.origin.setMap(null);
 
                     get_address_withLocation(current_lat, current_lng, map)
                     map.setCenter(pos);
@@ -123,12 +120,13 @@ function get_address_withLocation(lat, lng, map) {
 
                 document.getElementById('lat_Origin').value = lat;
                 document.getElementById('lon_Origin').value = lng;
-                dict_markers.origin = marker;
+                remove_mapMarkers('origin_address', marker)
 
 
             } else {
                 window.alert("No results found");
             }
+
         } else {
             window.alert("Geocoder failed due to: " + status);
         }
@@ -197,21 +195,28 @@ function onPlaceChanged(address_id, lat_id, long_id, map) {
             marker.addListener("click", () => {
                 infowindow.open(map, marker);
             });
+            remove_mapMarkers(address_id, marker);
 
-            if (address_id == 'origin_address') {
-                var marker_remove = dict_markers.origin;
-                dict_markers.origin = marker;
-
-            } else {
-                var marker_remove = dict_markers.destination;
-                dict_markers.destination = marker;
-
-            }
-            if (marker_remove != null) {
-                marker_remove.setMap(null);
-            }
 
         }
     });
+
+}
+
+
+function remove_mapMarkers(id, marker) {
+    if (id == 'origin_address') {
+
+        var marker_remove = dict_markers.origin;
+        dict_markers.origin = marker;
+
+    } else {
+
+        var marker_remove = dict_markers.destination;
+        dict_markers.destination = marker;
+
+    }
+    marker_remove.setMap(null);
+
 
 }
