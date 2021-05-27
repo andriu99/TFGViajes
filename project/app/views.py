@@ -4,7 +4,7 @@ from django.shortcuts import render
 from .forms import userRequest
 from app.models import Trip,blablaTrip,skyscannerTrip,busOrTrainTrip,RESTApi
 import googlemaps
-
+from datetime import datetime as dt 
 from .viewFunctions.homeviewFunctions import saveBlablacarTrips,saveSkyscannerFlights,save_train_bus_trips
 from .funtionsRequest.googleMapsRequests import getLatLong_address
 

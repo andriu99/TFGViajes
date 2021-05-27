@@ -39,7 +39,7 @@ function set_origin_throughtMap(map) {
 
         button.textContent = list_names_buttons[index];
         button.classList.add("custom-map-control-button");
-        map.controls[google.maps.ControlPosition.TOP_RIGHT].push(button);
+        map.controls[google.maps.ControlPosition.TOP_CENTER].push(button);
 
         var click = false;
         var listener = null;
@@ -55,7 +55,7 @@ function set_origin_throughtMap(map) {
 
                 } else {
                     list_is_activated[index] = true;
-                    var background = "green";
+                    var background = "darkgreen";
                     listener = map.addListener("click", (mapsMouseEvent) => {
                         get_address_withLocation(mapsMouseEvent.latLng.lat(), mapsMouseEvent.latLng.lng(), map, list_is_origin[index]);
                     });
