@@ -109,6 +109,13 @@ def save_tripInfo(searchDict,system_transport_dict,filter_departureNodes,filter_
 
 
 def save_train_bus_trips(start_coordinates,end_coordinates,start_date_local):
+    filter_departureNodes=filterNodes(start_coordinates,nodeType='S')
+    filter_arrivalNodes=filterNodes(end_coordinates,nodeType='S')
+    for bus_trainTrip in busOrTrainTrip.objects.all():
+        actual_trip=bus_trainTrip.trip
+        print(actual_trip.departureNode.location)
+        print(actual_trip.arrivalNode.location)
+
     getBusTrainTrips=Request.objects.get(name='getbustrainTripsInformationTrainline')
     searchDict={
         "passenger_ids": [
@@ -122,13 +129,12 @@ def save_train_bus_trips(start_coordinates,end_coordinates,start_date_local):
         "departure_date":"2021-03-29T00:00:00+01:00",
         "systems":[]
     }
-    filter_departureNodes=filterNodes(start_coordinates,nodeType='S')
-    filter_arrivalNodes=filterNodes(end_coordinates,nodeType='S')
+    
     system_transport={
                 'T':['renfe'],
                 'B':['busbud']
     }
-    save_tripInfo(searchDict,system_transport,filter_departureNodes,filter_arrivalNodes,start_date_local,getBusTrainTrips)
+    #save_tripInfo(searchDict,system_transport,filter_departureNodes,filter_arrivalNodes,start_date_local,getBusTrainTrips)
  
 
 

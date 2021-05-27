@@ -2,7 +2,7 @@
 #from project.app.models import busOrTrainTrip
 from django.shortcuts import render
 from .forms import userRequest
-from app.models import Trip,blablaTrip,skyscannerTrip,busOrTrainTrip,RESTApi
+from app.models import Trip,blablaTrip,skyscannerTrip,busOrTrainTrip
 import googlemaps
 from datetime import datetime as dt 
 from .viewFunctions.homeviewFunctions import saveBlablacarTrips,saveSkyscannerFlights,save_train_bus_trips
@@ -10,11 +10,12 @@ from .funtionsRequest.googleMapsRequests import getLatLong_address
 
 
 def home(request):
-    Trip.objects.all().delete()
+    #Trip.objects.all().delete()
 
     if request.method == 'POST':
         form = userRequest(request.POST)
         if form.is_valid():
+            
 
             print(form.cleaned_data)
             originalDate=form.cleaned_data['date']
