@@ -1,9 +1,11 @@
-from app.models import Request,Trip,blablaTrip,skyscannerTrip,busOrTrainTrip
+from app.models import Request,Trip,blablaTrip,skyscannerTrip,busOrTrainTrip,RESTApi
 from datetime import datetime as dt
 from datetime import timedelta
 from ..otherFunctions.dateFunctions import parseDate_withTimeZone,calculateDuration
 from ..otherFunctions.nodesFunctions import filterNodes
 from django.utils.dateparse import parse_datetime
+import googlemaps as gmaps
+from ..funtionsRequest.googleMapsRequests import getProvinceLocationThroughCoordinates
 
 
 def saveBlablacarTrips(start_coordinates,end_coordinates,start_date_local):
@@ -109,8 +111,12 @@ def save_tripInfo(searchDict,system_transport_dict,filter_departureNodes,filter_
 
 
 def save_train_bus_trips(start_coordinates,end_coordinates,start_date_local):
+    getskyscannerTrips=Request.objects.get(name='getTokenSkyscanner')
+    ClientGMaps=gmaps.Client(RESTApi.objects.get(name='getProLocatDataThroughCoordinates').APIKey)
+    ClientGMaps.reverse_geocode(start_coordinates)
     filter_departureNodes=filterNodes(start_coordinates,nodeType='S')
     filter_arrivalNodes=filterNodes(end_coordinates,nodeType='S')
+
     for bus_trainTrip in busOrTrainTrip.objects.all():
         actual_trip=bus_trainTrip.trip
         print(actual_trip.departureNode.location)

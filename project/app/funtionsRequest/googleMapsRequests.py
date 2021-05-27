@@ -1,6 +1,10 @@
 
-def getProvinceLocationThroughCoordinates(response):
-    json=response.json()
+def getProvinceLocationThroughCoordinates(response_json):
+    try: #Request
+        json=response_json.json()
+    except: #JSON
+        json=response_json
+
     directionData=json['results'][0]['address_components']
     location='Unknown'
     province='Unknown'
