@@ -1,8 +1,7 @@
-#from project.app.models import blablaTrip
-#from project.app.models import busOrTrainTrip
+
 from django.shortcuts import render
 from .forms import userRequest
-from app.models import Trip,blablaTrip,skyscannerTrip,busOrTrainTrip
+from app.models import blablaTrip,skyscannerTrip
 import googlemaps
 from datetime import datetime as dt 
 from .viewFunctions.homeviewFunctions import saveBlablacarTrips,saveSkyscannerFlights,save_train_bus_trips
@@ -18,8 +17,9 @@ def home(request):
 
 
             print(form.cleaned_data)
-            originalDate=form.cleaned_data['date']
-            start_date_local=dt(originalDate.year,originalDate.month,originalDate.day)
+            date=form.cleaned_data['date']
+            start_date_local=dt(date.year,date.month,date.day)
+            print(type(date))
 
             start_coordinates=str(form.cleaned_data['lat_Origin'])+','+str(form.cleaned_data['lon_Origin'])
             end_coordinates=str(form.cleaned_data['lat_Dest'])+','+str(form.cleaned_data['lon_Dest'])
@@ -28,7 +28,6 @@ def home(request):
             #saveBlablacarTrips(start_coordinates,end_coordinates,start_date_local)
             #saveSkyscannerFlights(start_coordinates,end_coordinates,start_date_local)
             query_set_bustrain_Trips=save_train_bus_trips(start_coordinates,end_coordinates,start_date_local)
-            #print(query_set_bustrain_Trips.objects.all())
 
     else:
 
