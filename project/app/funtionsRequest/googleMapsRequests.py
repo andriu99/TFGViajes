@@ -2,10 +2,14 @@
 def getProvinceLocationThroughCoordinates(response_json):
     try: #Request
         json=response_json.json()
+        directionData=json['results'][0]['address_components']
     except: #JSON
         json=response_json
+        directionData=json[0]['address_components']
 
-    directionData=json['results'][0]['address_components']
+    
+        
+  
     location='Unknown'
     province='Unknown'
     for i in directionData:

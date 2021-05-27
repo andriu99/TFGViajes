@@ -110,11 +110,20 @@ def save_tripInfo(searchDict,system_transport_dict,filter_departureNodes,filter_
                         bus_trains_trips.save()
 
 
-def save_train_bus_trips(start_coordinates,end_coordinates,start_date_local):
-    getskyscannerTrips=Request.objects.get(name='getTokenSkyscanner')
+def get_locat_province(coordinates):
+    
     ClientGMaps=gmaps.Client(RESTApi.objects.get(name='googleMapsRESTApi').APIKey)
-    location,province=getProvinceLocationThroughCoordinates(ClientGMaps.reverse_geocode(start_coordinates))
-    print(location,province)
+    location,province=getProvinceLocationThroughCoordinates(ClientGMaps.reverse_geocode(coordinates))
+    return location,province
+
+
+
+def save_train_bus_trips(start_coordinates,end_coordinates,start_date_local):
+
+    locatO,provO=get_locat_province(start_coordinates)
+    locatD,provD=get_locat_province(end_coordinates)
+    print(locatO)
+    print(locatD)
 
     filter_departureNodes=filterNodes(start_coordinates,nodeType='S')
     filter_arrivalNodes=filterNodes(end_coordinates,nodeType='S')
