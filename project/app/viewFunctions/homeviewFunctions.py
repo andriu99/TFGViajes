@@ -4,7 +4,6 @@ from datetime import timedelta
 from ..otherFunctions.dateFunctions import parseDate_withTimeZone,calculateDuration
 from ..otherFunctions.nodesFunctions import filterNodes
 from django.utils.dateparse import parse_datetime
-from time import sleep
 
 
 def saveBlablacarTrips(start_coordinates,end_coordinates,start_date_local):
@@ -83,7 +82,7 @@ def save_tripInfo(searchDict,system_transport_dict,filter_departureNodes,filter_
            
     for departureNode in filter_departureNodes:
         for arrivalNode in filter_arrivalNodes:
-            print(departureNode.name+'  '+arrivalNode.name)
+            #print(departureNode.name+'  '+arrivalNode.name)
             searchDict['departure_station_id']=int(departureNode.code)
             searchDict['arrival_station_id']=int(arrivalNode.code)
             searchDict['departure_date']=start_date_local.isoformat()
@@ -130,8 +129,6 @@ def save_train_bus_trips(start_coordinates,end_coordinates,start_date_local):
                 'B':['busbud']
     }
     save_tripInfo(searchDict,system_transport,filter_departureNodes,filter_arrivalNodes,start_date_local,getBusTrainTrips)
-    # sleep(6)
-    # save_tripInfo(searchDict,{'T':['renfe']},filter_departureNodes,filter_arrivalNodes,start_date_local,getBusTrainTrips)
-
+ 
 
 
