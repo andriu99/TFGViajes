@@ -11,11 +11,11 @@ from .funtionsRequest.googleMapsRequests import getLatLong_address
 
 def home(request):
     #Trip.objects.all().delete()
-
+    
     if request.method == 'POST':
         form = userRequest(request.POST)
         if form.is_valid():
-            
+
 
             print(form.cleaned_data)
             originalDate=form.cleaned_data['date']
@@ -27,8 +27,8 @@ def home(request):
 
             #saveBlablacarTrips(start_coordinates,end_coordinates,start_date_local)
             #saveSkyscannerFlights(start_coordinates,end_coordinates,start_date_local)
-            save_train_bus_trips(start_coordinates,end_coordinates,start_date_local)
-
+            query_set_bustrain_Trips=save_train_bus_trips(start_coordinates,end_coordinates,start_date_local)
+            print(query_set_bustrain_Trips.objects.all())
 
     else:
 
@@ -37,15 +37,21 @@ def home(request):
     
     blablaTrips=blablaTrip.objects.all()
     skyscannerTrips=skyscannerTrip.objects.all()
+
+    
+
     try:
-        busTrips=busOrTrainTrip.objects.filter(system='B')
+        busTrips=query_set_bustrain_Trips.objects.filter(system='B')
     except:
         busTrips={}
 
     try:
-        trainTrips=busOrTrainTrip.objects.filter(system='T')
+        trainTrips=query_set_bustrain_Trips.objects.filter(system='T')
     except:
         trainTrips={}
+
+
+
 
     context = {'form' : form,'blablaTrips':blablaTrips,'skyscannerTrips':skyscannerTrips,'busTrips':busTrips,'trainTrips':trainTrips}
     return render(request,'app/home.html',context)
