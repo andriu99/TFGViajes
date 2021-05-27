@@ -28,7 +28,7 @@ def home(request):
             #saveBlablacarTrips(start_coordinates,end_coordinates,start_date_local)
             #saveSkyscannerFlights(start_coordinates,end_coordinates,start_date_local)
             query_set_bustrain_Trips=save_train_bus_trips(start_coordinates,end_coordinates,start_date_local)
-            print(query_set_bustrain_Trips.objects.all())
+            #print(query_set_bustrain_Trips.objects.all())
 
     else:
 
@@ -41,12 +41,12 @@ def home(request):
     
 
     try:
-        busTrips=query_set_bustrain_Trips.objects.filter(system='B')
+        busTrips=query_set_bustrain_Trips.filter(system='B')
     except:
         busTrips={}
 
     try:
-        trainTrips=query_set_bustrain_Trips.objects.filter(system='T')
+        trainTrips=query_set_bustrain_Trips.filter(system='T')
     except:
         trainTrips={}
 
