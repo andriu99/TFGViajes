@@ -36,7 +36,6 @@ function set_origin_throughtMap(map) {
 
 
     list_buttons.forEach((button, index) => {
-
         button.textContent = list_names_buttons[index];
         button.classList.add("custom-map-control-button");
         map.controls[google.maps.ControlPosition.TOP_CENTER].push(button);
@@ -47,13 +46,22 @@ function set_origin_throughtMap(map) {
             previus_index = index - 1;
             if (previus_index == -1) previus_index = list_buttons.length - 1;
 
+            // window.alert(index);
+            // window.alert(previus_index);
+
+            // window.alert("Es origen: " + list_is_origin[index]);
+            // window.alert("Esta activado: " + list_is_activated[index]);
+
             if (list_is_activated[previus_index] == false) {
-                if (click) {
+                if (list_is_activated[index]) {
+                    // window.alert("Apago botón");
                     list_is_activated[index] = false;
                     var background = "#fff";
                     listener.remove();
 
                 } else {
+                    // window.alert("Enciendo botón");
+                    //turnOn_origin_destination(list_is_activated[index], map);
                     list_is_activated[index] = true;
                     var background = "darkgreen";
                     listener = map.addListener("click", (mapsMouseEvent) => {
@@ -61,18 +69,35 @@ function set_origin_throughtMap(map) {
                     });
                 }
 
-            } else {
-                window.alert("You cannot have the origin and destination buttons activated at the same time");
             }
+            //window.alert("Mal");
+            //window.alert(list_names_buttons[index]);
+
+            // list_is_activated[index] = true;
+            // list_is_activated[previus_index] = false;
+            // var background = "darkgreen";
+            // list_buttons[previus_index].style.background = "#fff";
+
+
+
+
 
 
             button.style.backgroundColor = background;
-            click = !click;
+            //click = !click;
         });
     });
 
 }
 
+function turnOn_origin_destination(is_activated, map) {
+    is_activated = true;
+    listener = map.addListener("click", (mapsMouseEvent) => {
+        get_address_withLocation(mapsMouseEvent.latLng.lat(), mapsMouseEvent.latLng.lng(), map, list_is_origin[index]);
+    });
+
+
+}
 
 function get_currentLocation(map) {
     const locationButton = document.createElement("button");
