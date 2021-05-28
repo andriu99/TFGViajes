@@ -16,9 +16,9 @@ def home(request):
         if form.is_valid():
 
 
-            print(form.cleaned_data)
             date=form.cleaned_data['date']
             start_date_local=dt(date.year,date.month,date.day)
+            print(date)
             print(type(date))
 
             start_coordinates=str(form.cleaned_data['lat_Origin'])+','+str(form.cleaned_data['lon_Origin'])

@@ -124,6 +124,8 @@ def get_locat_province(coordinates):
 
 
 def save_train_bus_trips(start_coordinates,end_coordinates,start_date_local):
+    print(start_date_local)
+    print(type(start_date_local))
 
     locatO,provO=get_locat_province(start_coordinates)
     locatD,provD=get_locat_province(end_coordinates)
@@ -139,9 +141,11 @@ def save_train_bus_trips(start_coordinates,end_coordinates,start_date_local):
     for bus_trainTrip in busOrTrainTrip.objects.all():
         actual_trip=bus_trainTrip.trip
 
-        if(actual_trip.departureNode.location==locatO and actual_trip.arrivalNode.location==locatD):
-            set_bustrain_Trips.add(bus_trainTrip.pk)
-    
+        if (actual_trip.departureDate>=start_date_local and actual_trip.departureDate<=(start_date_local+timedelta(days=1))):
+            if(actual_trip.departureNode.location==locatO and actual_trip.arrivalNode.location==locatD):
+                set_bustrain_Trips.add(bus_trainTrip.pk)
+        
+        
     if not set_bustrain_Trips: 
         getBusTrainTrips=Request.objects.get(name='getbustrainTripsInformationTrainline')
         searchDict={
