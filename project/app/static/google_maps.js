@@ -21,10 +21,14 @@ function init_autocomplete_map() {
 
 function set_origin_throughtMap(map) {
     const div_button_origin_dest = document.createElement("div");
-    div_button_origin_dest.className = 'buttons_origin_dest';
+    div_button_origin_dest.className = 'buttons_current_origin_dest';
 
     const set_originButton = document.createElement("button");
+    set_originButton.setAttribute("type", "button");
     const set_destinationButton = document.createElement("button");
+    set_destinationButton.setAttribute("type", "button");
+
+
     div_button_origin_dest.appendChild(set_destinationButton);
     div_button_origin_dest.appendChild(set_originButton);
 
@@ -46,12 +50,6 @@ function set_origin_throughtMap(map) {
             previus_index = index - 1;
             if (previus_index == -1) previus_index = list_buttons.length - 1;
 
-            // window.alert(index);
-            // window.alert(previus_index);
-
-            // window.alert("Es origen: " + list_is_origin[index]);
-            // window.alert("Esta activado: " + list_is_activated[index]);
-
             if (list_is_activated[previus_index] == false) {
                 if (list_is_activated[index]) {
                     // window.alert("Apago botón");
@@ -60,8 +58,7 @@ function set_origin_throughtMap(map) {
                     listener.remove();
 
                 } else {
-                    // window.alert("Enciendo botón");
-                    //turnOn_origin_destination(list_is_activated[index], map);
+
                     list_is_activated[index] = true;
                     var background = "darkgreen";
                     listener = map.addListener("click", (mapsMouseEvent) => {
@@ -70,39 +67,19 @@ function set_origin_throughtMap(map) {
                 }
 
             }
-            //window.alert("Mal");
-            //window.alert(list_names_buttons[index]);
-
-            // list_is_activated[index] = true;
-            // list_is_activated[previus_index] = false;
-            // var background = "darkgreen";
-            // list_buttons[previus_index].style.background = "#fff";
-
-
-
-
-
 
             button.style.backgroundColor = background;
-            //click = !click;
         });
     });
 
 }
 
-function turnOn_origin_destination(is_activated, map) {
-    is_activated = true;
-    listener = map.addListener("click", (mapsMouseEvent) => {
-        get_address_withLocation(mapsMouseEvent.latLng.lat(), mapsMouseEvent.latLng.lng(), map, list_is_origin[index]);
-    });
 
-
-}
 
 function get_currentLocation(map) {
     const locationButton = document.createElement("button");
-
-    locationButton.id = 'button-id';
+    locationButton.setAttribute("type", "button");
+    locationButton.class = 'buttons_current_origin_dest';
 
     locationButton.textContent = "Current Location";
     locationButton.classList.add("custom-map-control-button");
