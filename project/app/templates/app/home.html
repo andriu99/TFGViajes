@@ -27,7 +27,7 @@
                         <td>{{blablaTrip.trip.departureDate|time:"H:i"}}</td>
                         <td>{{blablaTrip.trip.arrivalDate|time:"H:i"}}</td>
                         <td>{{blablaTrip.trip.price}}</td>
-                        <td><a href="url">{{blablaTrip.link}}</a></td>
+                        <td><a href={{blablaTrip.link}} target="_blank">{{blablaTrip.link}}</a></td>
                     </tr>
 
                 {% endfor %}
