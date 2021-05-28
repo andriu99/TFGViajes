@@ -50,6 +50,8 @@ function set_origin_throughtMap(map) {
             previus_index = index - 1;
             if (previus_index == -1) previus_index = list_buttons.length - 1;
 
+
+
             if (list_is_activated[previus_index] == false) {
                 if (list_is_activated[index]) {
                     // window.alert("Apago botón");
@@ -67,6 +69,7 @@ function set_origin_throughtMap(map) {
                 }
 
             }
+
 
             button.style.backgroundColor = background;
         });
