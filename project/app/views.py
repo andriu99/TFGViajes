@@ -1,7 +1,7 @@
 
 from django.shortcuts import render
 from .forms import userRequest
-from app.models import blablaTrip,skyscannerTrip
+from app.models import blablaTrip,skyscannerTrip,Trip
 import googlemaps
 from datetime import datetime as dt 
 from .viewFunctions.homeviewFunctions import saveBlablacarTrips,saveSkyscannerFlights,save_train_bus_trips
@@ -10,7 +10,15 @@ from .funtionsRequest.googleMapsRequests import getLatLong_address
 
 def home(request):
     #Trip.objects.all().delete()
-    
+    for trip in Trip.objects.all():
+        try:
+            trip.busOrTrainTrip
+
+        except:
+            Trip.objects.all().delete(pk=trip.pk)
+
+    blablaTrip.objects.all().delete()
+    skyscannerTrip.objects.all().delete()
     if request.method == 'POST':
         form = userRequest(request.POST)
         if form.is_valid():
