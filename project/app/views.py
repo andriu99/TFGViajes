@@ -15,7 +15,7 @@ def home(request):
             trip.busOrTrainTrip
 
         except:
-            Trip.objects.all().delete(pk=trip.pk)
+            Trip.objects.all().get(id=trip.id).delete()
 
     blablaTrip.objects.all().delete()
     skyscannerTrip.objects.all().delete()
