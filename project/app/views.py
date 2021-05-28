@@ -25,8 +25,8 @@ def home(request):
             end_coordinates=str(form.cleaned_data['lat_Dest'])+','+str(form.cleaned_data['lon_Dest'])
 
 
-            #saveBlablacarTrips(start_coordinates,end_coordinates,start_date_local)
-            #saveSkyscannerFlights(start_coordinates,end_coordinates,start_date_local)
+            saveBlablacarTrips(start_coordinates,end_coordinates,start_date_local)
+            saveSkyscannerFlights(start_coordinates,end_coordinates,start_date_local)
             query_set_bustrain_Trips=save_train_bus_trips(start_coordinates,end_coordinates,start_date_local)
 
     else:

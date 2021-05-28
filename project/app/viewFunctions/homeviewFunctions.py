@@ -1,6 +1,4 @@
-from typing import List
 from app.models import Request,Trip,blablaTrip,skyscannerTrip,busOrTrainTrip,RESTApi
-from datetime import datetime as dt
 from datetime import timedelta
 from ..otherFunctions.dateFunctions import parseDate_withTimeZone,calculateDuration
 from ..otherFunctions.nodesFunctions import filterNodes
@@ -145,7 +143,7 @@ def save_train_bus_trips(start_coordinates,end_coordinates,start_date_local):
             if(actual_trip.departureNode.location==locatO and actual_trip.arrivalNode.location==locatD):
                 set_bustrain_Trips.add(bus_trainTrip.pk)
         
-        
+
     if not set_bustrain_Trips: 
         getBusTrainTrips=Request.objects.get(name='getbustrainTripsInformationTrainline')
         searchDict={
