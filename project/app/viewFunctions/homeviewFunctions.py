@@ -8,6 +8,7 @@ from ..funtionsRequest.googleMapsRequests import getProvinceLocationThroughCoord
 
 
 def saveBlablacarTrips(start_coordinates,end_coordinates,start_date_local):
+    set_trips_blabla=set()
     getBlablaCarTrips=Request.objects.get(name='getBlablaCarTrips')
 
     end_date_local_string=(start_date_local+timedelta(days=1)).isoformat()
@@ -34,6 +35,9 @@ def saveBlablacarTrips(start_coordinates,end_coordinates,start_date_local):
         
         new_trip=Trip(departureNode=None,arrivalNode=None,departureDate=departureDate_date,arrivalDate=arrivalDate_date,duration=duration.seconds,price=float(price))
         new_trip.save()
+        set_trips_blabla.add(new_trip.pk)
+
+
 
         new_blablatrip=blablaTrip(link=url,
                                     departureCity=startData_city,departureAddress=startData_address,departureLatitude=float(startData_latitude),departureLongitude=float(startData_longitude),
@@ -43,8 +47,11 @@ def saveBlablacarTrips(start_coordinates,end_coordinates,start_date_local):
         )
         new_blablatrip.save()
 
+        return Trip.objects.filter(id__in=set_trips_blabla)
+
 
 def saveSkyscannerFlights(start_coordinates,end_coordinates,start_date_local):
+    set_trips_skys=set()
     getskyscannerTrips=Request.objects.get(name='getTokenSkyscanner')
     token=getskyscannerTrips.executeFunction([getskyscannerTrips.RApi.APIKey])
 
@@ -75,8 +82,12 @@ def saveSkyscannerFlights(start_coordinates,end_coordinates,start_date_local):
 
                 new_trip=Trip(departureNode=departureNode,arrivalNode=arrivalNode,departureDate=startData_date,arrivalDate=endData_date,duration=duration*60,price=float(price))
                 new_trip.save()
+                set_trips_skys.add(new_trip.pk)
                 new_skyscannerTrip=skyscannerTrip(urlPay=urlPay,airlineName=airlineName,airlineUrlImage=airlineUrlImage,trip=new_trip)
                 new_skyscannerTrip.save()
+
+    return Trip.objects.filter(id__in=set_trips_skys)
+
 
 '''
 Guardo los viajes en la BD, y además los incluyo en un array para saber cuáles han sido los últimos guardados.
@@ -84,7 +95,7 @@ Guardo los viajes en la BD, y además los incluyo en un array para saber cuáles
 def save_tripInfo(set_bustrain_Trips,searchDict,system_transport_dict,filter_departureNodes,filter_arrivalNodes,start_date_local,getBusTrainTrips):
     for departureNode in filter_departureNodes:
         for arrivalNode in filter_arrivalNodes:
-            #print(departureNode.name+'  '+arrivalNode.name)
+            print(departureNode.name+'  '+arrivalNode.name)
             searchDict['departure_station_id']=int(departureNode.code)
             searchDict['arrival_station_id']=int(arrivalNode.code)
             searchDict['departure_date']=start_date_local.isoformat()
@@ -108,7 +119,7 @@ def save_tripInfo(set_bustrain_Trips,searchDict,system_transport_dict,filter_dep
                         
                         bus_train_trip=busOrTrainTrip(system=system,trip=new_trip)
                         bus_train_trip.save()
-                        set_bustrain_Trips.add(bus_train_trip.pk)
+                        set_bustrain_Trips.add(new_trip.pk)
                         
                         
 
@@ -122,13 +133,9 @@ def get_locat_province(coordinates):
 
 
 def save_train_bus_trips(start_coordinates,end_coordinates,start_date_local):
-    print(start_date_local)
-    print(type(start_date_local))
 
     locatO,provO=get_locat_province(start_coordinates)
     locatD,provD=get_locat_province(end_coordinates)
-    print(locatO)
-    print(locatD)
 
     filter_departureNodes=filterNodes(start_coordinates,nodeType='S')
     filter_arrivalNodes=filterNodes(end_coordinates,nodeType='S')
@@ -141,7 +148,7 @@ def save_train_bus_trips(start_coordinates,end_coordinates,start_date_local):
 
         if (actual_trip.departureDate>=start_date_local and actual_trip.departureDate<=(start_date_local+timedelta(days=1))):
             if(actual_trip.departureNode.location==locatO and actual_trip.arrivalNode.location==locatD):
-                set_bustrain_Trips.add(bus_trainTrip.pk)
+                set_bustrain_Trips.add(actual_trip.pk)
         
 
     if not set_bustrain_Trips: 
@@ -165,7 +172,7 @@ def save_train_bus_trips(start_coordinates,end_coordinates,start_date_local):
         }
         save_tripInfo(set_bustrain_Trips,searchDict,system_transport,filter_departureNodes,filter_arrivalNodes,start_date_local,getBusTrainTrips)
     
-    query_set_bustrain_Trips=busOrTrainTrip.objects.filter(id__in=set_bustrain_Trips)
+    query_set_bustrain_Trips=Trip.objects.filter(id__in=set_bustrain_Trips)
     return query_set_bustrain_Trips
     
 

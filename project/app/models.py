@@ -96,7 +96,7 @@ class Trip(models.Model):
 
 
 class blablaTrip(models.Model):
-    trip=models.OneToOneField(Trip,on_delete=models.CASCADE,related_name='blablaTrip')
+    trip=models.OneToOneField(Trip,on_delete=models.CASCADE,related_name='blablaTrip',blank=True, null=True)
     link=models.URLField(max_length=150)
     departureCity=models.CharField(max_length=30)
     departureAddress=models.CharField(max_length=30)
@@ -114,7 +114,7 @@ class blablaTrip(models.Model):
 
 
 class skyscannerTrip(models.Model):
-    trip=models.OneToOneField(Trip,on_delete=models.CASCADE,related_name='skyscannerTrip')
+    trip=models.OneToOneField(Trip,on_delete=models.CASCADE,related_name='skyscannerTrip', blank=True, null=True)   
     urlPay=models.URLField(max_length=1500)
     airlineName=models.CharField(max_length=50)
     airlineUrlImage=models.CharField(max_length=50)
@@ -122,7 +122,7 @@ class skyscannerTrip(models.Model):
     
   
 class busOrTrainTrip(models.Model):
-    trip=models.OneToOneField(Trip,on_delete=models.CASCADE,related_name='busOrTrainTrip')
+    trip=models.OneToOneField(Trip,on_delete=models.CASCADE,related_name='busOrTrainTrip', blank=True, null=True)
 
     class Suit(models.TextChoices):
         TRAIN = 'T'

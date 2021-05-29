@@ -72,3 +72,7 @@ body {
     margin-bottom: 22px;
     text-Align: center;
 }
+
+#max_price {
+    width: 7%;
+}

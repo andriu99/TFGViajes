@@ -24,10 +24,10 @@
                 </tr>
                 {% for blablaTrip in blablaTrips %}
                     <tr>
-                        <td>{{blablaTrip.trip.departureDate|time:"H:i"}}</td>
-                        <td>{{blablaTrip.trip.arrivalDate|time:"H:i"}}</td>
-                        <td>{{blablaTrip.trip.price}}</td>
-                        <td><a href={{blablaTrip.link}} target="_blank">{{blablaTrip.link}}</a></td>
+                        <td>{{blablaTrip.departureDate|time:"H:i"}}</td>
+                        <td>{{blablaTrip.arrivalDate|time:"H:i"}}</td>
+                        <td>{{blablaTrip.price}}</td>
+                        <td><a href={{blablaTrip.blablaTrip.link}} target="_blank">{{blablaTrip.blablaTrip.link}}</a></td>
                     </tr>
 
                 {% endfor %}
@@ -53,13 +53,13 @@
                 </tr>
                 {% for skyscannerTrip in skyscannerTrips %}
                     <tr>
-                        <td>{{skyscannerTrip.trip.departureDate|time:"H:i"}}</td>
-                        <td>{{skyscannerTrip.trip.arrivalDate|time:"H:i"}}</td>
-                        <td>{{skyscannerTrip.trip.price}}</td>
+                        <td>{{skyscannerTrip.departureDate|time:"H:i"}}</td>
+                        <td>{{skyscannerTrip.arrivalDate|time:"H:i"}}</td>
+                        <td>{{skyscannerTrip.price}}</td>
 
-                        <td>{{skyscannerTrip.airlineName}}</td>
-                        <td>{{skyscannerTrip.trip.departureNode.name}}</td>
-                        <td>{{skyscannerTrip.trip.arrivalNode.name}}</td>
+                        <td>{{skyscannerTrip.skyscannerTrip.airlineName}}</td>
+                        <td>{{skyscannerTrip.departureNode.name}}</td>
+                        <td>{{skyscannerTrip.arrivalNode.name}}</td>
                     </tr>
                 {% endfor %}
 
