@@ -9,6 +9,10 @@ from .funtionsRequest.googleMapsRequests import getProvinceLocationThroughCoordi
 
 def home(request):
 
+    blablaTrips={}
+    skyscannerTrips={}
+    trips_busTrain={}
+
 
     if request.method == 'POST':
         form = userRequest(request.POST)
@@ -21,7 +25,7 @@ def home(request):
 
             Trip.objects.all().filter(id__in=id_delete).delete() #Borro los viajes en avión y en blablacar
 
-            
+            print(form.cleaned_data['OrderType'])
             date=form.cleaned_data['date']
             start_date_local=dt(date.year,date.month,date.day)
     
@@ -38,17 +42,11 @@ def home(request):
                 blablaTrips=blablaTrips.filter(price__lt=form.cleaned_data['maxPrice'])
                 skyscannerTrips=skyscannerTrips.filter(price__lt=form.cleaned_data['maxPrice'])
                 trips_busTrain=trips_busTrain.filter(price__lt=form.cleaned_data['maxPrice'])
-
-
     else:
 
         form = userRequest()
 
-    
-    
-
     set_bus_trainTrips=set()
-
 
     for bus_trainTrip in trips_busTrain:
         set_bus_trainTrips.add(bus_trainTrip.busOrTrainTrip.pk)
@@ -67,7 +65,7 @@ def home(request):
 
     
     '''
-    BlablaTrips,SkyscannerTrips => Pertenecen a los modelos blablaTrip y skyscannerTrip
+    blablaTrips,skyscannerTrips => Pertenecen a los modelos blablaTrip y skyscannerTrip
     busTrips,trainTrips => Pertenecen al modelo Trip
     '''
     context = {'form' : form,'blablaTrips':blablaTrips,'skyscannerTrips':skyscannerTrips,'busTrips':busTrips,'trainTrips':trainTrips}

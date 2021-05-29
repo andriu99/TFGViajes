@@ -73,6 +73,7 @@ body {
     text-Align: center;
 }
 
-#max_price {
+#max_price_time {
     width: 7%;
+    text-align: left;
 }

@@ -1,4 +1,6 @@
 from django import forms
+from datetime import timedelta
+from durationwidget.widgets import TimeDurationWidget
 
 
 class DateInput(forms.DateTimeInput):
@@ -20,4 +22,16 @@ class userRequest(forms.Form):
 
     date=forms.DateField(widget=DateInput(attrs={"class":"data"}))
 
-    maxPrice=forms.FloatField(label='Max price:',widget=forms.NumberInput(attrs={"id":"max_price","class":"data",'step': "0.1"}),required=False)
+    maxPrice=forms.FloatField(label='Max price:',widget=forms.NumberInput(attrs={"id":"max_price_time","class":"data",'step': "0.1"}),required=False)
+
+    CHOICES =(
+    ("NONE", "NONE"),
+    ("ASC", "ASC"),
+    ("DESC", "DESC"),
+    )
+    
+    OrderType = forms.ChoiceField(label='Order: ',choices = CHOICES,initial='NONE',required=False,widget=forms.Select(attrs={"class":"data","id":"max_price_time"}))
+
+
+   
+
