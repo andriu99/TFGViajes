@@ -15,23 +15,26 @@ class userRequest(forms.Form):
     lat_Dest = forms.FloatField(widget=forms.HiddenInput(attrs={"id":"lat_Dest"}),required=False,initial=181)
     lon_Dest = forms.FloatField(widget=forms.HiddenInput(attrs={"id":"lon_Dest"}),required=False,initial=181)
 
- 
-
     origin_address=forms.CharField(max_length=200,widget=forms.TextInput(attrs={"class":"data","id":"origin_address"}))
     destination_address=forms.CharField(max_length=200,widget=forms.TextInput(attrs={"class":"data","id":"destination_address"}))
 
-    date=forms.DateField(widget=DateInput(attrs={"class":"data"}))
+    date=forms.DateField(widget=DateInput(attrs={"class":"data","id":"data_id"}))
 
     maxPrice=forms.FloatField(label='Max price:',widget=forms.NumberInput(attrs={"id":"max_price_time","class":"data",'step': "0.1"}),required=False)
 
-    CHOICES =(
+    CHOICES_ORDERTYPE =(
     ("NONE", "NONE"),
     ("ASC", "ASC"),
     ("DESC", "DESC"),
     )
     
-    OrderType = forms.ChoiceField(label='Order: ',choices = CHOICES,initial='NONE',required=False,widget=forms.Select(attrs={"class":"data","id":"max_price_time"}))
+    OrderType = forms.ChoiceField(label='Order',choices = CHOICES_ORDERTYPE,initial='NONE',required=False,widget=forms.Select(attrs={"class":"data","id":"max_price_time"}))
 
+    CHOICES_ORDERBY =(
+    ("PRICE", "PRICE"),
+    ("DURATION", "DURATION"),
+    )
+    OrderBy = forms.ChoiceField(label='Order by',choices = CHOICES_ORDERBY,initial='PRICE',required=False,widget=forms.Select(attrs={"class":"data","id":"max_price_time"}))
 
    
 

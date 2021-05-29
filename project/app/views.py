@@ -32,7 +32,6 @@ def home(request):
             start_coordinates=str(form.cleaned_data['lat_Origin'])+','+str(form.cleaned_data['lon_Origin'])
             end_coordinates=str(form.cleaned_data['lat_Dest'])+','+str(form.cleaned_data['lon_Dest'])
 
-
             blablaTrips=saveBlablacarTrips(start_coordinates,end_coordinates,start_date_local)
             skyscannerTrips=saveSkyscannerFlights(start_coordinates,end_coordinates,start_date_local)
             trips_busTrain=save_train_bus_trips(start_coordinates,end_coordinates,start_date_local)
@@ -42,16 +41,41 @@ def home(request):
                 blablaTrips=blablaTrips.filter(price__lt=form.cleaned_data['maxPrice'])
                 skyscannerTrips=skyscannerTrips.filter(price__lt=form.cleaned_data['maxPrice'])
                 trips_busTrain=trips_busTrain.filter(price__lt=form.cleaned_data['maxPrice'])
+
+
+            set_bus_trainTrips=set()
+            set_bus_trainTrips_trips=set()
+
+
+            for bus_trainTrip in trips_busTrain:
+                set_bus_trainTrips.add(bus_trainTrip.busOrTrainTrip.pk)
+                set_bus_trainTrips_trips.add(bus_trainTrip.busOrTrainTrip.pk)
+
+
+            bus_trainTrips=busOrTrainTrip.objects.filter(id__in=set_bus_trainTrips)
+            bus_trainTrips_trips=Trip.objects.filter(id__in=set_bus_trainTrips_trips)
+
+            #Aplico la ordenación (si procede):
+            # if form.cleaned_data['OrderType']!='NONE':
+            #     order_type=''
+            #     if form.cleaned_data['OrderType']=='ASC':
+            #         order_type+='+'
+
+            #     if  form.cleaned_data['OrderType']=='DESC':
+            #         order_type+='-'
+
+            #     order_by=str(form.cleaned_data['OrderBy']).lower()  
+
+            #     blablaTrips.order_by(order_type+order_by)
+            #     skyscannerTrips.order_by(order_type+order_by)
+            #     trips_busTrain.order_by(order_type+order_by)
+
+
     else:
 
         form = userRequest()
 
-    set_bus_trainTrips=set()
-
-    for bus_trainTrip in trips_busTrain:
-        set_bus_trainTrips.add(bus_trainTrip.busOrTrainTrip.pk)
-
-    bus_trainTrips=busOrTrainTrip.objects.filter(id__in=set_bus_trainTrips)
+   
 
     try:
         busTrips=bus_trainTrips.filter(system='B')
