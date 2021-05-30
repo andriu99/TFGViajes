@@ -8,6 +8,8 @@
 		{{ form }}
 
         <button id="send_button" >Send</button>
+                <button id="send_button" >Send</button>
+
         <div id="google_map" style="width:85%; height: 500px;"></div>
 
    
@@ -81,11 +83,11 @@
                 </tr>
                 {% for busTrip in busTrips %}
                     <tr>
-                        <td>{{ busTrip.trip.departureDate|time:"H:i" }}</td>
-                        <td>{{ busTrip.trip.arrivalDate|time:"H:i" }}</td>
-                        <td>{{ busTrip.trip.price}}</td>
-                        <td>{{ busTrip.trip.departureNode.name}}</td>
-                        <td>{{ busTrip.trip.arrivalNode.name}}</td>
+                        <td>{{ busTrip.departureDate|time:"H:i" }}</td>
+                        <td>{{ busTrip.arrivalDate|time:"H:i" }}</td>
+                        <td>{{ busTrip.price}}</td>
+                        <td>{{ busTrip.departureNode.name}}</td>
+                        <td>{{ busTrip.arrivalNode.name}}</td>
                     </tr>
 
                 {% endfor %}
@@ -112,11 +114,11 @@
                 </tr>
                 {% for trainTrip in trainTrips %}
                     <tr>
-                        <td>{{ trainTrip.trip.departureDate|time:"H:i" }}</td>
-                        <td>{{ trainTrip.trip.arrivalDate|time:"H:i" }}</td>
-                        <td>{{trainTrip.trip.price}}</td>
-                        <td>{{trainTrip.trip.departureNode.name}}</td>
-                        <td>{{trainTrip.trip.arrivalNode.name}}</td>
+                        <td>{{ trainTrip.departureDate|time:"H:i" }}</td>
+                        <td>{{ trainTrip.arrivalDate|time:"H:i" }}</td>
+                        <td>{{trainTrip.price}}</td>
+                        <td>{{trainTrip.departureNode.name}}</td>
+                        <td>{{trainTrip.arrivalNode.name}}</td>
                     </tr>
 
                 {% endfor %}

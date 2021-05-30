@@ -25,6 +25,11 @@ def home(request):
 
             Trip.objects.all().filter(id__in=id_delete).delete() #Borro los viajes en avión y en blablacar
 
+            # Trip.objects.all().select_related('skyscannerTrip')
+            # Trip.objects.all().select_related('blablaTrip')
+
+
+
             print(form.cleaned_data['OrderType'])
             date=form.cleaned_data['date']
             start_date_local=dt(date.year,date.month,date.day)
@@ -46,24 +51,24 @@ def home(request):
             
 
             #Aplico la ordenación (si procede):
-            if form.cleaned_data['OrderType']!='NONE':
-                order_type=''
-                    # if form.cleaned_data['OrderType']=='ASC':
-                    #     order_type+='+'
+            # if form.cleaned_data['OrderType']!='NONE':
+            #     order_type=''
+            #         # if form.cleaned_data['OrderType']=='ASC':
+            #         #     order_type+='+'
 
-                if  form.cleaned_data['OrderType']=='DESC':
-                    order_type+='-'
+            #     if  form.cleaned_data['OrderType']=='DESC':
+            #         order_type+='-'
 
-                order_by=str(form.cleaned_data['OrderBy']).lower()  
+            #     order_by=str(form.cleaned_data['OrderBy']).lower()  
 
-                if blablaTrips !=None:
-                    blablaTrips=blablaTrips.order_by(order_type+order_by) 
+            #     if blablaTrips !=None:
+            #         blablaTrips=blablaTrips.order_by(order_type+order_by) 
 
-                if skyscannerTrip!=None:
-                    skyscannerTrips=skyscannerTrips.order_by(order_type+order_by)
+            #     if skyscannerTrip!=None:
+            #         skyscannerTrips=skyscannerTrips.order_by(order_type+order_by)
 
-                if trips_busTrain!=None:
-                    trips_busTrain=trips_busTrain.order_by(order_type+order_by)
+            #     if trips_busTrain!=None:
+            #         trips_busTrain=trips_busTrain.order_by(order_type+order_by)
 
 
 
