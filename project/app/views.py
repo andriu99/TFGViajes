@@ -48,8 +48,7 @@ def home(request):
             #Aplico la ordenación (si procede):
             if form.cleaned_data['OrderType']!='NONE':
                 order_type=''
-                    # if form.cleaned_data['OrderType']=='ASC':
-                    #     order_type+='+'
+
 
                 if  form.cleaned_data['OrderType']=='DESC':
                     order_type+='-'
@@ -64,21 +63,6 @@ def home(request):
 
                 if trips_busTrain!=None:
                     trips_busTrain=trips_busTrain.order_by(order_type+order_by)
-
-
-
-
-            # set_bus_trainTrips_trips=set()
-
-            
-
-
-            # for bus_trainTrip in trips_busTrain:
-            #     print(bus_trainTrip.price)
-            #     set_bus_trainTrips_trips.add(bus_trainTrip.busOrTrainTrip.pk)
-
-
-            # bustrainTrips_busOrTrainTrip=busOrTrainTrip.objects.filter(id__in=set_bus_trainTrips_trips)
 
 
     else:
@@ -99,8 +83,7 @@ def home(request):
 
     
     '''
-    blablaTrips,skyscannerTrips => Pertenecen a los modelos blablaTrip y skyscannerTrip
-    busTrips,trainTrips => Pertenecen al modelo Trip
+    blablaTrips,skyscannerTrips,busTrips,trainTrips => Pertenecen al modelo Trip
     '''
     context = {'form' : form,'blablaTrips':blablaTrips,'skyscannerTrips':skyscannerTrips,'busTrips':busTrips,'trainTrips':trainTrips}
     return render(request,'app/home.html',context=context)
