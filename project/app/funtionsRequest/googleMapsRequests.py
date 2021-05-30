@@ -28,3 +28,7 @@ def getTimeZone(response):
 
 def getLatLong_address(json):
     return json[0]['geometry']['location']['lat'],json[0]['geometry']['location']['lng']
+
+
+def getTime_between_coordinates(json):
+    return json['rows'][0]['elements'][0]['duration']['value']

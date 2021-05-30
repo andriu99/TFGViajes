@@ -5,7 +5,7 @@ from app.models import blablaTrip,skyscannerTrip,Trip,Node,RESTApi,busOrTrainTri
 from datetime import datetime as dt 
 from .viewFunctions.homeviewFunctions import saveBlablacarTrips,saveSkyscannerFlights,save_train_bus_trips
 import googlemaps as gmaps
-from .funtionsRequest.googleMapsRequests import getProvinceLocationThroughCoordinates
+from .funtionsRequest.googleMapsRequests import getProvinceLocationThroughCoordinates,getTime_between_coordinates
 
 def home(request):
 
@@ -25,7 +25,6 @@ def home(request):
 
             Trip.objects.all().filter(id__in=id_delete).delete() #Borro los viajes en avión y en blablacar
 
-            print(form.cleaned_data['OrderType'])
             date=form.cleaned_data['date']
             start_date_local=dt(date.year,date.month,date.day)
     
@@ -36,11 +35,21 @@ def home(request):
             skyscannerTrips=saveSkyscannerFlights(start_coordinates,end_coordinates,start_date_local)
             trips_busTrain=save_train_bus_trips(start_coordinates,end_coordinates,start_date_local)
 
+            exists_blablaTrip=blablaTrips==None
+            exist_skyscannerTrip=skyscannerTrips==None
+            exist_busTrainTrip=trips_busTrain==None
+
             #Filtro el precio:
             if form.cleaned_data['maxPrice']!=None:
-                blablaTrips=blablaTrips.filter(price__lt=form.cleaned_data['maxPrice'])
-                skyscannerTrips=skyscannerTrips.filter(price__lt=form.cleaned_data['maxPrice'])
-                trips_busTrain=trips_busTrain.filter(price__lt=form.cleaned_data['maxPrice'])
+
+                if not exists_blablaTrip:
+                    blablaTrips=blablaTrips.filter(price__lt=form.cleaned_data['maxPrice'])
+
+                if not exist_skyscannerTrip:
+                    skyscannerTrips=skyscannerTrips.filter(price__lt=form.cleaned_data['maxPrice'])
+
+                if not exist_busTrainTrip:
+                    trips_busTrain=trips_busTrain.filter(price__lt=form.cleaned_data['maxPrice'])
 
 
             
@@ -55,13 +64,13 @@ def home(request):
 
                 order_by=str(form.cleaned_data['OrderBy']).lower()  
 
-                if blablaTrips !=None:
+                if not exists_blablaTrip:
                     blablaTrips=blablaTrips.order_by(order_type+order_by) 
 
-                if skyscannerTrip!=None:
+                if not exist_skyscannerTrip:
                     skyscannerTrips=skyscannerTrips.order_by(order_type+order_by)
 
-                if trips_busTrain!=None:
+                if not exist_busTrainTrip:
                     trips_busTrain=trips_busTrain.order_by(order_type+order_by)
 
 
