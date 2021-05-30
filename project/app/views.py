@@ -43,32 +43,40 @@ def home(request):
                 trips_busTrain=trips_busTrain.filter(price__lt=form.cleaned_data['maxPrice'])
 
 
-            set_bus_trainTrips=set()
+            
+
+            #Aplico la ordenación (si procede):
+            if form.cleaned_data['OrderType']!='NONE':
+                order_type=''
+                    # if form.cleaned_data['OrderType']=='ASC':
+                    #     order_type+='+'
+
+                if  form.cleaned_data['OrderType']=='DESC':
+                    order_type+='-'
+
+                order_by=str(form.cleaned_data['OrderBy']).lower()  
+
+                print(type(blablaTrip))
+                if blablaTrips !=None:
+                    blablaTrips.order_by(order_type+order_by) 
+
+                if skyscannerTrip!=None:
+                    skyscannerTrips.order_by(order_type+order_by)
+
+                if trips_busTrain!=None:
+                    trips_busTrain.order_by(order_type+order_by)
+
+
+
+
             set_bus_trainTrips_trips=set()
 
 
             for bus_trainTrip in trips_busTrain:
-                set_bus_trainTrips.add(bus_trainTrip.busOrTrainTrip.pk)
                 set_bus_trainTrips_trips.add(bus_trainTrip.busOrTrainTrip.pk)
 
 
-            bus_trainTrips=busOrTrainTrip.objects.filter(id__in=set_bus_trainTrips)
-            bus_trainTrips_trips=Trip.objects.filter(id__in=set_bus_trainTrips_trips)
-
-            #Aplico la ordenación (si procede):
-            # if form.cleaned_data['OrderType']!='NONE':
-            #     order_type=''
-            #     if form.cleaned_data['OrderType']=='ASC':
-            #         order_type+='+'
-
-            #     if  form.cleaned_data['OrderType']=='DESC':
-            #         order_type+='-'
-
-            #     order_by=str(form.cleaned_data['OrderBy']).lower()  
-
-            #     blablaTrips.order_by(order_type+order_by)
-            #     skyscannerTrips.order_by(order_type+order_by)
-            #     trips_busTrain.order_by(order_type+order_by)
+            bustrainTrips_busOrTrainTrip=busOrTrainTrip.objects.filter(id__in=set_bus_trainTrips_trips)
 
 
     else:
@@ -78,12 +86,12 @@ def home(request):
    
 
     try:
-        busTrips=bus_trainTrips.filter(system='B')
+        busTrips=bustrainTrips_busOrTrainTrip.filter(system='B')
     except:
         busTrips={}
 
     try:
-        trainTrips=bus_trainTrips.filter(system='T')
+        trainTrips=bustrainTrips_busOrTrainTrip.filter(system='T')
     except:
         trainTrips={}
 
