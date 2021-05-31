@@ -98,34 +98,7 @@ def save_tripsInfo_DepArriNodes(filter_departureNodes,filter_arrivalNodes,start_
     for departureNode in filter_departureNodes:
         for arrivalNode in filter_arrivalNodes:
             save_busTrainTrip(departureNode,arrivalNode,start_date_local,getBusTrainTrips,set_bustrain_Trips)
-
-            #print(departureNode.name+'  '+arrivalNode.name)
-            # searchDict['departure_station_id']=int(departureNode.code)
-            # searchDict['arrival_station_id']=int(arrivalNode.code)
-            # searchDict['departure_date']=start_date_local.isoformat()
-
-            # for system in system_transport_dict:
-            #     searchDict['systems']=system_transport_dict[system]
-            #     tripGenerator=getBusTrainTrips.executeFunction(['EUR',searchDict],typeOfData='str')
-
-            #     if tripGenerator!=None:
-            #         for price,departureDate_str,arrivalDate_str in tripGenerator:
-            #             departureDate_date=parse_datetime(departureDate_str)
-            #             arrivalDate_date=parse_datetime(arrivalDate_str)
-
-            #             departureDate_withTimeZone = parseDate_withTimeZone(departureDate_date,departureNode.latitude,departureNode.longitude)
-            #             arrivalDate_withTimeZone = parseDate_withTimeZone(arrivalDate_date,arrivalNode.latitude,arrivalNode.longitude)
-                    
-            #             duration=calculateDuration(departureDate_withTimeZone,arrivalDate_withTimeZone)
-
-            #             new_trip=Trip(departureNode=departureNode,arrivalNode=arrivalNode,departureDate=departureDate_date.replace(tzinfo=None),arrivalDate=arrivalDate_date.replace(tzinfo=None),duration=duration.seconds,price=price)
-            #             new_trip.save()
-                        
-            #             bus_train_trip=busOrTrainTrip(system=system,trip=new_trip)
-            #             bus_train_trip.save()
-            #             if set_bustrain_Trips!=None:
-            #                 set_bustrain_Trips.add(new_trip.pk)
-                        
+            
                         
 def save_busTrainTrip(departureNode,arrivalNode,start_date_local,getBusTrainTrips,set_bustrain_Trips=None):
     searchDict=get_SearchDict()
