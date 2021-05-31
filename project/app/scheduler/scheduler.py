@@ -13,12 +13,17 @@ def deactivate_expired_accounts():
     # get accounts, expire them, etc.
     ...
 
+def myfunc():
+    print('Holaaaa')
 
 def start():
     scheduler = BackgroundScheduler()
-    scheduler.add_jobstore(DjangoJobStore(), "default")
-    # run this job every 24 hours
-    scheduler.add_job(deactivate_expired_accounts, 'interval', HOUR=1, name='clean_accounts', jobstore='default')
-    register_events(scheduler)
+    job = scheduler.add_job(myfunc, 'interval', seconds=10)
     scheduler.start()
-    print("Scheduler started...", file=sys.stdout)
+
+    # scheduler.add_jobstore(DjangoJobStore(), "default")
+    # # run this job every 24 hours
+    # scheduler.add_job(deactivate_expired_accounts, 'interval', HOUR=1, name='clean_accounts', jobstore='default')
+    # register_events(scheduler)
+    # scheduler.start()
+    # print("Scheduler started...", file=sys.stdout)
