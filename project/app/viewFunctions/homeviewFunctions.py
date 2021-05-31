@@ -143,10 +143,6 @@ def save_busTrainTrip(departureNode,arrivalNode,start_date_local,getBusTrainTrip
             for price,departureDate_str,arrivalDate_str in tripGenerator:
 
                 departureDate_date=parse_datetime(departureDate_str)
-                #print(departureDate_date)
-                print(departureDate_date.replace(tzinfo=None))
-                print(start_date_local+timedelta(days=1))
-                print(departureDate_date.replace(tzinfo=None)<(start_date_local+timedelta(days=1)))
 
                 if (departureDate_date.replace(tzinfo=None)<(start_date_local+timedelta(days=1))):
                     arrivalDate_date=parse_datetime(arrivalDate_str)
@@ -165,11 +161,6 @@ def save_busTrainTrip(departureNode,arrivalNode,start_date_local,getBusTrainTrip
                     if set_bustrain_Trips!=None:
                         set_bustrain_Trips.add(new_trip.pk)
 
-                else:
-                    print("mal")
-                    print(departureDate_date.replace(tzinfo=None))
-                    print(start_date_local+timedelta(days=1))
-                    print("hijo puta")
 
 
 
