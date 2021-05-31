@@ -1,6 +1,6 @@
+from django.db.models.expressions import F
 from app.models import Request,Node,RESTApi
 import googlemaps as gmaps
-from django.db.models import Count
 from ..funtionsRequest.googleMapsRequests import getTime_between_coordinates
 
 def filterNodes(coordinates,nodeType='A'):
@@ -13,7 +13,7 @@ def filterNodes(coordinates,nodeType='A'):
 
 
         if nodeType!='A':
-            filter_Nodes = filter_Nodes.annotate(time_to_go=0*Count('latitude')) #Añado el campo distancia a las coordenadas a cada nodo
+            filter_Nodes = filter_Nodes.annotate(time_to_go=0*F('latitude')) #Añado el campo distancia a las coordenadas a cada nodo
 
             ClientGMaps=gmaps.Client(RESTApi.objects.get(name='googleMapsRESTApi').APIKey)
 
@@ -27,11 +27,6 @@ def filterNodes(coordinates,nodeType='A'):
             filter_Nodes=filter_Nodes.order_by('time_to_go')
             return filter_Nodes[0:10]
 
-
-
-
-
-    
 
     return filter_Nodes
 
