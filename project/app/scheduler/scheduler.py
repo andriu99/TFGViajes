@@ -3,27 +3,33 @@ from django_apscheduler.jobstores import DjangoJobStore, register_events
 from django.utils import timezone
 from django_apscheduler.models import DjangoJobExecution
 import sys
-
-from pytz import HOUR
-
-# This is the function you want to schedule - add as many as you want and then register them in the start() function below
-def deactivate_expired_accounts():
-    today = timezone.now()
-    ...
-    # get accounts, expire them, etc.
-    ...
+from ..models import Trip 
+from datetime import datetime as dt 
+#from django.utils import timezone
+from datetime import timezone
+from ..otherFunctions.dateFunctions import is_old_date
 
 def myfunc():
-    print('Holaaaa')
+    set_TripID_toDelete=set()
+    for trip in Trip.objects.all():
+    
+        if (hasattr(trip,"blablaTrip")):
+            lat=trip.blablaTrip.latitude
+            lng=trip.blablaTrip.longitude
+
+        else:
+            lat=trip.arrivalNode.latitude
+            lng=trip.arrivalNode.longitude
+
+        is_old_trip=is_old_date(trip.arrivalDate,lat,lng)
+        if is_old_trip:
+            set_TripID_toDelete.add(trip.pk)
+
+    #Trip.objects.filter(id__in=set_TripID_toDelete).delete()
+       
 
 def start():
     scheduler = BackgroundScheduler()
-    job = scheduler.add_job(myfunc, 'interval', seconds=10)
+    scheduler.add_job(myfunc, 'interval', seconds=60)
     scheduler.start()
 
-    # scheduler.add_jobstore(DjangoJobStore(), "default")
-    # # run this job every 24 hours
-    # scheduler.add_job(deactivate_expired_accounts, 'interval', HOUR=1, name='clean_accounts', jobstore='default')
-    # register_events(scheduler)
-    # scheduler.start()
-    # print("Scheduler started...", file=sys.stdout)

@@ -108,8 +108,6 @@ class blablaTrip(models.Model):
     arrivalLatitude=models.FloatField()
     arrivalLongitude=models.FloatField()
 
-    # class Meta:
-    #     unique_together = ('link', 'departureCity','departureAddress','departureLatitude','departureLongitude','arrivalLatitude','arrivalLongitude')
 
 
 
