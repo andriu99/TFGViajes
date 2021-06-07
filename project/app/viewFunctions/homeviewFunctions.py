@@ -1,6 +1,5 @@
-from re import search
 from app.models import Request,Trip,blablaTrip,skyscannerTrip,busOrTrainTrip,RESTApi
-from datetime import timedelta, tzinfo
+from datetime import timedelta
 from ..otherFunctions.dateFunctions import parseDate_withTimeZone,calculateDuration
 from ..otherFunctions.nodesFunctions import filterNodes
 from django.utils.dateparse import parse_datetime
@@ -98,7 +97,7 @@ def save_tripsInfo_DepArriNodes(filter_departureNodes,filter_arrivalNodes,start_
     for departureNode in filter_departureNodes:
         for arrivalNode in filter_arrivalNodes:
             save_busTrainTrip(departureNode,arrivalNode,start_date_local,getBusTrainTrips,set_bustrain_Trips)
-            
+
                         
 def save_busTrainTrip(departureNode,arrivalNode,start_date_local,getBusTrainTrips,set_bustrain_Trips=None):
     searchDict=get_SearchDict()

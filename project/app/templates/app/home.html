@@ -5,7 +5,72 @@
 
     <form method="post">
 		{% csrf_token %}
-		{{ form }}
+        
+        <div class="grid-container">
+            <div class="L1">
+                {{ form.origin_address.label_tag}}
+
+            
+            </div>
+            <div class="F1">
+                {{ form.origin_address}}
+
+            
+            </div>
+            <div class="L2">
+                {{ form.destination_address.label_tag}}
+
+            
+            </div>
+            <div class="F2">
+                {{ form.destination_address}}
+
+            
+            </div>
+            <div class="L3">
+                {{ form.date.label_tag}}
+
+            
+            </div>
+            <div class="F3">
+                {{ form.date}}
+
+            
+            </div>
+            <div class="L4">
+                {{ form.maxPrice.label_tag}}
+
+            
+            </div>
+            <div class="F4">
+                {{ form.maxPrice}}
+
+            
+            </div>
+            <div class="L5">
+                {{ form.OrderType.label_tag}}
+
+            
+            </div>
+            <div class="F5">
+                {{ form.OrderType}}
+
+            
+            </div>
+            <div class="L6">
+                {{ form.OrderBy.label_tag}}
+
+            
+            </div>
+            <div class="F6">
+                {{ form.OrderBy}}
+
+            </div>
+        </div>
+
+
+
+        
 
         <button id="send_button" >Send</button>
 
