@@ -1,212 +1,215 @@
-{% extends 'app/layout.html' %}
-
-{% block content %}
+{% extends 'app/layout.html' %} {% block content %}
 
 
-    <form method="post">
-		{% csrf_token %}
-        
-        <div class="grid-container">
-            <div class="L1">
+<form method="post">
+    {% csrf_token %}
+
+    <div class="grid-container">
+        <div class="L1">
+            <div class="data_aux">
                 {{ form.origin_address.label_tag}}
 
-            
             </div>
-            <div class="F1">
-                {{ form.origin_address}}
 
-            
-            </div>
-            <div class="L2">
+        </div>
+        <div class="F1">
+            {{ form.origin_address}}
+
+
+        </div>
+        <div class="L2">
+            <div class="data_aux data_aux2">
                 {{ form.destination_address.label_tag}}
 
-            
             </div>
-            <div class="F2">
-                {{ form.destination_address}}
 
-            
-            </div>
-            <div class="L3">
+
+        </div>
+        <div class="F2">
+            {{ form.destination_address}}
+
+
+        </div>
+        <div class="L3">
+            <div class="data_aux data_aux2">
                 {{ form.date.label_tag}}
 
-            
             </div>
-            <div class="F3">
-                {{ form.date}}
 
-            
-            </div>
-            <div class="L4">
-                {{ form.maxPrice.label_tag}}
 
-            
-            </div>
-            <div class="F4">
-                {{ form.maxPrice}}
 
-            
-            </div>
-            <div class="L5">
+        </div>
+        <div class="F3">
+            {{ form.date}}
+
+
+        </div>
+        <div class="L4">
+            <div class="data_aux">
+                {{ form.maxPrice.label_tag}} </div>
+
+        </div>
+
+        <div class="F4">
+            {{ form.maxPrice}}
+
+        </div>
+        <div class="L5">
+            <div class="data_aux data_aux2">
                 {{ form.OrderType.label_tag}}
 
-            
             </div>
-            <div class="F5">
-                {{ form.OrderType}}
 
-            
-            </div>
-            <div class="L6">
+        </div>
+        <div class="F5">
+            {{ form.OrderType}}
+
+
+        </div>
+        <div class="L6">
+            <div class="data_aux data_aux2">
                 {{ form.OrderBy.label_tag}}
 
-            
             </div>
-            <div class="F6">
-                {{ form.OrderBy}}
 
-            </div>
+
+        </div>
+        <div class="F6">
+            {{ form.OrderBy}}
+
         </div>
 
 
 
-        
-
-        <button id="send_button" >Send</button>
-
-        <div id="google_map" style="width:85%; height: 500px;"></div>
-
-   
-        {% if blablaTrips %}
-        <div class="titles">
-            <h2>Lista de viajes en blablaCar</h2>
-        </div>
-            <table id="trips">
-                <tr>
-                    <th>Hora Salida</th>
-                    <th>Hora Llegada</th>
-                    <th>Precio</th>
-                    <th>Link al viaje</th>
-                </tr>
-                {% for blablaTrip in blablaTrips %}
-                    <tr>
-                        <td>{{blablaTrip.departureDate|time:"H:i"}}</td>
-                        <td>{{blablaTrip.arrivalDate|time:"H:i"}}</td>
-                        <td>{{blablaTrip.price}}</td>
-                        <td><a href={{blablaTrip.blablaTrip.link}} target="_blank">{{blablaTrip.blablaTrip.link}}</a></td>
-                    </tr>
-
-                {% endfor %}
-
-            </table>
-
-        {% endif %}
+    </div>
 
 
-        {% if skyscannerTrips %}
-            <div class="titles">
-
-                <h2>Lista de viajes en avión</h2>
-            </div>
-            <table id="trips">
-                <tr>
-                        <th>Hora Salida</th>
-                        <th>Hora Llegada</th>
-                        <th>Precio</th>
-                        <th>Compañía aerea</th>
-                        <th>Nombre del aeropuerto de Salida</th>
-                        <th>Nombre del aeropuerto de llegada</th>
-                </tr>
-                {% for skyscannerTrip in skyscannerTrips %}
-                    <tr>
-                        <td>{{skyscannerTrip.departureDate|time:"H:i"}}</td>
-                        <td>{{skyscannerTrip.arrivalDate|time:"H:i"}}</td>
-                        <td>{{skyscannerTrip.price}}</td>
-
-                        <td>{{skyscannerTrip.skyscannerTrip.airlineName}}</td>
-                        <td>{{skyscannerTrip.departureNode.name}}</td>
-                        <td>{{skyscannerTrip.arrivalNode.name}}</td>
-                    </tr>
-                {% endfor %}
-
-            </table>
-        {% endif %}
 
 
-        {% if busTrips %}
-            <div class="titles">
-                <h2>Lista de viajes en bus</h2>
-            </div>
-            <table id="trips">
-                <tr>
-                    <th>Hora Salida</th>
-                    <th>Hora Llegada</th>
-                    <th>Precio</th>
-                    <th>Nombre de la Estación de Salida</th>
-                    <th>Nombre de la estación de llegada</th>
-                </tr>
-                {% for busTrip in busTrips %}
-                    <tr>
-                        <td>{{ busTrip.departureDate|time:"H:i" }}</td>
-                        <td>{{ busTrip.arrivalDate|time:"H:i" }}</td>
-                        <td>{{ busTrip.price}}</td>
-                        <td>{{ busTrip.departureNode.name}}</td>
-                        <td>{{ busTrip.arrivalNode.name}}</td>
-                    </tr>
-
-                {% endfor %}
 
 
-            </table>
+    <button id="send_button">Send</button>
 
-        {% endif %}
-
-
-        {% if trainTrips %}
-            <div class="titles">
-
-                <h2>Lista de viajes en tren</h2>
-            </div>
-
-            <table id="trips">
-                <tr>
-                    <th>Hora Salida</th>
-                    <th>Hora Llegada</th>
-                    <th>Precio</th>
-                    <th>Nombre de la Estación de Salida</th>
-                    <th>Nombre de la estación de llegada</th>
-                </tr>
-                {% for trainTrip in trainTrips %}
-                    <tr>
-                        <td>{{ trainTrip.departureDate|time:"H:i" }}</td>
-                        <td>{{ trainTrip.arrivalDate|time:"H:i" }}</td>
-                        <td>{{trainTrip.price}}</td>
-                        <td>{{trainTrip.departureNode.name}}</td>
-                        <td>{{trainTrip.arrivalNode.name}}</td>
-                    </tr>
-
-                {% endfor %}
+    <div id="google_map" style="width:85%; height: 500px;"></div>
 
 
-            </table>
-        {% endif %}
+    {% if blablaTrips %}
+    <div class="titles">
+        <h2>Lista de viajes en blablaCar</h2>
+    </div>
+    <table id="trips">
+        <tr>
+            <th>Hora Salida</th>
+            <th>Hora Llegada</th>
+            <th>Precio</th>
+            <th>Link al viaje</th>
+        </tr>
+        {% for blablaTrip in blablaTrips %}
+        <tr>
+            <td>{{blablaTrip.departureDate|time:"H:i"}}</td>
+            <td>{{blablaTrip.arrivalDate|time:"H:i"}}</td>
+            <td>{{blablaTrip.price}}</td>
+            <td><a href={{blablaTrip.blablaTrip.link}} target="_blank">{{blablaTrip.blablaTrip.link}}</a></td>
+        </tr>
 
-        
+        {% endfor %}
 
-        
-    
+    </table>
 
-	</form>
+    {% endif %} {% if skyscannerTrips %}
+    <div class="titles">
 
-{% endblock %}
+        <h2>Lista de viajes en avión</h2>
+    </div>
+    <table id="trips">
+        <tr>
+            <th>Hora Salida</th>
+            <th>Hora Llegada</th>
+            <th>Precio</th>
+            <th>Compañía aerea</th>
+            <th>Nombre del aeropuerto de Salida</th>
+            <th>Nombre del aeropuerto de llegada</th>
+        </tr>
+        {% for skyscannerTrip in skyscannerTrips %}
+        <tr>
+            <td>{{skyscannerTrip.departureDate|time:"H:i"}}</td>
+            <td>{{skyscannerTrip.arrivalDate|time:"H:i"}}</td>
+            <td>{{skyscannerTrip.price}}</td>
 
-{% block extend_footer %}
-    {% load static %}
-    <script src="{% static 'google_maps.js'%}"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCaR0xc4Xiv3rHEV-HkFD-4Dt7hsIx3aT0&libraries=places&callback=init_autocomplete_map" ></script> 
-    
+            <td>{{skyscannerTrip.skyscannerTrip.airlineName}}</td>
+            <td>{{skyscannerTrip.departureNode.name}}</td>
+            <td>{{skyscannerTrip.arrivalNode.name}}</td>
+        </tr>
+        {% endfor %}
+
+    </table>
+    {% endif %} {% if busTrips %}
+    <div class="titles">
+        <h2>Lista de viajes en bus</h2>
+    </div>
+    <table id="trips">
+        <tr>
+            <th>Hora Salida</th>
+            <th>Hora Llegada</th>
+            <th>Precio</th>
+            <th>Nombre de la Estación de Salida</th>
+            <th>Nombre de la estación de llegada</th>
+        </tr>
+        {% for busTrip in busTrips %}
+        <tr>
+            <td>{{ busTrip.departureDate|time:"H:i" }}</td>
+            <td>{{ busTrip.arrivalDate|time:"H:i" }}</td>
+            <td>{{ busTrip.price}}</td>
+            <td>{{ busTrip.departureNode.name}}</td>
+            <td>{{ busTrip.arrivalNode.name}}</td>
+        </tr>
+
+        {% endfor %}
+
+
+    </table>
+
+    {% endif %} {% if trainTrips %}
+    <div class="titles">
+
+        <h2>Lista de viajes en tren</h2>
+    </div>
+
+    <table id="trips">
+        <tr>
+            <th>Hora Salida</th>
+            <th>Hora Llegada</th>
+            <th>Precio</th>
+            <th>Nombre de la Estación de Salida</th>
+            <th>Nombre de la estación de llegada</th>
+        </tr>
+        {% for trainTrip in trainTrips %}
+        <tr>
+            <td>{{ trainTrip.departureDate|time:"H:i" }}</td>
+            <td>{{ trainTrip.arrivalDate|time:"H:i" }}</td>
+            <td>{{trainTrip.price}}</td>
+            <td>{{trainTrip.departureNode.name}}</td>
+            <td>{{trainTrip.arrivalNode.name}}</td>
+        </tr>
+
+        {% endfor %}
+
+
+    </table>
+    {% endif %}
+
+
+
+
+
+
+</form>
+
+{% endblock %} {% block extend_footer %} {% load static %}
+<script src="{% static 'google_maps.js'%}"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCaR0xc4Xiv3rHEV-HkFD-4Dt7hsIx3aT0&libraries=places&callback=init_autocomplete_map">
+</script>
+
 
 
 {% endblock %}
-
-
