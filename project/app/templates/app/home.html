@@ -12,11 +12,9 @@
             </div>
 
         </div>
-        <div class="F1">
-            {{ form.origin_address}}
 
+        <div class="F1">{{ form.origin_address}}</div>
 
-        </div>
         <div class="L2">
             <div class="data_aux data_aux2">
                 {{ form.destination_address.label_tag}}
@@ -25,11 +23,7 @@
 
 
         </div>
-        <div class="F2">
-            {{ form.destination_address}}
-
-
-        </div>
+        <div class="F2">{{ form.destination_address}}</div>
         <div class="L3">
             <div class="data_aux data_aux2">
                 {{ form.date.label_tag}}
@@ -39,21 +33,14 @@
 
 
         </div>
-        <div class="F3">
-            {{ form.date}}
-
-
-        </div>
+        <div class="F3">{{ form.date}}</div>
         <div class="L4">
             <div class="data_aux">
                 {{ form.maxPrice.label_tag}} </div>
 
         </div>
 
-        <div class="F4">
-            {{ form.maxPrice}}
-
-        </div>
+        <div class="F4">{{ form.maxPrice}}</div>
         <div class="L5">
             <div class="data_aux data_aux2">
                 {{ form.OrderType.label_tag}}
@@ -61,11 +48,7 @@
             </div>
 
         </div>
-        <div class="F5">
-            {{ form.OrderType}}
-
-
-        </div>
+        <div class="F5">{{ form.OrderType}}</div>
         <div class="L6">
             <div class="data_aux data_aux2">
                 {{ form.OrderBy.label_tag}}
@@ -74,10 +57,7 @@
 
 
         </div>
-        <div class="F6">
-            {{ form.OrderBy}}
-
-        </div>
+        <div class="F6">{{ form.OrderBy}}</div>
 
 
         <div class="button-send">
@@ -86,18 +66,15 @@
         </div>
 
 
+        <div class="map">
+            <div id="google_map" style="width:100%; height: 100%;"></div>
+        </div>
+
 
 
     </div>
 
 
-
-
-
-
-
-
-    <div id="google_map" style="width:85%; height: 500px;"></div>
 
 
     {% if blablaTrips %}
