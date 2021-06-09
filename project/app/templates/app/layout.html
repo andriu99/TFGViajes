@@ -1,37 +1,38 @@
 <!DOCTYPE html>
- 
+
 <html>
 
-    <head>
-        {% load static %}
-        <link rel="stylesheet" type="text/css" href="{% static 'style.css'%}">
-       
-       
-      
-      
-    </head>
-   
-        
-
-    <body>
-                <h1>TravelApp</h1>
+<head>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'style.css'%}">
 
 
-            {% block content %}
-
-            {% endblock %}
-
-                                </div>
 
 
-            {% block extend_footer %}
-
-            {% endblock%}
+</head>
 
 
-        
 
-       
-       
-    </body>
+<body>
+    <h1>TravelApp</h1>
+
+    <!-- 
+    {% block content %} {% endblock %} 
+    
+    
+    {% block extend_footer %} {% endblock%} -->
+
+
+    {% block form-block %} {% endblock %} {% block trips-block %} {% endblock %} {% block map-block %} {% endblock %}
+
+
+
+
+
+
+
+
+
+</body>
+
 </html>

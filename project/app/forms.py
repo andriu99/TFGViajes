@@ -6,7 +6,7 @@ class DateInput(forms.DateTimeInput):
     
 class userRequest(forms.Form):
     def __init__(self, *args, **kwargs):
-        super(userRequest,self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     lat_Origin = forms.FloatField(widget=forms.HiddenInput(attrs={"id":"lat_Origin"}),required=False,initial=181)
     lon_Origin = forms.FloatField(widget=forms.HiddenInput(attrs={"id":"lon_Origin"}),required=False,initial=181)
@@ -18,7 +18,7 @@ class userRequest(forms.Form):
 
     date=forms.DateField(widget=DateInput(attrs={"class":"data_aux data","id":"data_id"}))
 
-    maxPrice=forms.FloatField(label='Max price:',widget=forms.NumberInput(attrs={"id":"max_price_time","class":"data_aux data",'step': "0.1"}),required=False)
+    maxPrice=forms.FloatField(label='Max price:',widget=forms.NumberInput(attrs={"class":"data_aux data order",'step': "0.1"}),required=False)
 
     CHOICES_ORDERTYPE =(
     ("NONE", "NONE"),
@@ -26,13 +26,13 @@ class userRequest(forms.Form):
     ("DESC", "DESC"),
     )
     
-    OrderType = forms.ChoiceField(label='Order',choices = CHOICES_ORDERTYPE,initial='NONE',required=False,widget=forms.Select(attrs={"class":"data","id":"max_price_time"}))
+    OrderType = forms.ChoiceField(label='Order',choices = CHOICES_ORDERTYPE,initial='NONE',required=False,widget=forms.Select(attrs={"class":"data order"}))
 
     CHOICES_ORDERBY =(
     ("PRICE", "PRICE"),
     ("DURATION", "DURATION"),
     )
-    OrderBy = forms.ChoiceField(label='Order by',choices = CHOICES_ORDERBY,initial='PRICE',required=False,widget=forms.Select(attrs={"class":"data","id":"max_price_time"}))
+    OrderBy = forms.ChoiceField(label='Order by',choices = CHOICES_ORDERBY,initial='PRICE',required=False,widget=forms.Select(attrs={"class":"data order"}))
 
    
 

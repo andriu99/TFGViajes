@@ -13,7 +13,8 @@ def saveBlablacarTrips(start_coordinates,end_coordinates,start_date_local):
 
     end_date_local_string=(start_date_local+timedelta(days=1)).isoformat()
     
-
+    print(start_coordinates)
+    print(end_coordinates)
     iterableBlablaCar=getBlablaCarTrips.executeFunction([getBlablaCarTrips.RApi.APIKey,start_coordinates,end_coordinates,'EUR',start_date_local.isoformat(),end_date_local_string])
     for (   url,
             startData_str,startData_city,startData_address,startData_latitude,startData_longitude,

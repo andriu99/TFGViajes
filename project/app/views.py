@@ -16,7 +16,11 @@ def home(request):
 
     if request.method == 'POST':
         form = userRequest(request.POST)
+        print(request.POST)
         if form.is_valid():
+
+
+            print(form.cleaned_data)
 
             id_delete=set()
             for trip in Trip.objects.all():
@@ -30,6 +34,7 @@ def home(request):
     
             start_coordinates=str(form.cleaned_data['lat_Origin'])+','+str(form.cleaned_data['lon_Origin'])
             end_coordinates=str(form.cleaned_data['lat_Dest'])+','+str(form.cleaned_data['lon_Dest'])
+
 
             blablaTrips=saveBlablacarTrips(start_coordinates,end_coordinates,start_date_local)
             skyscannerTrips=saveSkyscannerFlights(start_coordinates,end_coordinates,start_date_local)
@@ -77,6 +82,7 @@ def home(request):
     else:
 
         form = userRequest()
+
 
    
 

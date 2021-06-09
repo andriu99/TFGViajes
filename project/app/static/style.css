@@ -125,21 +125,21 @@ body {
     cursor: pointer;
 }
 
-#trips {
+.trips {
     font-family: Arial, Helvetica, sans-serif;
     border-collapse: collapse;
     width: 100%;
 }
 
-#trips tr:nth-child(even) {
+.trips tr:nth-child(even) {
     background-color: rebeccapurple;
 }
 
-#trips tr:hover {
+.trips tr:hover {
     background-color: red;
 }
 
-#trips th {
+.trips th {
     padding-top: 12px;
     padding-bottom: 12px;
     text-align: left;
@@ -166,7 +166,7 @@ body {
     text-Align: center;
 }
 
-#max_price_time {
+.order {
     width: 41%;
     text-align: left;
 }

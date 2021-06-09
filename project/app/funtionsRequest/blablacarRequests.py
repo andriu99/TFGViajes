@@ -1,6 +1,7 @@
 
 def findBlablaTrips(response):
     jsonBlabla=response.json()
+    print(jsonBlabla)
     for trip in jsonBlabla['trips']:
         startData=trip['waypoints'][0]
         endData=trip['waypoints'][1]
