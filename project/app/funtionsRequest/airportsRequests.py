@@ -34,6 +34,7 @@ def getFlightInformation(response):
     ItinerariosJson=Json['Itineraries']
     DetailsJson=Json['Legs']
     AirlinesJson=Json['Carriers']
+    
     for itinerary,details,airline in zip(ItinerariosJson,DetailsJson,AirlinesJson):
         Precio=itinerary['PricingOptions'][0]['Price']
         UrlPago=itinerary['PricingOptions'][0]['DeeplinkUrl']

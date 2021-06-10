@@ -6,9 +6,9 @@ body {
 .grid-container {
     display: grid;
     grid-template-columns: 0.5fr 1fr 0.5fr 1fr 0.5fr 1fr;
-    grid-template-rows: 0.3fr 0.3fr 0.3fr 10fr;
+    grid-template-rows: 0.3fr 0.3fr 0.3fr 10fr auto;
     gap: 0px 0px;
-    grid-template-areas: "L1 F1 L2 F2 L3 F3""L4 F4 L5 F5 L6 F6""button-send button-send button-send button-send button-send button-send""map map map map map map";
+    grid-template-areas: "L1 F1 L2 F2 L3 F3""L4 F4 L5 F5 L6 F6""button-send button-send button-send button-send button-send button-send""map map map map map map" "trips-result trips-result trips-result trips-result trips-result trips-result";
 }
 
 .L1 {
@@ -71,12 +71,15 @@ body {
     justify-content: center;
 }
 
+.trips-result {
+    grid-area: trips-result;
+}
+
 
 /* For presentation only, no need to copy the code below */
 
 
-/*
-.grid-container * {
+/* .grid-container * {
     border: 1px solid red;
     position: relative;
 }
@@ -86,8 +89,7 @@ body {
     position: absolute;
     top: 0;
     left: 0;
-}
-*/
+} */
 
 .data_aux {
     width: 100%;
