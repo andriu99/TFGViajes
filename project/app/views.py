@@ -6,13 +6,15 @@ from datetime import datetime as dt
 from .viewFunctions.homeviewFunctions import saveBlablacarTrips,saveSkyscannerFlights,save_train_bus_trips
 import googlemaps as gmaps
 from .funtionsRequest.googleMapsRequests import getProvinceLocationThroughCoordinates,getTime_between_coordinates
+from django.contrib import messages
+
 
 def home(request):
 
     blablaTrips={}
     skyscannerTrips={}
     trips_busTrain={}
-
+    messages.info(request,'Hola amigo ')
 
     if request.method == 'POST':
         form = userRequest(request.POST)

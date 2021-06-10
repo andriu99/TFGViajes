@@ -18,6 +18,20 @@
 
     {% block form-block %} {% endblock %} {% block map-block %} {% endblock %} {% block trips-block %} {% endblock %}
 
+    <!-- <script>
+        window.alert('Correctisimo loko')
+    </script> -->
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        <script>
+            window.alert("{{ message }}")
+        </script>
+
+        <!-- <li{% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li> -->
+        {% endfor %}
+    </ul>
+    {% endif %}
 
 </body>
 
