@@ -8,9 +8,10 @@ def update_trips():
     trip_set=set()
 
     for trip in Trip.objects.all():
+
         if (hasattr(trip,"blablaTrip")):
-            lat=trip.blablaTrip.latitude
-            lng=trip.blablaTrip.longitude
+            lat=trip.blablaTrip.arrivalLatitude
+            lng=trip.blablaTrip.arrivalLongitude
 
         else:
             lat=trip.arrivalNode.latitude
