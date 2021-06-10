@@ -18,7 +18,6 @@ def home(request):
         form = userRequest(request.POST)
         if form.is_valid():
 
-
             id_delete=set()
             for trip in Trip.objects.all():
                 if (hasattr(trip,"busOrTrainTrip")==False):

@@ -268,6 +268,10 @@ function remove_mapMarkers(id, marker) {
         dict_markers.destination = marker;
 
     }
-    marker_remove.setMap(null);
+
+    if (marker_remove != null) {
+        marker_remove.setMap(null);
+
+    }
 
 }
