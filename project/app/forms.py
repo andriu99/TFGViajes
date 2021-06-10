@@ -11,8 +11,6 @@ class userRequest(forms.Form):
 
 
     lat_Origin = forms.FloatField(widget=forms.NumberInput(attrs={'id':'lat_Origin'}),required=False,initial=181)
-    # lat_Origin = forms.DecimalField(required=False,min_value=0,max_value=100,initial=float(20))
-
     lon_Origin = forms.FloatField(widget=forms.NumberInput(attrs={'id':'lon_Origin'}),required=False,initial=181)
     lat_Dest = forms.FloatField(widget=forms.NumberInput(attrs={'id':'lat_Dest'}),required=False,initial=181)
     lon_Dest = forms.FloatField(widget=forms.NumberInput(attrs={'id':'lon_Dest'}),required=False,initial=181)
