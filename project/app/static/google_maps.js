@@ -4,6 +4,9 @@ var dict_markers = {
 }
 
 function init_autocomplete_map() {
+    var list = document.querySelectorAll('*[id]');
+    console.log(list);
+
     var map = new google.maps.Map(document.getElementById("google_map"), {
         scaleControl: true,
         center: { //Madrid Coordinates
@@ -12,6 +15,7 @@ function init_autocomplete_map() {
         },
         zoom: 6,
     });
+
     get_currentLocation(map);
     set_origin_throughtMap(map);
     autocomplete("origin_address", "destination_address", map);
@@ -86,8 +90,6 @@ function get_address_withLocation(lat, lng, map, is_origin) {
                     console.log(lng);
                     document.getElementById("lat_Origin").value = lat;
                     document.getElementById("lon_Origin").value = lng;
-                    // document.getElementById("lat_Origin").value = 40;
-                    // document.getElementById("lon_Origin").value = 2;
 
                     remove_mapMarkers('origin_address', marker)
 

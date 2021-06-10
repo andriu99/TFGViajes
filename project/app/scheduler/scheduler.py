@@ -1,7 +1,6 @@
 from apscheduler.schedulers.background import BackgroundScheduler
-from ..models import Trip 
+from ..models import Trip,Request 
 from ..otherFunctions.dateFunctions import is_old_date
-from app.models import Request,Trip
 from ..viewFunctions.homeviewFunctions import save_busTrainTrip
 
 

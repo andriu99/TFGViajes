@@ -1,7 +1,7 @@
 
 from django.shortcuts import render
 from .forms import userRequest
-from app.models import blablaTrip,skyscannerTrip,Trip,Node,RESTApi,busOrTrainTrip
+from .models import blablaTrip,skyscannerTrip,Trip,Node,RESTApi,busOrTrainTrip
 from datetime import datetime as dt 
 from .viewFunctions.homeviewFunctions import saveBlablacarTrips,saveSkyscannerFlights,save_train_bus_trips
 import googlemaps as gmaps
@@ -16,11 +16,8 @@ def home(request):
 
     if request.method == 'POST':
         form = userRequest(request.POST)
-        print(request.POST)
         if form.is_valid():
 
-
-            print(form.cleaned_data)
 
             id_delete=set()
             for trip in Trip.objects.all():
@@ -80,7 +77,7 @@ def home(request):
 
 
     else:
-
+        
         form = userRequest()
 
 
