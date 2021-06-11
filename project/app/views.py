@@ -11,15 +11,15 @@ from django.contrib import messages
 
 def home(request):
 
+
     blablaTrips={}
     skyscannerTrips={}
     trips_busTrain={}
-    messages.info(request,'Hola amigo ')
 
     if request.method == 'POST':
         form = userRequest(request.POST)
         if form.is_valid():
-
+##cambios
             id_delete=set()
             for trip in Trip.objects.all():
                 if (hasattr(trip,"busOrTrainTrip")==False):
@@ -33,25 +33,45 @@ def home(request):
             start_coordinates=str(form.cleaned_data['lat_Origin'])+','+str(form.cleaned_data['lon_Origin'])
             end_coordinates=str(form.cleaned_data['lat_Dest'])+','+str(form.cleaned_data['lon_Dest'])
 
+            exists_blablaTrip=True
+            exist_skyscannerTrip=True
+            exist_busTrainTrip=True
 
-            blablaTrips=saveBlablacarTrips(start_coordinates,end_coordinates,start_date_local)
-            skyscannerTrips=saveSkyscannerFlights(start_coordinates,end_coordinates,start_date_local)
-            trips_busTrain=save_train_bus_trips(start_coordinates,end_coordinates,start_date_local)
+            try:
+                blablaTrips=saveBlablacarTrips(start_coordinates,end_coordinates,start_date_local)
+            except:
+                exists_blablaTrip=False
+                messages.error(request,'Error al procesar los viajes en blablacar')
 
-            exists_blablaTrip=blablaTrips==None
-            exist_skyscannerTrip=skyscannerTrips==None
-            exist_busTrainTrip=trips_busTrain==None
+            try:
+                skyscannerTrips=saveSkyscannerFlights(start_coordinates,end_coordinates,start_date_local)
+            except:
+                exist_skyscannerTrip=False
+                messages.error(request,'Error al procesar los viajes en skyscanner')
+
+
+            try:
+                trips_busTrain=save_train_bus_trips(start_coordinates,end_coordinates,start_date_local)
+            except:
+                exist_busTrainTrip=False
+                messages.error(request,'Error al procesar los viajes en bus y tren')
+
+                
+
+            exists_blablaTrip=(exists_blablaTrip and blablaTrips!=None)
+            exist_skyscannerTrip=(exist_skyscannerTrip and skyscannerTrips!=None)
+            exist_busTrainTrip=(exist_busTrainTrip and trips_busTrain!=None)
 
             #Filtro el precio:
             if form.cleaned_data['maxPrice']!=None:
 
-                if not exists_blablaTrip:
+                if  exists_blablaTrip:
                     blablaTrips=blablaTrips.filter(price__lt=form.cleaned_data['maxPrice'])
 
-                if not exist_skyscannerTrip:
+                if  exist_skyscannerTrip:
                     skyscannerTrips=skyscannerTrips.filter(price__lt=form.cleaned_data['maxPrice'])
 
-                if not exist_busTrainTrip:
+                if  exist_busTrainTrip:
                     trips_busTrain=trips_busTrain.filter(price__lt=form.cleaned_data['maxPrice'])
 
 
@@ -67,13 +87,13 @@ def home(request):
 
                 order_by=str(form.cleaned_data['OrderBy']).lower()  
 
-                if not exists_blablaTrip:
+                if exists_blablaTrip:
                     blablaTrips=blablaTrips.order_by(order_type+order_by) 
 
-                if not exist_skyscannerTrip:
+                if exist_skyscannerTrip:
                     skyscannerTrips=skyscannerTrips.order_by(order_type+order_by)
 
-                if not exist_busTrainTrip:
+                if exist_busTrainTrip:
                     trips_busTrain=trips_busTrain.order_by(order_type+order_by)
 
 
@@ -93,6 +113,7 @@ def home(request):
         trainTrips=trips_busTrain.filter(busOrTrainTrip__system='T')
     except:
         trainTrips={}
+
 
     
     '''
