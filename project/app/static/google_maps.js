@@ -4,8 +4,6 @@ var dict_markers = {
 }
 
 function init_autocomplete_map() {
-    var list = document.querySelectorAll('*[id]');
-    console.log(list);
 
     var map = new google.maps.Map(document.getElementById("google_map"), {
         scaleControl: true,
@@ -16,12 +14,22 @@ function init_autocomplete_map() {
         zoom: 6,
     });
 
+    init_marker('origin_address', 'lat_Origin', 'lon_Origin', map)
+    init_marker('destination_address', 'lat_Dest', 'lon_Dest', map)
+
     get_currentLocation(map);
-    set_origin_throughtMap(map);
+    set_origin_dest_throughtMap(map);
     autocomplete("origin_address", "destination_address", map);
 
 }
 
+function init_marker(address_id, lat_id, long_id, map) {
+    if (document.getElementById(address_id).value != '') {
+        onPlaceChanged(address_id, lat_id, long_id, map)
+
+    }
+
+}
 
 
 
@@ -86,8 +94,6 @@ function get_address_withLocation(lat, lng, map, is_origin) {
 
                 if (is_origin) {
                     document.getElementById('origin_address').value = results[0].formatted_address;
-                    console.log(lat);
-                    console.log(lng);
                     document.getElementById("lat_Origin").value = lat;
                     document.getElementById("lon_Origin").value = lng;
 
@@ -95,8 +101,6 @@ function get_address_withLocation(lat, lng, map, is_origin) {
 
 
                 } else {
-                    console.log(lat);
-                    console.log(lng);
                     document.getElementById('destination_address').value = results[0].formatted_address;
                     document.getElementById("lat_Dest").value = lat;
                     document.getElementById("lon_Dest").value = lng;
@@ -123,7 +127,7 @@ function get_address_withLocation(lat, lng, map, is_origin) {
 
 
 
-function set_origin_throughtMap(map) {
+function set_origin_dest_throughtMap(map) {
     const div_button_origin_dest = document.createElement("div");
     div_button_origin_dest.className = 'buttons_current_origin_dest';
 
@@ -157,7 +161,6 @@ function set_origin_throughtMap(map) {
 
             if (list_is_activated[previus_index] == false) {
                 if (list_is_activated[index]) {
-                    // window.alert("Apago botón");
                     list_is_activated[index] = false;
                     var background = "#fff";
                     listener.remove();
@@ -228,8 +231,6 @@ function onPlaceChanged(address_id, lat_id, long_id, map) {
             var latitude = results[0].geometry.location.lat();
             var longitude = results[0].geometry.location.lng();
 
-            console.log(latitude);
-            console.log(longitude);
 
             document.getElementById(lat_id).value = latitude;
             document.getElementById(long_id).value = longitude;

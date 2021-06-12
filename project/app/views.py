@@ -11,7 +11,6 @@ from django.contrib import messages
 
 def home(request):
 
-
     blablaTrips={}
     skyscannerTrips={}
     trips_busTrain={}
@@ -33,18 +32,15 @@ def home(request):
             end_coordinates=str(form.cleaned_data['lat_Dest'])+','+str(form.cleaned_data['lon_Dest'])
 
 
-            print(start_coordinates)
-            print(end_coordinates)
-
             exists_blablaTrip=True
             exist_skyscannerTrip=True
             exist_busTrainTrip=True
 
-            # try:
-            blablaTrips=saveBlablacarTrips(start_coordinates,end_coordinates,start_date_local)
-            # except:
-            #     exists_blablaTrip=False
-            #     messages.error(request,'Error al procesar los viajes en blablacar')
+            try:
+                blablaTrips=saveBlablacarTrips(start_coordinates,end_coordinates,start_date_local)
+            except:
+                exists_blablaTrip=False
+                messages.error(request,'Error al procesar los viajes en blablacar')
 
             try:
                 skyscannerTrips=saveSkyscannerFlights(start_coordinates,end_coordinates,start_date_local)
@@ -53,12 +49,13 @@ def home(request):
                 messages.error(request,'Error al procesar los viajes en skyscanner')
 
 
+
+
             try:
                 trips_busTrain=save_train_bus_trips(start_coordinates,end_coordinates,start_date_local)
             except:
                 exist_busTrainTrip=False
                 messages.error(request,'Error al procesar los viajes en bus y tren')
-
                 
 
             exists_blablaTrip=(exists_blablaTrip and blablaTrips!=None)

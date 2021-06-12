@@ -1,5 +1,5 @@
 from django.db.models.expressions import F
-from app.models import Request,Node,RESTApi
+from ..models import Request,Node,RESTApi
 import googlemaps as gmaps
 from ..funtionsRequest.googleMapsRequests import getTime_between_coordinates
 

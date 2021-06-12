@@ -1,6 +1,6 @@
 
 from pytz import timezone
-from app.models import Request,RESTApi
+from ..models import Request,RESTApi
 from datetime import datetime as dt
 from datetime import timedelta
 import pytz
@@ -12,7 +12,6 @@ import googlemaps as gmaps
 def parseDate_withTimeZone(date_date,lat,lon):
     ClientGMaps=gmaps.Client(RESTApi.objects.get(name='googleMapsRESTApi').APIKey)
 
- 
 
     dict_location={
         "lat" : lat,

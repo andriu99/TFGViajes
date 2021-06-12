@@ -13,7 +13,6 @@ def saveBlablacarTrips(start_coordinates,end_coordinates,start_date_local):
     getBlablaCarTrips=Request.objects.get(name='getBlablaCarTrips')
 
     end_date_local_string=(start_date_local+timedelta(days=1)).isoformat()
-    print('1')
     iterableBlablaCar=getBlablaCarTrips.executeFunction([getBlablaCarTrips.RApi.APIKey,start_coordinates,end_coordinates,'EUR',start_date_local.isoformat(),end_date_local_string])
     for (   url,
             startData_str,startData_city,startData_address,startData_latitude,startData_longitude,
@@ -21,19 +20,13 @@ def saveBlablacarTrips(start_coordinates,end_coordinates,start_date_local):
             price
 
     ) in iterableBlablaCar:
-        print('2')
 
 
         departureDate_date=parse_datetime(startData_str)
-        print('3')
-
         arrivalDate_date=parse_datetime(endData_str)
-        print('4')
 
 
         startData_date_withTimeZone = parseDate_withTimeZone(departureDate_date,startData_latitude,startData_longitude) 
-        print('5')
-
         endData_date_withTimeZone = parseDate_withTimeZone(arrivalDate_date,endData_latitude,endData_longitude)
 
 
@@ -186,16 +179,12 @@ def get_locat_province(coordinates):
 
 
 def save_train_bus_trips(start_coordinates,end_coordinates,start_date_local):
-    print(type(start_date_local))
 
     locatO,provO=get_locat_province(start_coordinates)
-    pass
     locatD,provD=get_locat_province(end_coordinates)
 
     filter_departureNodes=filterNodes(start_coordinates,nodeType='S')
     filter_arrivalNodes=filterNodes(end_coordinates,nodeType='S')
-    print(filter_departureNodes)
-    print(filter_arrivalNodes)
     
 
     #Buscamos en la caché de la BD:
