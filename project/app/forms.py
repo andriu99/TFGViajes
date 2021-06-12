@@ -9,14 +9,6 @@ class userRequest(forms.Form):
         super(userRequest, self).__init__(*args, **kwargs)
 
 
-
-    # lat_Origin = forms.FloatField(widget=forms.NumberInput(attrs={'id':'lat_Origin'}),required=False,initial=181)
-    # lon_Origin = forms.FloatField(widget=forms.NumberInput(attrs={'id':'lon_Origin'}),required=False,initial=181)
-    # lat_Dest = forms.FloatField(widget=forms.NumberInput(attrs={'id':'lat_Dest'}),required=False,initial=181)
-    # lon_Dest = forms.FloatField(widget=forms.NumberInput(attrs={'id':'lon_Dest'}),required=False,initial=181)
-
-
-
     lat_Origin = forms.FloatField(widget=forms.HiddenInput(attrs={'id':'lat_Origin'}),required=False,initial=181)
     lon_Origin = forms.FloatField(widget=forms.HiddenInput(attrs={'id':'lon_Origin'}),required=False,initial=181)
     lat_Dest = forms.FloatField(widget=forms.HiddenInput(attrs={'id':'lat_Dest'}),required=False,initial=181)

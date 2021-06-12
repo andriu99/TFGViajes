@@ -19,7 +19,6 @@ def home(request):
     if request.method == 'POST':
         form = userRequest(request.POST)
         if form.is_valid():
-##cambios
             id_delete=set()
             for trip in Trip.objects.all():
                 if (hasattr(trip,"busOrTrainTrip")==False):
@@ -32,6 +31,10 @@ def home(request):
     
             start_coordinates=str(form.cleaned_data['lat_Origin'])+','+str(form.cleaned_data['lon_Origin'])
             end_coordinates=str(form.cleaned_data['lat_Dest'])+','+str(form.cleaned_data['lon_Dest'])
+
+
+            print(start_coordinates)
+            print(end_coordinates)
 
             exists_blablaTrip=True
             exist_skyscannerTrip=True

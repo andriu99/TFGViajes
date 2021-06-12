@@ -9,7 +9,7 @@ def run():
 
 
 def importGoogleMapsInfo():
-  googleMapsRESTApi=RESTApi(name='googleMapsRESTApi',BaseUrl='https://maps.googleapis.com/maps/',APIKey='AIzaSyCaR0xc4Xiv3rHEV-HkFD-4Dt7hsIx3aT0')
+  googleMapsRESTApi=RESTApi(name='googleMapsRESTApi',BaseUrl='https://maps.googleapis.com/maps/',APIKey='AIzaSyDwt6CynIHH3UzbX1TLVP2n7__088CprNM')
   googleMapsRESTApi.save()
   paramsGeocodeReverseGoogleMaps={
 
