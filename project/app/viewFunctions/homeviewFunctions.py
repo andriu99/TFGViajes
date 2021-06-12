@@ -36,10 +36,8 @@ def saveBlablacarTrips(start_coordinates,end_coordinates,start_date_local):
 
         endData_date_withTimeZone = parseDate_withTimeZone(arrivalDate_date,endData_latitude,endData_longitude)
 
-        print('Caguen dios1')
 
         duration=calculateDuration(startData_date_withTimeZone,endData_date_withTimeZone)
-        print('Caguen dios2')
         
 
         

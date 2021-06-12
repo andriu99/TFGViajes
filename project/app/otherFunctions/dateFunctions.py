@@ -12,10 +12,15 @@ import googlemaps as gmaps
 def parseDate_withTimeZone(date_date,lat,lon):
     ClientGMaps=gmaps.Client(RESTApi.objects.get(name='googleMapsRESTApi').APIKey)
 
-    print('Parseando...')
-    strtimezone=ClientGMaps.timezone(str(lat)+','+str(lon))
-    print(strtimezone)
-    date_date=date_date.astimezone(timezone(strtimezone))
+ 
+
+    dict_location={
+        "lat" : lat,
+        "lng" : lon,
+  
+    }
+    dict_timezone=ClientGMaps.timezone(dict_location)
+    date_date=date_date.astimezone(timezone(dict_timezone['timeZoneId']))
     return date_date
 
 

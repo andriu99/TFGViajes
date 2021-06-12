@@ -40,11 +40,11 @@ def home(request):
             exist_skyscannerTrip=True
             exist_busTrainTrip=True
 
-            try:
-                blablaTrips=saveBlablacarTrips(start_coordinates,end_coordinates,start_date_local)
-            except:
-                exists_blablaTrip=False
-                messages.error(request,'Error al procesar los viajes en blablacar')
+            # try:
+            blablaTrips=saveBlablacarTrips(start_coordinates,end_coordinates,start_date_local)
+            # except:
+            #     exists_blablaTrip=False
+            #     messages.error(request,'Error al procesar los viajes en blablacar')
 
             try:
                 skyscannerTrips=saveSkyscannerFlights(start_coordinates,end_coordinates,start_date_local)
