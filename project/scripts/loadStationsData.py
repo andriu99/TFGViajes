@@ -1,12 +1,10 @@
 
 
 import csv
-import requests
 import urllib.parse
-from app.models import Node,Request,RESTApi
+from ..app.models import Node,Request
 import os
-from .usefulFunctions import getProvinceAndLocationThroughCoordinates
-
+from ..app.funtionsRequest.googleMapsRequests import get_locat_province
 
 def run():
     workpath = os.path.dirname(os.path.abspath(__file__)) #Returns the Path your .py file is in
@@ -33,7 +31,7 @@ def run():
                     latitude=jsonEstaciones['stations'][0]['latitude']
                     longitude=jsonEstaciones['stations'][0]['longitude']
                 
-                location,province=getProvinceAndLocationThroughCoordinates(latitude,longitude)
+                location,province=get_locat_province(str(latitude)+str(longitude))
 
                 new_node=Node(name=name,code=Id,latitude=float(latitude),longitude=float(longitude),nodeType='S',location=location,province=province)
                 new_node.save()

@@ -1,26 +1,10 @@
 
-from pytz import timezone
-from ..models import Request,RESTApi
 from datetime import datetime as dt
 from datetime import timedelta
 import pytz
 from datetime import timezone as tz
-import googlemaps as gmaps
+from ..funtionsRequest.googleMapsRequests import parseDate_withTimeZone
 
-
-
-def parseDate_withTimeZone(date_date,lat,lon):
-    ClientGMaps=gmaps.Client(RESTApi.objects.get(name='googleMapsRESTApi').APIKey)
-
-
-    dict_location={
-        "lat" : lat,
-        "lng" : lon,
-  
-    }
-    dict_timezone=ClientGMaps.timezone(dict_location)
-    date_date=date_date.astimezone(timezone(dict_timezone['timeZoneId']))
-    return date_date
 
 
 def calculateDuration(startData_date,endData_date):

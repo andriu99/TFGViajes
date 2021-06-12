@@ -1,14 +1,14 @@
 
-def getProvinceLocationThroughCoordinates(response_json):
-    try: #Request
-        json=response_json.json()
-        directionData=json['results'][0]['address_components']
-    except: #JSON
-        directionData=response_json[0]['address_components']
+from ..models import RESTApi
+import time
+import googlemaps as gmaps
+from pytz import timezone
 
-    
-        
-  
+
+def get_province_muni_json(response_json):
+   
+    directionData=response_json[0]['address_components']
+
     location='Unknown'
     province='Unknown'
     for i in directionData:
@@ -22,12 +22,39 @@ def getProvinceLocationThroughCoordinates(response_json):
     return location,province
 
 
-def getTimeZone(response):
-    return response.json()['timeZoneId']
 
-def getLatLong_address(json):
-    return json[0]['geometry']['location']['lat'],json[0]['geometry']['location']['lng']
+def getTime_between_coordinates(coordinates_origin,coordinates_destination):
+    ClientGMaps=gmaps.Client(RESTApi.objects.get(name='googleMapsRESTApi').APIKey)
+    resultJson=ClientGMaps.distance_matrix(origins=coordinates_origin,destinations=coordinates_destination)
+        
+    return resultJson['rows'][0]['elements'][0]['duration']['value']
 
 
-def getTime_between_coordinates(json):
-    return json['rows'][0]['elements'][0]['duration']['value']
+
+def parseDate_withTimeZone(date_date,lat,lon):
+    ClientGMaps=gmaps.Client(RESTApi.objects.get(name='googleMapsRESTApi').APIKey)
+
+    dict_location={
+        "lat" : lat,
+        "lng" : lon,
+  
+    }
+    dict_timezone=ClientGMaps.timezone(dict_location)
+    date_date=date_date.astimezone(timezone(dict_timezone['timeZoneId']))
+    return date_date
+
+
+
+def get_locat_province(coordinates):
+    
+    ClientGMaps=gmaps.Client(RESTApi.objects.get(name='googleMapsRESTApi').APIKey)
+    x=3
+    while x>0:
+        try:
+            location,province=get_province_muni_json(ClientGMaps.reverse_geocode(coordinates))
+            break
+        except:
+            time.sleep(0.02)
+        x-=1
+
+    return location,province

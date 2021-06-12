@@ -1,11 +1,9 @@
-from app.models import Request,Trip,blablaTrip,skyscannerTrip,busOrTrainTrip,RESTApi
+from app.models import Request,Trip,blablaTrip,skyscannerTrip,busOrTrainTrip
 from datetime import timedelta
 from ..otherFunctions.dateFunctions import parseDate_withTimeZone,calculateDuration
 from ..otherFunctions.nodesFunctions import filterNodes
 from django.utils.dateparse import parse_datetime
-import googlemaps as gmaps
-from ..funtionsRequest.googleMapsRequests import getProvinceLocationThroughCoordinates
-import time
+from ..funtionsRequest.googleMapsRequests import get_locat_province
 
 
 def saveBlablacarTrips(start_coordinates,end_coordinates,start_date_local):
@@ -162,19 +160,6 @@ def get_systemOfTransport_dict():
         'B':['busbud']
     }
 
-def get_locat_province(coordinates):
-    
-    ClientGMaps=gmaps.Client(RESTApi.objects.get(name='googleMapsRESTApi').APIKey)
-    x=3
-    while x>0:
-        try:
-            location,province=getProvinceLocationThroughCoordinates(ClientGMaps.reverse_geocode(coordinates))
-            break
-        except:
-            time.sleep(2)
-        x-=1
-
-    return location,province
 
 
 

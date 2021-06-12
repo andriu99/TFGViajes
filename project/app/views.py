@@ -1,11 +1,9 @@
 
 from django.shortcuts import render
 from .forms import userRequest
-from .models import blablaTrip,skyscannerTrip,Trip,Node,RESTApi,busOrTrainTrip
+from .models import Trip
 from datetime import datetime as dt 
 from .viewFunctions.homeviewFunctions import saveBlablacarTrips,saveSkyscannerFlights,save_train_bus_trips
-import googlemaps as gmaps
-from .funtionsRequest.googleMapsRequests import getProvinceLocationThroughCoordinates,getTime_between_coordinates
 from django.contrib import messages
 
 
@@ -51,11 +49,13 @@ def home(request):
 
 
 
+
             try:
                 trips_busTrain=save_train_bus_trips(start_coordinates,end_coordinates,start_date_local)
             except:
                 exist_busTrainTrip=False
                 messages.error(request,'Error al procesar los viajes en bus y tren')
+
                 
 
             exists_blablaTrip=(exists_blablaTrip and blablaTrips!=None)

@@ -1,6 +1,5 @@
-from app.models import Request,RESTApi,Node
-from .usefulFunctions import getProvinceAndLocationThroughCoordinates
-
+from ..app.models import Request,Node
+from ..app.funtionsRequest.googleMapsRequests import get_locat_province
 
 
 def run():
@@ -15,7 +14,7 @@ def run():
     
     
     for ID,name,lat,lon in airportsInfo:
-        location,province=getProvinceAndLocationThroughCoordinates(lat,lon)
+        location,province=get_locat_province(str(lat)+str(lon))
       
 
         if location=='Unknown':
