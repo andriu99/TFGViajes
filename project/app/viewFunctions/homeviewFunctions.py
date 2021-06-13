@@ -173,7 +173,7 @@ def save_train_bus_trips(start_coordinates,end_coordinates,start_date_local):
     
 
     #Buscamos en la caché de la BD:
-    set_bustrain_Trips=set()
+    # set_bustrain_Trips=set()
     for bus_trainTrip in busOrTrainTrip.objects.all():
         actual_trip=bus_trainTrip.trip
 
