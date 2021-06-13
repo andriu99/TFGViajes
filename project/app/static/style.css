@@ -5,10 +5,10 @@ body {
 
 .grid-container {
     display: grid;
-    grid-template-columns: 0.5fr 1fr 0.5fr 1fr 0.5fr 1fr;
-    grid-template-rows: 0.3fr 0.3fr 0.3fr 10fr auto;
+    grid-template-columns: repeat(6, auto);
+    grid-template-rows: 0.3fr 0.3fr 0.3fr 10fr auto auto auto auto;
     gap: 0px 0px;
-    grid-template-areas: "L1 F1 L2 F2 L3 F3""L4 F4 L5 F5 L6 F6""button-send button-send button-send button-send button-send button-send""map map map map map map" "trips-result trips-result trips-result trips-result trips-result trips-result";
+    grid-template-areas: "L1 F1 L2 F2 L3 F3""L4 F4 L5 F5 L6 F6""button-send button-send button-send button-send button-send button-send""map map map map map map" "trips-result-blabla trips-result-blabla trips-result-blabla trips-result-blabla trips-result-blabla trips-result-blabla" "trips-result-skys trips-result-skys trips-result-skys trips-result-skys trips-result-skys trips-result-skys" "trips-result-bus trips-result-bus trips-result-bus trips-result-bus trips-result-bus trips-result-bus" "trips-result-train trips-result-train trips-result-train trips-result-train trips-result-train trips-result-train"
 }
 
 .L1 {
@@ -71,8 +71,20 @@ body {
     justify-content: center;
 }
 
-.trips-result {
-    grid-area: trips-result;
+.trips-result-skys {
+    grid-area: trips-result-skys;
+}
+
+.trips-result-train {
+    grid-area: trips-result-train;
+}
+
+.trips-result-bus {
+    grid-area: trips-result-bus;
+}
+
+.trips-result-blabla {
+    grid-area: trips-result-blabla;
 }
 
 
@@ -90,9 +102,6 @@ body {
     top: 0;
     left: 0;
 } */
-
-
-/*klajfads*/
 
 .data_aux {
     width: 100%;
@@ -182,8 +191,4 @@ body {
 
 #data_id2 {
     width: 70%;
-}
-
-#oa {
-    background-color: red;
 }
