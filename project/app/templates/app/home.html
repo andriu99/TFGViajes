@@ -83,12 +83,11 @@
 
 
 {% endblock %} {% block trips-block %} {% if blablaTrips %}
-<div class="trips-result-blabla">
-
+<div class="trips-result">
+    <div class="titles">
+        <h2>Lista de viajes en blablaCar</h2>
+    </div>
     <table class="trips">
-        <div class="titles">
-            <h2>Lista de viajes en blablaCar</h2>
-        </div>
         <tr>
             <th>Hora Salida</th>
             <th>Hora Llegada</th>
@@ -106,15 +105,13 @@
         {% endfor %}
 
     </table>
-</div>
-{% endif %} {% if skyscannerTrips %}
-<div class="trips-result-skys">
 
+    {% endif %} {% if skyscannerTrips %}
+    <div class="titles">
+
+        <h2>Lista de viajes en avión</h2>
+    </div>
     <table class="trips">
-        <div class="titles">
-
-            <h2>Lista de viajes en avión</h2>
-        </div>
         <tr>
             <th>Hora Salida</th>
             <th>Hora Llegada</th>
@@ -136,16 +133,11 @@
         {% endfor %}
 
     </table>
-</div>
-
-{% endif %} {% if busTrips %}
-<div class="trips-result-bus">
+    {% endif %} {% if busTrips %}
     <div class="titles">
         <h2>Lista de viajes en bus</h2>
     </div>
-
     <table class="trips">
-
         <tr>
             <th>Hora Salida</th>
             <th>Hora Llegada</th>
@@ -166,10 +158,8 @@
 
 
     </table>
-</div>
-{% endif %} {% if trainTrips %}
-<div class="trips-result-train">
 
+    {% endif %} {% if trainTrips %}
     <div class="titles">
 
         <h2>Lista de viajes en tren</h2>
@@ -201,7 +191,7 @@
 
 </div>
 
-</div>
+
 </div>
 
 {% endif %} {% endblock %}

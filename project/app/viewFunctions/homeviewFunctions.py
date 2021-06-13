@@ -4,8 +4,6 @@ from ..otherFunctions.dateFunctions import parseDate_withTimeZone,calculateDurat
 from ..otherFunctions.nodesFunctions import filterNodes
 from django.utils.dateparse import parse_datetime
 from ..funtionsRequest.googleMapsRequests import get_locat_province
-import networkx as nx
-
 
 
 def saveBlablacarTrips(start_coordinates,end_coordinates,start_date_local):
@@ -192,10 +190,5 @@ def save_train_bus_trips(start_coordinates,end_coordinates,start_date_local):
     query_set_bustrain_Trips=Trip.objects.filter(id__in=set_bustrain_Trips)
     return query_set_bustrain_Trips
     
-
-def more_1_Trip():
-    DG=nx.DiGraph()
-    for bus_train_Trip in busOrTrainTrip.objects.all():
-        print(bus_train_Trip.trip.duration)
 
 

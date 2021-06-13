@@ -3,7 +3,7 @@ from django.shortcuts import render
 from .forms import userRequest
 from .models import Trip
 from datetime import datetime as dt 
-from .viewFunctions.homeviewFunctions import saveBlablacarTrips,saveSkyscannerFlights,save_train_bus_trips,more_1_Trip
+from .viewFunctions.homeviewFunctions import saveBlablacarTrips,saveSkyscannerFlights,save_train_bus_trips
 from django.contrib import messages
 
 
@@ -55,10 +55,6 @@ def home(request):
             except:
                 exist_busTrainTrip=False
                 messages.error(request,'Error al procesar los viajes en bus y tren')
-
-
-
-            # more_1_Trip()
 
                 
 
