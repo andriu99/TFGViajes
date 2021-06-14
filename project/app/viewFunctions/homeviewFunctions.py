@@ -190,6 +190,7 @@ def save_train_bus_trips(start_coordinates,end_coordinates,start_date_local):
     query_set_bustrain_Trips=Trip.objects.filter(id__in=set_bustrain_Trips)
     return query_set_bustrain_Trips
     
+import matplotlib.pyplot as plt    
 
 
 def more_Trips():
@@ -207,4 +208,5 @@ def more_Trips():
                  font_size=24,
                  width=2, with_labels=True, node_size=3500,
     )
+    plt.show()
     
