@@ -4,7 +4,7 @@ from ..otherFunctions.dateFunctions import parseDate_withTimeZone,calculateDurat
 from ..otherFunctions.nodesFunctions import filterNodes
 from django.utils.dateparse import parse_datetime
 from ..funtionsRequest.googleMapsRequests import get_locat_province
-
+import networkx as nx
 
 def saveBlablacarTrips(start_coordinates,end_coordinates,start_date_local):
     set_trips_blabla=set()
@@ -173,7 +173,7 @@ def save_train_bus_trips(start_coordinates,end_coordinates,start_date_local):
     
 
     #Buscamos en la caché de la BD:
-    # set_bustrain_Trips=set()
+    set_bustrain_Trips=set()
     for bus_trainTrip in busOrTrainTrip.objects.all():
         actual_trip=bus_trainTrip.trip
 
@@ -192,3 +192,19 @@ def save_train_bus_trips(start_coordinates,end_coordinates,start_date_local):
     
 
 
+def more_Trips():
+    
+    DG=nx.Graph()
+    DG.add_nodes_from(['A', 'B', 'C', 'D', 'E', 'F', 'G'])
+    lista_prueba=[('B', 'A', 5), ('B', 'D', 1), ('B', 'G', 2), ('A', 'B', 5), ('A', 'D', 3), ('A', 'E', 12), ('A', 'F', 5), ('D', 'B', 1), ('D', 'G', 1), ('D', 'E', 1), ('D', 'A', 3), ('G', 'B', 2), ('G', 'D', 1), ('G', 'C', 2), ('C', 'G', 2), ('C', 'E', 1), ('C', 'F', 16), ('E', 'A', 12), ('E', 'D', 1), ('E', 'C', 1), ('E', 'F', 2), ('F', 'A', 5), ('F', 'E', 2), ('F', 'C', 16)]
+    
+    #lista_prueba=[('B', 'A', 5), ('B', 'D', 1)]
+
+    DG.add_weighted_edges_from(lista_prueba)
+    nx.draw_circular(DG,
+                 node_color="lightblue",
+                 edge_color="gray",
+                 font_size=24,
+                 width=2, with_labels=True, node_size=3500,
+    )
+    

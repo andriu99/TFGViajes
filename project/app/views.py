@@ -3,7 +3,7 @@ from django.shortcuts import render
 from .forms import userRequest
 from .models import Trip
 from datetime import datetime as dt 
-from .viewFunctions.homeviewFunctions import saveBlablacarTrips,saveSkyscannerFlights,save_train_bus_trips
+from .viewFunctions.homeviewFunctions import more_Trips, saveBlablacarTrips,saveSkyscannerFlights,save_train_bus_trips
 from django.contrib import messages
 
 
@@ -34,30 +34,30 @@ def home(request):
             exist_skyscannerTrip=True
             exist_busTrainTrip=True
 
-            try:
-                blablaTrips=saveBlablacarTrips(start_coordinates,end_coordinates,start_date_local)
-            except:
-                exists_blablaTrip=False
-                messages.error(request,'Error al procesar los viajes en blablacar')
+            # try:
+            #     blablaTrips=saveBlablacarTrips(start_coordinates,end_coordinates,start_date_local)
+            # except:
+            #     exists_blablaTrip=False
+            #     messages.error(request,'Error al procesar los viajes en blablacar')
 
-            try:
-                skyscannerTrips=saveSkyscannerFlights(start_coordinates,end_coordinates,start_date_local)
-            except:
-                exist_skyscannerTrip=False
-                messages.error(request,'Error al procesar los viajes en skyscanner')
-
-
+            # try:
+            #     skyscannerTrips=saveSkyscannerFlights(start_coordinates,end_coordinates,start_date_local)
+            # except:
+            #     exist_skyscannerTrip=False
+            #     messages.error(request,'Error al procesar los viajes en skyscanner')
 
 
 
-            try:
-                trips_busTrain=save_train_bus_trips(start_coordinates,end_coordinates,start_date_local)
-            except:
-                exist_busTrainTrip=False
-                messages.error(request,'Error al procesar los viajes en bus y tren')
+
+
+            # try:
+            #     trips_busTrain=save_train_bus_trips(start_coordinates,end_coordinates,start_date_local)
+            # except:
+            #     exist_busTrainTrip=False
+            #     messages.error(request,'Error al procesar los viajes en bus y tren')
 
                 
-
+            more_Trips()
             exists_blablaTrip=(exists_blablaTrip and blablaTrips!=None)
             exist_skyscannerTrip=(exist_skyscannerTrip and skyscannerTrips!=None)
             exist_busTrainTrip=(exist_busTrainTrip and trips_busTrain!=None)

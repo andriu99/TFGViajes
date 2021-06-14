@@ -14,8 +14,8 @@ function init_autocomplete_map() {
         zoom: 6,
     });
 
-    init_marker('origin_address', 'lat_Origin', 'lon_Origin', map)
-    init_marker('destination_address', 'lat_Dest', 'lon_Dest', map)
+    init_marker('origin_address', 'lat_Origin', 'lon_Origin', map);
+    init_marker('destination_address', 'lat_Dest', 'lon_Dest', map);
 
     get_currentLocation(map);
     set_origin_dest_throughtMap(map);
