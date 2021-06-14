@@ -1,10 +1,13 @@
-from app.models import Request,Trip,blablaTrip,skyscannerTrip,busOrTrainTrip
+from networkx.algorithms.shortest_paths import weighted
+from ..models import Request,Trip,blablaTrip,skyscannerTrip,busOrTrainTrip
 from datetime import timedelta
 from ..otherFunctions.dateFunctions import parseDate_withTimeZone,calculateDuration
 from ..otherFunctions.nodesFunctions import filterNodes
 from django.utils.dateparse import parse_datetime
 from ..funtionsRequest.googleMapsRequests import get_locat_province
 import networkx as nx
+import matplotlib.pyplot as plt    
+
 
 def saveBlablacarTrips(start_coordinates,end_coordinates,start_date_local):
     set_trips_blabla=set()
@@ -190,23 +193,78 @@ def save_train_bus_trips(start_coordinates,end_coordinates,start_date_local):
     query_set_bustrain_Trips=Trip.objects.filter(id__in=set_bustrain_Trips)
     return query_set_bustrain_Trips
     
-import matplotlib.pyplot as plt    
 
+def dijkstra(nodes, distances):
+    # These are all the nodes which have not been visited yet
+    unvisited = {node: None for node in nodes}
+    # It will store the shortest distance from one node to another
+    visited = {}
+    current = 'B'
+    # It will store the predecessors of the nodes
+    currentDistance = 0
+    unvisited[current] = currentDistance
+    # Running the loop while all the nodes have been visited
+    while True:
+        # iterating through all the unvisited node
+
+        for neighbour, distance in distances[current].items():
+            # Iterating through the connected nodes of current_node (for 
+            # example, a is connected with b and c having values 10 and 3
+            # respectively) and the weight of the edges
+            if neighbour not in unvisited: continue
+
+            newDistance = currentDistance + distance
+            if unvisited[neighbour] is None or unvisited[neighbour] > newDistance:
+                unvisited[neighbour] = newDistance
+        # Till now the shortest distance between the source node and target node 
+        # has been found. Set the current node as the target node
+        visited[current] = currentDistance
+        del unvisited[current]
+        if not unvisited: break
+        candidates = [node for node in unvisited.items() if node[1]]
+       
+        current, currentDistance = sorted(candidates, key = lambda x: x[1])[0]
+    return visited
+
+
+def Convert_listOfList_intoDict(tups):
+    dct=dict()
+    for x,y,weigh_dict in tups:
+        if x not in dct.keys():
+            dct[x]={}
+
+        dct[x][y]=weigh_dict['weight']
+   
+
+    return dct
 
 def more_Trips():
     
-    DG=nx.Graph()
+    DG=nx.DiGraph()
     DG.add_nodes_from(['A', 'B', 'C', 'D', 'E', 'F', 'G'])
-    lista_prueba=[('B', 'A', 5), ('B', 'D', 1), ('B', 'G', 2), ('A', 'B', 5), ('A', 'D', 3), ('A', 'E', 12), ('A', 'F', 5), ('D', 'B', 1), ('D', 'G', 1), ('D', 'E', 1), ('D', 'A', 3), ('G', 'B', 2), ('G', 'D', 1), ('G', 'C', 2), ('C', 'G', 2), ('C', 'E', 1), ('C', 'F', 16), ('E', 'A', 12), ('E', 'D', 1), ('E', 'C', 1), ('E', 'F', 2), ('F', 'A', 5), ('F', 'E', 2), ('F', 'C', 16)]
+    lista_prueba=[['B', 'A', 5], ['B', 'D', 1], ['B', 'G', 2], ['A', 'B', 5], ['A', 'D', 3], ['A', 'E', 12], ['A', 'F', 5], ['D', 'B', 1], ['D', 'G', 1], ['D', 'E', 1], ['D', 'A', 3], ['G', 'B', 2], ['G', 'D', 1], ['G', 'C', 2], ['C', 'G', 2], ['C', 'E', 1], ['C', 'F', 16], ['E', 'A', 12], ['E', 'D', 1], ['E', 'C', 1], ['E', 'F', 2], ['F', 'A', 5], ['F', 'E', 2], ['F', 'C', 16]]
     
-    #lista_prueba=[('B', 'A', 5), ('B', 'D', 1)]
 
     DG.add_weighted_edges_from(lista_prueba)
-    nx.draw_circular(DG,
-                 node_color="lightblue",
-                 edge_color="gray",
-                 font_size=24,
-                 width=2, with_labels=True, node_size=3500,
-    )
-    plt.show()
+    # labels = nx.get_edge_attributes(DG,'weight')
+    # pos = nx.spring_layout(DG)
+
+    # nx.draw_networkx(DG,
+    #              node_color="lightblue",
+    #              edge_color="gray",
+    #              font_size=24,
+    #              width=2, with_labels=True, node_size=3500,
+    #              pos=pos,
+    # )
+
+    
+    # nx.draw_networkx_edge_labels(DG,pos, edge_labels=labels)
+
+
+    # plt.show()
+
+    print(DG.nodes)
+    dict_edges=Convert_listOfList_intoDict(DG.edges(data=True))
+    print(dijkstra(DG.nodes,dict_edges))
+   
     
