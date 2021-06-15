@@ -6,7 +6,9 @@ from ..otherFunctions.nodesFunctions import filterNodes
 from django.utils.dateparse import parse_datetime
 from ..funtionsRequest.googleMapsRequests import get_locat_province
 import networkx as nx
-import matplotlib.pyplot as plt    
+# import matplotlib.pyplot as plt    
+from datetime import datetime as dt
+import random
 
 
 def saveBlablacarTrips(start_coordinates,end_coordinates,start_date_local):
@@ -233,7 +235,7 @@ def Convert_listOfList_intoDict(tups):
         if x not in dct.keys():
             dct[x]={}
 
-        dct[x][y]=weigh_dict['weight']
+        dct[x][y]=(weigh_dict['weight'])
    
 
     return dct
@@ -242,10 +244,19 @@ def more_Trips():
     
     DG=nx.DiGraph()
     DG.add_nodes_from(['A', 'B', 'C', 'D', 'E', 'F', 'G'])
-    lista_prueba=[['B', 'A', 5], ['B', 'D', 1], ['B', 'G', 2], ['A', 'B', 5], ['A', 'D', 3], ['A', 'E', 12], ['A', 'F', 5], ['D', 'B', 1], ['D', 'G', 1], ['D', 'E', 1], ['D', 'A', 3], ['G', 'B', 2], ['G', 'D', 1], ['G', 'C', 2], ['C', 'G', 2], ['C', 'E', 1], ['C', 'F', 16], ['E', 'A', 12], ['E', 'D', 1], ['E', 'C', 1], ['E', 'F', 2], ['F', 'A', 5], ['F', 'E', 2], ['F', 'C', 16]]
-    
+    list_weight=[['B', 'A', 5], ['B', 'D', 1], ['B', 'G', 2], ['A', 'B', 5], ['A', 'D', 3], ['A', 'E', 12], ['A', 'F', 5], ['D', 'B', 1], ['D', 'G', 1], ['D', 'E', 1], ['D', 'A', 3], ['G', 'B', 2], ['G', 'D', 1], ['G', 'C', 2], ['C', 'G', 2], ['C', 'E', 1], ['C', 'F', 16], ['E', 'A', 12], ['E', 'D', 1], ['E', 'C', 1], ['E', 'F', 2], ['F', 'A', 5], ['F', 'E', 2], ['F', 'C', 16]]
+    #dt(2021,6,15,random.randint(0, 24))
+    list_time = [i for i in list_weight]
+    print(list_time==list_weight)
+    # list_time=list_weight
+    for i in list_time:
+        i[-1]=dt(2021,6,15,random.randint(0, 23))
 
-    DG.add_weighted_edges_from(lista_prueba)
+
+    print(list_time)
+    print(list_weight)
+
+    DG.add_weighted_edges_from(list_weight)
     # labels = nx.get_edge_attributes(DG,'weight')
     # pos = nx.spring_layout(DG)
 
@@ -257,14 +268,21 @@ def more_Trips():
     #              pos=pos,
     # )
 
+
     
     # nx.draw_networkx_edge_labels(DG,pos, edge_labels=labels)
 
 
     # plt.show()
 
-    print(DG.nodes)
+  
+
     dict_edges=Convert_listOfList_intoDict(DG.edges(data=True))
-    print(dijkstra(DG.nodes,dict_edges))
+    print(dict_edges)
+    print(id(list_time))
+    print(id(list_weight))
+    print(list_time==list_weight)
+
+    # print(dijkstra(DG.nodes,dict_edges))
    
     
