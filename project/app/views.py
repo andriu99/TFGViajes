@@ -24,7 +24,7 @@ def home(request):
             Trip.objects.all().filter(id__in=id_delete).delete() #Borro los viajes en avión y en blablacar
 
             date=form.cleaned_data['date']
-            start_date_local=dt(date.year,date.month,date.day)
+            start_date=dt(date.year,date.month,date.day)
     
             start_coordinates=str(form.cleaned_data['lat_Origin'])+','+str(form.cleaned_data['lon_Origin'])
             end_coordinates=str(form.cleaned_data['lat_Dest'])+','+str(form.cleaned_data['lon_Dest'])
@@ -35,29 +35,26 @@ def home(request):
             exist_busTrainTrip=True
 
             # try:
-            #     blablaTrips=saveBlablacarTrips(start_coordinates,end_coordinates,start_date_local)
+            #     blablaTrips=saveBlablacarTrips(start_coordinates,end_coordinates,start_date)
             # except:
             #     exists_blablaTrip=False
             #     messages.error(request,'Error al procesar los viajes en blablacar')
 
             # try:
-            #     skyscannerTrips=saveSkyscannerFlights(start_coordinates,end_coordinates,start_date_local)
+            #     skyscannerTrips=saveSkyscannerFlights(start_coordinates,end_coordinates,start_date)
             # except:
             #     exist_skyscannerTrip=False
             #     messages.error(request,'Error al procesar los viajes en skyscanner')
 
 
-
-
-
             # try:
-            #     trips_busTrain=save_train_bus_trips(start_coordinates,end_coordinates,start_date_local)
+            #     trips_busTrain=save_train_bus_trips(start_coordinates,end_coordinates,start_date)
             # except:
             #     exist_busTrainTrip=False
             #     messages.error(request,'Error al procesar los viajes en bus y tren')
 
                 
-            more_Trips()
+            more_Trips(start_date)
             exists_blablaTrip=(exists_blablaTrip and blablaTrips!=None)
             exist_skyscannerTrip=(exist_skyscannerTrip and skyscannerTrips!=None)
             exist_busTrainTrip=(exist_busTrainTrip and trips_busTrain!=None)
