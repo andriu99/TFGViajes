@@ -6,7 +6,7 @@ from ..otherFunctions.nodesFunctions import filterNodes
 from django.utils.dateparse import parse_datetime
 from ..funtionsRequest.googleMapsRequests import get_locat_province
 import networkx as nx
-# import matplotlib.pyplot as plt    
+import matplotlib.pyplot as plt    
 from datetime import datetime as dt
 import random
 
@@ -194,67 +194,216 @@ def save_train_bus_trips(start_coordinates,end_coordinates,start_date_local):
     
     query_set_bustrain_Trips=Trip.objects.filter(id__in=set_bustrain_Trips)
     return query_set_bustrain_Trips
+
+
+
+def dijkstra(graph,dict_times):   
+
+    initial = 'B'
+    dict_arrivalTime_node={}
+
+    path = {}
+
+    adj_node = {}
+
+    queue = []
+
+
+    for node in graph:
+        path[node] = float("inf")
+        adj_node[node] = None
+        dict_arrivalTime_node[node]=None
+        queue.append(node)
+        
+    path[initial] = 0
+
+    while queue:
+        # find min distance which wasn't marked as current
+        print(adj_node)
+        key_min = queue[0]
+        min_val = path[key_min]
+        for n in range(1, len(queue)):
+            if path[queue[n]] < min_val:
+                # current_time=dict_times[]
+                key_min = queue[n]  
+                min_val = path[key_min]
+        cur = key_min
+
+        queue.remove(cur)
+        
+
+        for i in graph[cur]:
+            trip_data_end=dict_times[cur][i]
+            alternate = graph[cur][i] + path[cur]
+            # print(dict_arrivalTime_node[i])
+            # print(trip_data_end)
+            if path[i] > alternate: #and (dict_arrivalTime_node[i] is None or trip_data_end>dict_arrivalTime_node[i]):
+                
+                actual_node=cur
+                previus=i
+
+                is_better=True
+
+                last_time=dict_times[cur][previus]
+                print('Tiempo inicial')
+                print(last_time)
+                while True:
+
+
+                    print(cur,previus)
+                    previus = actual_node
+                    actual_node=adj_node[actual_node]
+                    # print(previus,actual_node)
+
+
+                    if actual_node is None:
+                        print("")
+                        break
+
+                    time_actual=dict_times[actual_node][previus]
+                    print(time_actual,actual_node,previus)
+                    if last_time>time_actual:
+                        last_time=time_actual
+                    else:
+                        print('Es peor')
+                        print(last_time)
+                        print(time_actual)
+                        is_better=False
+                        break
+                    
+
+                print('Fin bucle')
+              
+
+                if is_better:
+                    path[i] = alternate
+                    adj_node[i] = cur
+                    dict_arrivalTime_node[i]=trip_data_end
+                    
+
+                # print(graph[cur][i])
+                    
+
+            # else:
+            #     print('Eooo')
+                
+                
+    x = 'F'
+    # print('The path between B to F')
+    # print(x, end = '<-')
+    print(adj_node)
     
-
-def dijkstra(nodes, distances):
-    # These are all the nodes which have not been visited yet
-    unvisited = {node: None for node in nodes}
-    # It will store the shortest distance from one node to another
-    visited = {}
-    current = 'B'
-    # It will store the predecessors of the nodes
-    currentDistance = 0
-    unvisited[current] = currentDistance
-    # Running the loop while all the nodes have been visited
+    print('The path between A to F')
+    print(x, end = '<-')
     while True:
-        # iterating through all the unvisited node
+        x = adj_node[x]
+        if x is None:
+            print("")
+            break
+        print(x, end='<-')
 
-        for neighbour, distance in distances[current].items():
-            # Iterating through the connected nodes of current_node (for 
-            # example, a is connected with b and c having values 10 and 3
-            # respectively) and the weight of the edges
-            if neighbour not in unvisited: continue
 
-            newDistance = currentDistance + distance
-            if unvisited[neighbour] is None or unvisited[neighbour] > newDistance:
-                unvisited[neighbour] = newDistance
-        # Till now the shortest distance between the source node and target node 
-        # has been found. Set the current node as the target node
-        visited[current] = currentDistance
-        del unvisited[current]
-        if not unvisited: break
-        candidates = [node for node in unvisited.items() if node[1]]
+
+    for key in (dict_times):
+        print(key)
+        print(dict_times[key])
+
+# def dijkstra(nodes, distances,dict_time,target='F'):
+
+#     # These are all the nodes which have not been visited yet
+#     unvisited = {node: None for node in nodes}
+#     # It will store the shortest distance from one node to another
+#     visited = {}
+#     current_Node = 'B'
+#     current_time=None
+    
+#     # It will store the predecessors of the nodes
+#     currentDistance = 0
+#     unvisited[current_Node] = currentDistance
+#     # Running the loop while all the nodes have been visited
+#     while True:
+#         # iterating through all the unvisited node
+#         print(visited)
+#         print(unvisited)
+#         print('\n')
+   
+#         for neighbour, distance in distances[current_Node].items():
+
+#             # Iterating through the connected nodes of current_node (for 
+#             # example, a is connected with b and c having values 10 and 3
+#             # respectively) and the weight of the edges
+#             if neighbour not in unvisited: continue
+
+#             newDistance = currentDistance + distance
+#             if unvisited[neighbour] is None or unvisited[neighbour] > newDistance:
+
+#                 print(current_time)
+#                 print(dict_time[current_Node][neighbour])
+#                 if current_time is None or current_time<dict_time[current_Node][neighbour]:
+                     
+#                     unvisited[neighbour] = newDistance
+#                     current_time=dict_time[current_Node][neighbour]
+
+#                 else:
+#                     unvisited[neighbour]=float('Inf')
+
+
+
+
+             
+
+               
+
+#         # Till now the shortest distance between the source node and target node 
+#         # has been found. Set the current_Node node as the target node
+#         visited[current_Node] = currentDistance
+#         del unvisited[current_Node]
+#         if current_Node==target or not unvisited: break
+#         candidates = [node for node in unvisited.items() if node[1]]
        
-        current, currentDistance = sorted(candidates, key = lambda x: x[1])[0]
-    return visited
+#         current_Node, currentDistance = sorted(candidates, key = lambda x: x[1])[0]
+#     return visited
 
 
 def Convert_listOfList_intoDict(tups):
-    dct=dict()
-    for x,y,weigh_dict in tups:
-        if x not in dct.keys():
-            dct[x]={}
+    dct_weights=dict()
+    dct_times=dict()
+    # num=0
+    for x,y,element in tups:
+        if x not in dct_weights.keys():
+            dct_weights[x]={}
+            dct_times[x]={}
 
-        dct[x][y]=(weigh_dict['weight'])
-   
+        dct_weights[x][y]=element['weight']
+        # if random.randint(0,100)>50:
+        #     dct_times[x][y]=dt(2021,6,15,num)
+        #     num+=1
+        # else:
+        dct_times[x][y]=dt(2021,6,15,random.randint(0,23))
 
-    return dct
 
+    return dct_weights,dct_times
+
+
+def get_dict_DateTime(dict_edges):
+    for key in dict_edges.keys():
+        for element in key:
+            print(element)
+
+
+            
 def more_Trips():
     
     DG=nx.DiGraph()
     DG.add_nodes_from(['A', 'B', 'C', 'D', 'E', 'F', 'G'])
     list_weight=[['B', 'A', 5], ['B', 'D', 1], ['B', 'G', 2], ['A', 'B', 5], ['A', 'D', 3], ['A', 'E', 12], ['A', 'F', 5], ['D', 'B', 1], ['D', 'G', 1], ['D', 'E', 1], ['D', 'A', 3], ['G', 'B', 2], ['G', 'D', 1], ['G', 'C', 2], ['C', 'G', 2], ['C', 'E', 1], ['C', 'F', 16], ['E', 'A', 12], ['E', 'D', 1], ['E', 'C', 1], ['E', 'F', 2], ['F', 'A', 5], ['F', 'E', 2], ['F', 'C', 16]]
-    #dt(2021,6,15,random.randint(0, 24))
-    list_time = [i for i in list_weight]
-    print(list_time==list_weight)
-    # list_time=list_weight
-    for i in list_time:
-        i[-1]=dt(2021,6,15,random.randint(0, 23))
+    # list_time = [i[:] for i in list_weight]
+
+    # for i in list_time:
+    #     i[-1]=dt(2021,6,15,random.randint(0, 23))
 
 
-    print(list_time)
-    print(list_weight)
+
 
     DG.add_weighted_edges_from(list_weight)
     # labels = nx.get_edge_attributes(DG,'weight')
@@ -277,12 +426,16 @@ def more_Trips():
 
   
 
-    dict_edges=Convert_listOfList_intoDict(DG.edges(data=True))
-    print(dict_edges)
-    print(id(list_time))
-    print(id(list_weight))
-    print(list_time==list_weight)
+    dict_edges,dict_times=Convert_listOfList_intoDict(DG.edges(data=True))
 
-    # print(dijkstra(DG.nodes,dict_edges))
+    # get_dict_DateTime(dict_edges)
+
+
+    # print(dict_edges)
+    # print(id(list_time))
+    # print(id(list_weight))
+    # print(list_time==list_weight)
+    # for i in range(0,20):
+    (dijkstra(dict_edges,dict_times))
    
     
