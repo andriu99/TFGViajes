@@ -388,27 +388,45 @@ def save_train_bus_trips(start_coordinates,end_coordinates,start_date_local):
 
 
 def Convert_listOfList_intoDict(tups):
-    dct_ids=dict()
+    dct_ids_price_dates=dict()
     # dct_times=dict()
     for x,y,trip_id,trip_price in tups:
         
-        if x not in dct_ids.keys():
-            dct_ids[x]={}
+        if x not in dct_ids_price_dates.keys():
+            dct_ids_price_dates[x]={}
 
-        if y not in dct_ids[x].keys():
-            dct_ids[x][y]=dict()
+        if y not in dct_ids_price_dates[x].keys():
+            dct_ids_price_dates[x][y]=dict()
 
-        dct_ids[x][y][trip_id]=trip_price
+        dct_ids_price_dates[x][y][trip_id]=list()
+        dct_ids_price_dates[x][y][trip_id].append(trip_price)
+        dct_ids_price_dates[x][y][trip_id].append(Trip.objects.get(pk=trip_id).departureDate)
+        dct_ids_price_dates[x][y][trip_id].append(Trip.objects.get(pk=trip_id).arrivalDate)
+
+
+
   
 
 
-    return dct_ids
+    return dct_ids_price_dates
+
+
+
+def init_dijkstra(path,adj_node,queue,dict_arrivalTime_node,node):
+        path[node] = float("inf")
+        adj_node[node] = None
+        dict_arrivalTime_node[node]=None
+        queue[node]=0
 
 
 
 
+def dijkstra(graph):   
 
-def dijkstra(graph,dict_times):   
+
+
+    print(graph)
+
 
     initial = 'B'
     dict_arrivalTime_node={}
@@ -417,17 +435,28 @@ def dijkstra(graph,dict_times):
 
     adj_node = {}
 
-    queue = []
+    #Número de viajes chequeados que tengan como inicio el nodo marcado como key
+    queue = {}
+
+    for node in graph.keys():
+        init_dijkstra(path,adj_node,queue,dict_arrivalTime_node,node)
 
 
-    for node in graph:
-        path[node] = float("inf")
-        adj_node[node] = None
-        dict_arrivalTime_node[node]=None
-        queue.append(node)
-        
+
+    for dict_arrivalNode_trips in graph.values():
+        for arrivalNode in dict_arrivalNode_trips:
+            init_dijkstra(path,adj_node,queue,dict_arrivalTime_node,arrivalNode)
+    
+    print(path)
+    print(adj_node)
+    print(queue)
+    
+     
+
     path[initial] = 0
 
+    return 
+    
     while queue:
         # find min distance which wasn't marked as current
         # print(adj_node)
@@ -492,11 +521,7 @@ def dijkstra(graph,dict_times):
                     dict_arrivalTime_node[i]=trip_data_end
                     
 
-                # print(graph[cur][i])
-                    
-
-            # else:
-            #     print('Eooo')
+                
                 
                 
     x = 'F'
@@ -527,10 +552,8 @@ def more_Trips(start_date):
 
         set_nodes=set()
         if (hasattr(trip,"busOrTrainTrip")):
-
             list_edge=list()
 
-            
 
             set_nodes.add(trip.arrivalNode.code)
             set_nodes.add(trip.departureNode.code)
@@ -540,16 +563,22 @@ def more_Trips(start_date):
             list_edge.append(trip.id)
 
             list_edge.append(trip.price)
-
-
             list_edges.append(list_edge)
 
      
 
    
     
-    dict_ids=Convert_listOfList_intoDict(list_edges)
-    print(dict_ids)
+    dct_ids_price_dates=Convert_listOfList_intoDict(list_edges)
+    # print(dct_ids_price_dates)
+
+    for trip_info in (dct_ids_price_dates['22676']['6615']):
+        print(dct_ids_price_dates['22676']['6615'][trip_info][2])
+    
+    
+    print(dct_ids_price_dates['22676'])
+    print(len(dct_ids_price_dates['22676']))
+    # dijkstra(dct_ids_price_dates)
 
 
    
