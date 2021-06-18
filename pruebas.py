@@ -1,11 +1,3 @@
-
-from datetime import datetime as dt
-date=dt(2021, 6, 15, 0, 0)
-
-print(date.year)
-print(date.month)
-
-print(date.day)
-
-
-print(type(str(date.year)))
+a=[1,2,3,4,5,6,7,8,9]
+print(a)
+print([z for z in reversed(a)])
