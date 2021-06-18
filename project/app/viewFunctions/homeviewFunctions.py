@@ -424,21 +424,31 @@ def init_dijkstra(path,adj_node,queue,node):
 
 
 
+def get_list_trips(solution_dijkstra,code_arrivalNode):
+    # print('The path between A to F')
+    # print(code_arrivalNode, end = '<-')
 
-def dijkstra(graph):   
+    set_trips_ids=set()
+    while True:
+        x=code_arrivalNode
+        x = solution_dijkstra[x][0]
+        set_trips_ids.append(solution_dijkstra[x][1])
+        if x is None:
+            # print("")
+            break
+        # print(x, end='<-')
+
+    return set_trips_ids
 
 
 
-    print(graph)
+def dijkstra(graph,initial):   
 
+    path = {} #Nos indica el coste total hasta llegar a cada nodo
 
-    initial = '23776'
+    adj_node = {} #Diccionario que nos indica para cada nodo en el grafo, el nodo a través del cuál llegamos a él
 
-    path = {}
-
-    adj_node = {}
-
-    #Número de viajes chequeados que tengan como inicio el nodo marcado como key
+    #Nodos del grafo todavía no chequeados
     queue = []
 
     for node in graph.keys():
@@ -449,10 +459,6 @@ def dijkstra(graph):
     for dict_arrivalNode_trips in graph.values():
         for arrivalNode in dict_arrivalNode_trips:
             init_dijkstra(path,adj_node,queue,arrivalNode)
-    
-    print(path)
-    print(adj_node)
-    print(queue)
     
      
 
@@ -473,10 +479,6 @@ def dijkstra(graph):
         queue.remove(cur)
 
         
-
-
-        
-
         for i in graph[cur]:
 
             #Elijo de todos los viaje entre el nodo actual y el nodo i el más conveniente
@@ -527,20 +529,20 @@ def dijkstra(graph):
                         break
 
         
-    x = 'F'
-    print('The path between A to F')
-    print(x, end = '<-')
+    # x = 'F'
+    # print('The path between A to F')
+    # print(x, end = '<-')
 
-    list_trips_ids=list()
-    while True:
-        x = adj_node[x][0]
-        list_trips_ids.append(adj_node[x][1])
-        if x is None:
-            print("")
-            break
-        print(x, end='<-')
+    # set_trips_ids=list()
+    # while True:
+    #     x = adj_node[x][0]
+    #     set_trips_ids.append(adj_node[x][1])
+    #     if x is None:
+    #         print("")
+    #         break
+    #     print(x, end='<-')
 
-    return [ele for ele in reversed(list_trips_ids)]
+    return adj_node
 
             
 
@@ -613,10 +615,12 @@ def dijkstra(graph):
         print(x, end='<-')
 '''
 
-def more_Trips(start_date):
+def more_Trips(start_date,start_coordinates,end_coordinates):
     
 
-
+    filter_departureNodes=filterNodes(start_coordinates,nodeType='S')
+    filter_arrivalNodes=filterNodes(end_coordinates,nodeType='S')
+    
 
     trips=Trip.objects.all().filter(departureDate__year=start_date.year,departureDate__month=start_date.month,departureDate__day=start_date.day)
 
@@ -644,8 +648,16 @@ def more_Trips(start_date):
    
     
     dct_ids_price_dates=Convert_listOfList_intoDict(list_edges)
-    print(dct_ids_price_dates['22676']['6615'][16123])
-    # print(dct_ids_price_dates)
+
+    for initial_node in filter_departureNodes:
+        sol_dijkstra=dijkstra(dct_ids_price_dates,initial_node.code)
+
+        for arrivalNode in filter_arrivalNodes:
+            
+            sol_trips=get_list_trips(sol_dijkstra,arrivalNode.code)
+            print(sol_trips)
+
+    #print(dct_ids_price_dates)
 
     # for trip_info in (dct_ids_price_dates['22676']['6615']):
     #     print(dct_ids_price_dates['22676']['6615'][trip_info][2])

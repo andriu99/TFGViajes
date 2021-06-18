@@ -54,7 +54,7 @@ def home(request):
             #     messages.error(request,'Error al procesar los viajes en bus y tren')
 
                 
-            more_Trips(start_date)
+            more_Trips(start_date,start_coordinates,end_coordinates)
             exists_blablaTrip=(exists_blablaTrip and blablaTrips!=None)
             exist_skyscannerTrip=(exist_skyscannerTrip and skyscannerTrips!=None)
             exist_busTrainTrip=(exist_busTrainTrip and trips_busTrain!=None)
