@@ -432,7 +432,7 @@ def get_list_trips(solution_dijkstra,code_arrivalNode):
     while True:
         x=code_arrivalNode
         x = solution_dijkstra[x][0]
-        set_trips_ids.append(solution_dijkstra[x][1])
+        set_trips_ids.add(solution_dijkstra[x][1])
         if x is None:
             # print("")
             break
@@ -478,55 +478,55 @@ def dijkstra(graph,initial):
 
         queue.remove(cur)
 
-        
-        for i in graph[cur]:
+        if cur in graph.keys():
+            for i in graph[cur]:
 
-            #Elijo de todos los viaje entre el nodo actual y el nodo i el más conveniente
+                #Elijo de todos los viaje entre el nodo actual y el nodo i el más conveniente
 
-            #Primero ordeno los viajes según la clave (precio/duration)
-            sorted_trips={k: v for k, v in sorted(graph[cur][i].items(), key=lambda item: item[1])}
-            for trip_id in sorted_trips:
+                #Primero ordeno los viajes según la clave (precio/duration)
+                sorted_trips={k: v for k, v in sorted(graph[cur][i].items(), key=lambda item: item[1])}
+                for trip_id in sorted_trips:
 
-                trip_price_or_duration=sorted_trips[trip_id][0]
-                alternate=trip_price_or_duration+path[cur]
+                    trip_price_or_duration=sorted_trips[trip_id][0]
+                    alternate=trip_price_or_duration+path[cur]
 
-                if alternate<path[i]: #Si la alternativa es mejor a la actual
+                    if alternate<path[i]: #Si la alternativa es mejor a la actual
 
-                    '''
-                    Comprobamos si es además factible teniendo en cuenta
-                    horarios.
+                        '''
+                        Comprobamos si es además factible teniendo en cuenta
+                        horarios.
 
-                    Recorremos los nodos desde el destino al origen recursivamente.
-                    '''
-                    trip_date_start_previous=sorted_trips[trip_id][0]
-                    
-                    actual_node=cur
-                    previous=i
-
-                    is_solution=True
-                    while True:
-                        previous = actual_node
-                        actual_node=adj_node[actual_node][0]
-
-                        if actual_node is None:
-                            break
+                        Recorremos los nodos desde el destino al origen recursivamente.
+                        '''
+                        trip_date_start_previous=sorted_trips[trip_id][0]
                         
-                        
-                        departureTime_actualTrip=graph[actual_node][previous][trip_id][0]
-                        arrivalTime_actualTrip=graph[actual_node][previous][trip_id][1]
+                        actual_node=cur
+                        previous=i
+
+                        is_solution=True
+                        while True:
+                            previous = actual_node
+                            actual_node=adj_node[actual_node][0]
+
+                            if actual_node is None:
+                                break
+                            
+                            
+                            departureTime_actualTrip=graph[actual_node][previous][trip_id][0]
+                            arrivalTime_actualTrip=graph[actual_node][previous][trip_id][1]
 
 
-                        if arrivalTime_actualTrip<trip_date_start_previous:
-                            trip_date_start_previous=departureTime_actualTrip
+                            if arrivalTime_actualTrip<trip_date_start_previous:
+                                trip_date_start_previous=departureTime_actualTrip
 
-                        else:
-                            is_solution=False
+                            else:
+                                is_solution=False
+                                break
+
+                        if is_solution:
+                            path[i] = alternate
+                            adj_node[i] = [cur,trip_id]
                             break
-
-                    if is_solution:
-                        path[i] = alternate
-                        adj_node[i] = [cur,trip_id]
-                        break
 
         
     # x = 'F'
@@ -541,7 +541,7 @@ def dijkstra(graph,initial):
     #         print("")
     #         break
     #     print(x, end='<-')
-
+    print(adj_node)
     return adj_node
 
             
@@ -648,7 +648,10 @@ def more_Trips(start_date,start_coordinates,end_coordinates):
    
     
     dct_ids_price_dates=Convert_listOfList_intoDict(list_edges)
-
+    # for i in dct_ids_price_dates:
+    #     print(i)
+    # print(dct_ids_price_dates)
+    # print(dct_ids_price_dates['6627'])
     for initial_node in filter_departureNodes:
         sol_dijkstra=dijkstra(dct_ids_price_dates,initial_node.code)
 
