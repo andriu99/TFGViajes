@@ -46,7 +46,6 @@ def home(request):
             #     exist_skyscannerTrip=False
             #     messages.error(request,'Error al procesar los viajes en skyscanner')
 
-            print('Aca')
 
             try:
                 trips_busTrain=save_train_bus_trips(start_coordinates,end_coordinates,start_date)
