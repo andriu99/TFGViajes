@@ -420,7 +420,8 @@ def init_dijkstra(path,adj_node,queue,node):
         El segundo será el viaje concreto desde el cuál se llega.
         '''
         adj_node[node] = [None,None]
-        queue.append(node)
+        if node not in queue:
+            queue.append(node)
 
 
 
@@ -429,13 +430,18 @@ def get_list_trips(solution_dijkstra,code_arrivalNode):
     # print(code_arrivalNode, end = '<-')
 
     set_trips_ids=set()
+    x=code_arrivalNode
+
     while True:
-        x=code_arrivalNode
-        x = solution_dijkstra[x][0]
-        set_trips_ids.add(solution_dijkstra[x][1])
+        try:
+            x = solution_dijkstra[x][0]
+        except:
+            return set_trips_ids
         if x is None:
             # print("")
             break
+        set_trips_ids.add(solution_dijkstra[x][1])
+        
         # print(x, end='<-')
 
     return set_trips_ids
@@ -444,12 +450,13 @@ def get_list_trips(solution_dijkstra,code_arrivalNode):
 
 def dijkstra(graph,initial):   
 
-    path = {} #Nos indica el coste total hasta llegar a cada nodo
+    path = dict() #Nos indica el coste total hasta llegar a cada nodo
 
-    adj_node = {} #Diccionario que nos indica para cada nodo en el grafo, el nodo a través del cuál llegamos a él
+    adj_node = dict() #Diccionario que nos indica para cada nodo en el grafo, el nodo a través del cuál llegamos a él
 
     #Nodos del grafo todavía no chequeados
-    queue = []
+    queue = list()
+
 
     for node in graph.keys():
         init_dijkstra(path,adj_node,queue,node)
@@ -463,19 +470,22 @@ def dijkstra(graph,initial):
      
 
     path[initial] = 0
-     
-    
+
+    # print(queue)
+   
     while queue:
         # find min distance which wasn't marked as current
         key_min = queue[0]
         min_val = path[key_min]
         for n in range(1, len(queue)):
+            # print('path '+str(path[queue[n]]))
+            # print('Min value:'+str(min_val))
             if path[queue[n]] < min_val:
                 # current_time=dict_times[]
                 key_min = queue[n]  
                 min_val = path[key_min]
-        cur = key_min
 
+        cur = key_min
         queue.remove(cur)
 
         if cur in graph.keys():
@@ -488,17 +498,30 @@ def dijkstra(graph,initial):
                 for trip_id in sorted_trips:
 
                     trip_price_or_duration=sorted_trips[trip_id][0]
+
                     alternate=trip_price_or_duration+path[cur]
+                    # print(path[cur])
+                    # print(cur)
+                    # # print(cur)
+                     
 
+
+                    
+                    # print('Price: '+str(trip_price_or_duration))
+                    # print("Alternativa "+str(alternate))
+                    # print("path[i]  "+str(path[i]))
+
+                    # print("Alternativa "+str(alternate))
+                    # print("Camino "+str(path[i]))
                     if alternate<path[i]: #Si la alternativa es mejor a la actual
-
                         '''
                         Comprobamos si es además factible teniendo en cuenta
                         horarios.
 
                         Recorremos los nodos desde el destino al origen recursivamente.
                         '''
-                        trip_date_start_previous=sorted_trips[trip_id][0]
+                        trip_date_start_previous=sorted_trips[trip_id][1]
+                        # print(trip_date_start_previous)
                         
                         actual_node=cur
                         previous=i
@@ -507,16 +530,22 @@ def dijkstra(graph,initial):
                         while True:
                             previous = actual_node
                             actual_node=adj_node[actual_node][0]
+                            # print(previous)
+                            # print(actual_node)
 
                             if actual_node is None:
                                 break
                             
-                            
-                            departureTime_actualTrip=graph[actual_node][previous][trip_id][0]
-                            arrivalTime_actualTrip=graph[actual_node][previous][trip_id][1]
+                            actual_trip_id=adj_node[actual_node][1]
+
+                            if actual_trip_id is not None:
+                                departureTime_actualTrip=graph[actual_node][previous][actual_trip_id][0]
+                                arrivalTime_actualTrip=graph[actual_node][previous][actual_trip_id][1]
+                            else:
+                                arrivalTime_actualTrip=None
 
 
-                            if arrivalTime_actualTrip<trip_date_start_previous:
+                            if arrivalTime_actualTrip is not None and arrivalTime_actualTrip<trip_date_start_previous:
                                 trip_date_start_previous=departureTime_actualTrip
 
                             else:
@@ -524,10 +553,16 @@ def dijkstra(graph,initial):
                                 break
 
                         if is_solution:
+                            # print('Es solucion')
+                            # print(i)
+                            # print(cur)
+                            # print(trip_id)
                             path[i] = alternate
                             adj_node[i] = [cur,trip_id]
-                            break
-
+                            
+        
+        elif initial==cur:
+            break
         
     # x = 'F'
     # print('The path between A to F')
@@ -541,7 +576,6 @@ def dijkstra(graph,initial):
     #         print("")
     #         break
     #     print(x, end='<-')
-    print(adj_node)
     return adj_node
 
             
@@ -620,7 +654,9 @@ def more_Trips(start_date,start_coordinates,end_coordinates):
 
     filter_departureNodes=filterNodes(start_coordinates,nodeType='S')
     filter_arrivalNodes=filterNodes(end_coordinates,nodeType='S')
-    
+    # for node in filter_arrivalNodes:
+    #     print(node.code)
+    #     print(node.name)
 
     trips=Trip.objects.all().filter(departureDate__year=start_date.year,departureDate__month=start_date.month,departureDate__day=start_date.day)
 
@@ -628,16 +664,13 @@ def more_Trips(start_date,start_coordinates,end_coordinates):
 
     for trip in trips:
 
-        set_nodes=set()
         if (hasattr(trip,"busOrTrainTrip")):
             list_edge=list()
 
 
-            set_nodes.add(trip.arrivalNode.code)
-            set_nodes.add(trip.departureNode.code)
-
-            list_edge.append(trip.arrivalNode.code)
             list_edge.append(trip.departureNode.code)
+            list_edge.append(trip.arrivalNode.code)
+
             list_edge.append(trip.id)
 
             list_edge.append(trip.price)
@@ -645,20 +678,32 @@ def more_Trips(start_date,start_coordinates,end_coordinates):
 
      
 
-   
+    
     
     dct_ids_price_dates=Convert_listOfList_intoDict(list_edges)
+
+
     # for i in dct_ids_price_dates:
     #     print(i)
     # print(dct_ids_price_dates)
     # print(dct_ids_price_dates['6627'])
-    for initial_node in filter_departureNodes:
-        sol_dijkstra=dijkstra(dct_ids_price_dates,initial_node.code)
+    for arrivalNode in filter_departureNodes:
 
-        for arrivalNode in filter_arrivalNodes:
-            
-            sol_trips=get_list_trips(sol_dijkstra,arrivalNode.code)
-            print(sol_trips)
+        sol_dijkstra=dijkstra(dct_ids_price_dates,arrivalNode.code)
+        print(sol_dijkstra)
+        
+
+
+
+
+        # for arrivalNode in filter_departureNodes:
+        #     if arrivalNode.code in sol_dijkstra.keys():
+        #         sol_trips=get_list_trips(sol_dijkstra,arrivalNode.code)
+        #         print(sol_trips)
+
+
+
+
 
     #print(dct_ids_price_dates)
 
