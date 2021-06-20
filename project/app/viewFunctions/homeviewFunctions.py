@@ -240,22 +240,21 @@ Vamos almacenando los viajes recursivamente.
 '''
 def get_list_trips(solution_dijkstra,code_arrivalNode):
 
-    set_trips_ids=list()
+    list_trips_ids=list()
     x=code_arrivalNode
-    set_trips_ids.append(solution_dijkstra[x][1])
     while True:
+        if solution_dijkstra[x][1] is None:
+            break 
+
+        list_trips_ids.append(Trip.objects.get(pk=solution_dijkstra[x][1]))
+
         x = solution_dijkstra[x][0]
        
-        if x is None:
-            # print("")
-            break
-        set_trips_ids.append(solution_dijkstra[x][1])
         
-        # print(x, end='<-')
-    set_trips_ids.remove(None)    
+        
 
 
-    return set_trips_ids[:: -1]
+    return list_trips_ids[:: -1]
 
 
 '''
@@ -384,11 +383,26 @@ def dijkstra(graph,initial):
  
     return adj_node
 
+'''
+Obtiene una lista de listas con los objetos viaje de cada itinerario.
+list_list_trips_ids: lista de listas con los ids de los viajes enlazados.
+
+'''
+# def getlist_list_trips_objects(list_list_trips_ids):
+#     list_list_travels=list()
+#     for list_travels_id in list_list_trips_ids:
+#         list_travels=[]
+#         for travel_id in list_travels_id:
             
+#             list_travels.append(Trip.objects.all().get(pk=travel_id))
+        
+#         list_list_travels.append(list_travels)
+
+#     return list_list_travels
 
 
 def more_Trips(start_date,start_coordinates,end_coordinates):
-    list_oflist_travelswithTransfer=list() #Lista que guarda listas con los viajes encadenados que son solución
+    list_oflist_travelswithTransfer_id=list() #Lista que guarda listas con los viajes encadenados que son solución
 
     filter_departureNodes=filterNodes(start_coordinates,nodeType='S')
     filter_arrivalNodes=filterNodes(end_coordinates,nodeType='S')
@@ -445,10 +459,11 @@ def more_Trips(start_date,start_coordinates,end_coordinates):
         for arrivalNode in filter_arrivalNodes:
             sol_trips=get_list_trips(sol_dijkstra,arrivalNode.code)
 
-            firstTrip_node=Trip.objects.all().get(pk=sol_trips[0]).departureNode.code
+
+            firstTrip_node=sol_trips[0].departureNode.code
             if firstTrip_node==departureNode.code:
-                list_oflist_travelswithTransfer.append(sol_trips)
+                list_oflist_travelswithTransfer_id.append(sol_trips)
             
 
 
-    return list_oflist_travelswithTransfer
+    return list_oflist_travelswithTransfer_id

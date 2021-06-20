@@ -55,7 +55,6 @@ def home(request):
 
                 
             list_list_travels_with_transfer=more_Trips(start_date,start_coordinates,end_coordinates)
-            print(list_list_travels_with_transfer)
 
 
             exists_blablaTrip=(exists_blablaTrip and blablaTrips!=None)
@@ -119,7 +118,7 @@ def home(request):
     '''
     blablaTrips,skyscannerTrips,busTrips,trainTrips => Pertenecen al modelo Trip
     '''
-    context = {'form' : form,'blablaTrips':blablaTrips,'skyscannerTrips':skyscannerTrips,'busTrips':busTrips,'trainTrips':trainTrips}
+    context = {'form' : form,'blablaTrips':blablaTrips,'skyscannerTrips':skyscannerTrips,'busTrips':busTrips,'trainTrips':trainTrips,'list_list_travels_with_transfer':list_list_travels_with_transfer}
     return render(request,'app/home.html',context=context)
 
 

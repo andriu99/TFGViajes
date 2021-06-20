@@ -196,9 +196,57 @@
 
 
         </div>
+        {% endif %} {% if list_list_travels_with_transfer %}
+
+
+        <div class="transfer_trips_result">
+            <div class="titles">
+
+                <h2>Lista de viajes encadenados</h2>
+            </div>
+
+            {% for list_travels in list_list_travels_with_transfer %}
+            <table class="trips">
+                <tr>
+                    <th>Hora Salida</th>
+                    <th>Hora Llegada</th>
+                    <th>Precio</th>
+                    <th>Nombre de la Estación de Salida</th>
+                    <th>Nombre de la estación de llegada</th>
+
+                </tr>
+
+                {% for travel in list_travels%}
+                <tr>
+                    <td>{{ travel.departureDate|time:"H:i" }}</td>
+                    <td>{{ travel.arrivalDate|time:"H:i" }}</td>
+                    <td>{{travel.price}}</td>
+                    <td>{{travel.departureNode.name}}</td>
+                    <td>{{travel.arrivalNode.name}}</td>
+
+                </tr>
+
+
+                {% endfor %}
+            </table>
+            {% endfor %}
+
+
+
+        </div>
+
+
+
+
+
+
+
+
+
+        {% endif %}
 
 
     </div>
 </form>
 
-{% endif %} {% endblock %}
+{% endblock %}
