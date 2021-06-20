@@ -96,8 +96,15 @@ def save_tripsInfo_DepArriNodes(filter_departureNodes,filter_arrivalNodes,start_
     
     for departure_Node in filter_departureNodes:
         for arrival_Node in filter_arrivalNodes:
-            trips=Trip.objects.all().filter(departureNode__code=departure_Node.code).filter(arrival_Node__code=arrival_Node.code)
-            save_busTrainTrip(departure_Node,arrival_Node,start_date_local,getBusTrainTrips,set_bustrain_Trips)
+
+            '''
+            Solamente buscamos nuevos viajes si no tenemos ningún viaje entre esas dos estaciones en esa fecha.
+            Encontramos los viajes entre departure_Node y arrival_NOde en la fecha marcada por el usuario, si no hay buscamos en la api rest.
+            '''
+            trips=Trip.objects.all().filter(departureDate__year=start_date_local.year,departureDate__month=start_date_local.month,departureDate__day=start_date_local.day).filter(departureNode__code=departure_Node.code).filter(arrival_Node__code=arrival_Node.code)
+
+            if trips.count()==0:
+                save_busTrainTrip(departure_Node,arrival_Node,start_date_local,getBusTrainTrips,set_bustrain_Trips)
 
                         
 def save_busTrainTrip(departureNode,arrivalNode,start_date_local,getBusTrainTrips,set_bustrain_Trips=None):
@@ -168,11 +175,11 @@ def get_systemOfTransport_dict():
 def save_train_bus_trips(start_coordinates,end_coordinates,start_date_local):
 
     locatO,provO=get_locat_province(start_coordinates)
-    locatD,provO=get_locat_province(end_coordinates)
+    locatD,provD=get_locat_province(end_coordinates)
      
 
     filter_departureNodes=filterNodes(start_coordinates,nodeType='S',location=locatO,province=provO)
-    filter_arrivalNodes=filterNodes(end_coordinates,nodeType='S',location=locatD,province=locatD)
+    filter_arrivalNodes=filterNodes(end_coordinates,nodeType='S',location=locatD,province=provD)
     
     '''
     Buscamos en la caché de la BD:
@@ -390,21 +397,9 @@ def dijkstra(graph,initial):
     return adj_node
 
 '''
-Obtiene una lista de listas con los objetos viaje de cada itinerario.
-list_list_trips_ids: lista de listas con los ids de los viajes enlazados.
+Búsqueda de viajes con transbordos.
 
 '''
-# def getlist_list_trips_objects(list_list_trips_ids):
-#     list_list_travels=list()
-#     for list_travels_id in list_list_trips_ids:
-#         list_travels=[]
-#         for travel_id in list_travels_id:
-            
-#             list_travels.append(Trip.objects.all().get(pk=travel_id))
-        
-#         list_list_travels.append(list_travels)
-
-#     return list_list_travels
 
 
 def more_Trips(start_date,start_coordinates,end_coordinates):
