@@ -5,6 +5,10 @@ from .models import Trip
 from datetime import datetime as dt 
 from .viewFunctions.homeviewFunctions import more_Trips, saveBlablacarTrips,saveSkyscannerFlights,save_train_bus_trips
 from django.contrib import messages
+from .otherFunctions.nodesFunctions import filterNodes
+from .funtionsRequest.googleMapsRequests import get_locat_province
+
+
 
 
 def home(request):
@@ -34,6 +38,12 @@ def home(request):
             exist_skyscannerTrip=True
             exist_busTrainTrip=True
 
+            locatO,provO=get_locat_province(start_coordinates)
+            locatD,provD=get_locat_province(end_coordinates)
+
+            
+            filter_departureNodes=filterNodes(start_coordinates,nodeType='S',location=locatO,province=provO)
+            filter_arrivalNodes=filterNodes(end_coordinates,nodeType='S',location=locatD,province=provD)
             # try:
             #     blablaTrips=saveBlablacarTrips(start_coordinates,end_coordinates,start_date)
             # except:
@@ -47,14 +57,16 @@ def home(request):
             #     messages.error(request,'Error al procesar los viajes en skyscanner')
 
 
-            # try:
-            #     trips_busTrain=save_train_bus_trips(start_coordinates,end_coordinates,start_date)
-            # except:
-            #     exist_busTrainTrip=False
-            #     messages.error(request,'Error al procesar los viajes en bus y tren')
+            try:
+                trips_busTrain= save_train_bus_trips(filter_departureNodes,filter_arrivalNodes,locatO,locatD,start_date)
 
-            # list_list_travels_with_transfer=list()
-            list_list_travels_with_transfer=more_Trips(start_date,start_coordinates,end_coordinates)
+            except:
+                exist_busTrainTrip=False
+                messages.error(request,'Error al procesar los viajes en bus y tren')
+
+            list_list_travels_with_transfer=list()
+            # list_list_travels_with_transfer=more_Trips(start_date,filter_departureNodes,filter_arrivalNodes)
+
 
 
             exists_blablaTrip=(exists_blablaTrip and blablaTrips!=None)

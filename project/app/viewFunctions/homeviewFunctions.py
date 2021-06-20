@@ -101,7 +101,7 @@ def save_tripsInfo_DepArriNodes(filter_departureNodes,filter_arrivalNodes,start_
             Solamente buscamos nuevos viajes si no tenemos ningún viaje entre esas dos estaciones en esa fecha.
             Encontramos los viajes entre departure_Node y arrival_NOde en la fecha marcada por el usuario, si no hay buscamos en la api rest.
             '''
-            trips=Trip.objects.all().filter(departureDate__year=start_date_local.year,departureDate__month=start_date_local.month,departureDate__day=start_date_local.day).filter(departureNode__code=departure_Node.code).filter(arrival_Node__code=arrival_Node.code)
+            trips=Trip.objects.all().filter(departureDate__year=start_date_local.year,departureDate__month=start_date_local.month,departureDate__day=start_date_local.day).filter(departureNode__code=departure_Node.code).filter(arrivalNode__code=arrival_Node.code)
 
             if trips.count()==0:
                 save_busTrainTrip(departure_Node,arrival_Node,start_date_local,getBusTrainTrips,set_bustrain_Trips)
@@ -172,14 +172,14 @@ def get_systemOfTransport_dict():
 
 
 
-def save_train_bus_trips(start_coordinates,end_coordinates,start_date_local):
+def save_train_bus_trips(filter_departureNodes,filter_arrivalNodes,locatO,locatD,start_date_local):
 
-    locatO,provO=get_locat_province(start_coordinates)
-    locatD,provD=get_locat_province(end_coordinates)
+    # locatO,provO=get_locat_province(start_coordinates)
+    # locatD,provD=get_locat_province(end_coordinates)
      
 
-    filter_departureNodes=filterNodes(start_coordinates,nodeType='S',location=locatO,province=provO)
-    filter_arrivalNodes=filterNodes(end_coordinates,nodeType='S',location=locatD,province=provD)
+    # filter_departureNodes=filterNodes(start_coordinates,nodeType='S',location=locatO,province=provO)
+    # filter_arrivalNodes=filterNodes(end_coordinates,nodeType='S',location=locatD,province=provD)
     
     '''
     Buscamos en la caché de la BD:
@@ -402,11 +402,11 @@ Búsqueda de viajes con transbordos.
 '''
 
 
-def more_Trips(start_date,start_coordinates,end_coordinates):
+def more_Trips(start_date,filter_departureNodes,filter_arrivalNodes):
     list_oflist_travelswithTransfer_id=list() #Lista que guarda listas con los viajes encadenados que son solución
 
-    filter_departureNodes=filterNodes(start_coordinates,nodeType='S')
-    filter_arrivalNodes=filterNodes(end_coordinates,nodeType='S')
+    # filter_departureNodes=filterNodes(start_coordinates,nodeType='S')
+    # filter_arrivalNodes=filterNodes(end_coordinates,nodeType='S')
    
     '''
     Lista de los viajes guardados en la BD que cumplen:
