@@ -6,6 +6,7 @@ from django.utils.dateparse import parse_datetime
 from ..funtionsRequest.googleMapsRequests import get_locat_province
 
 
+
 def saveBlablacarTrips(start_coordinates,end_coordinates,start_date_local):
     set_trips_blabla=set()
     getBlablaCarTrips=Request.objects.get(name='getBlablaCarTrips')
@@ -192,9 +193,9 @@ def save_train_bus_trips(start_coordinates,end_coordinates,start_date_local):
 
 
 
+
 def Convert_listOfList_intoDict(tups):
     dct_ids_price_dates=dict()
-
     for x,y,trip_id,trip_price in tups:
         
         if x not in dct_ids_price_dates.keys():
@@ -208,6 +209,9 @@ def Convert_listOfList_intoDict(tups):
         dct_ids_price_dates[x][y][trip_id].append(Trip.objects.get(pk=trip_id).departureDate)
         dct_ids_price_dates[x][y][trip_id].append(Trip.objects.get(pk=trip_id).arrivalDate)
 
+
+
+  
 
 
     return dct_ids_price_dates
@@ -228,7 +232,6 @@ def init_dijkstra(path,adj_node,queue,node):
 
 
 def get_list_trips(solution_dijkstra,code_arrivalNode):
-  
 
     set_trips_ids=list()
     x=code_arrivalNode
@@ -237,9 +240,11 @@ def get_list_trips(solution_dijkstra,code_arrivalNode):
         x = solution_dijkstra[x][0]
        
         if x is None:
+            # print("")
             break
         set_trips_ids.append(solution_dijkstra[x][1])
         
+        # print(x, end='<-')
     set_trips_ids.remove(None)    
 
 
@@ -270,39 +275,34 @@ def dijkstra(graph,initial):
 
     path[initial] = 0
 
-    # print(queue)
    
     while queue:
         # find min distance which wasn't marked as current
         key_min = queue[0]
         min_val = path[key_min]
         for n in range(1, len(queue)):
-            # print('path '+str(path[queue[n]]))
-            # print('Min value:'+str(min_val))
             if path[queue[n]] < min_val:
-                # current_time=dict_times[]
                 key_min = queue[n]  
                 min_val = path[key_min]
 
         cur = key_min
         queue.remove(cur)
-        # print("Current "+cur)
 
         if cur in graph.keys():
             for i in graph[cur]:
-                # print(i)
                 #Elijo de todos los viaje entre el nodo actual y el nodo i el más conveniente
 
                 #Primero ordeno los viajes según la clave (precio/duration)
                 sorted_trips={k: v for k, v in sorted(graph[cur][i].items(), key=lambda item: item[1])}
                 for trip_id in sorted_trips:
-                    # print("     Trip_id "+str(trip_id))
                     trip_price_or_duration=sorted_trips[trip_id][0]
 
                     alternate=trip_price_or_duration+path[cur]
-                   
+                     
+
+
+
                     if alternate<path[i]: #Si la alternativa es mejor a la actual
-                        # print("         Mejor que el actual en precio ")
 
 
                         '''
@@ -312,7 +312,6 @@ def dijkstra(graph,initial):
                         Recorremos los nodos desde el destino al origen recursivamente.
                         '''
                         trip_date_start_previous=sorted_trips[trip_id][1]
-                        # print("             Fecha inicio: "+str(trip_date_start_previous))
                         
                         actual_node=cur
                         previous=i
@@ -321,8 +320,6 @@ def dijkstra(graph,initial):
                         while True:
                             previous = actual_node
                             actual_node=adj_node[actual_node][0]
-                            # print(previous)
-                            # print(actual_node)
 
                             if actual_node is None:
                                 break
@@ -335,8 +332,6 @@ def dijkstra(graph,initial):
                             else:
                                 arrivalTime_actualTrip=None
 
-                            # print("             Arrival time actual trip: "+str(arrivalTime_actualTrip))
-                            # print("             Trip date start previous: "+str(trip_date_start_previous))
 
 
                             if arrivalTime_actualTrip is not None and arrivalTime_actualTrip<trip_date_start_previous:
@@ -347,8 +342,8 @@ def dijkstra(graph,initial):
                                 break
 
                         if is_solution:
-                            #print('             Es solucion')
-                           
+                            
+                            path[i] = alternate
                             adj_node[i] = [cur,trip_id]
                             break
                             
@@ -363,12 +358,11 @@ def dijkstra(graph,initial):
 
 
 def more_Trips(start_date,start_coordinates,end_coordinates):
-    
+    list_oflist_travelswithTransfer=list()
 
     filter_departureNodes=filterNodes(start_coordinates,nodeType='S')
     filter_arrivalNodes=filterNodes(end_coordinates,nodeType='S')
-  
-
+   
     trips=Trip.objects.all().filter(departureDate__year=start_date.year,departureDate__month=start_date.month,departureDate__day=start_date.day)
 
     list_edges=list()
@@ -377,7 +371,6 @@ def more_Trips(start_date,start_coordinates,end_coordinates):
 
         if (hasattr(trip,"busOrTrainTrip")):
             list_edge=list()
-
 
             list_edge.append(trip.departureNode.code)
             list_edge.append(trip.arrivalNode.code)
@@ -398,16 +391,23 @@ def more_Trips(start_date,start_coordinates,end_coordinates):
     for departureNode in filter_departureNodes:
 
         sol_dijkstra=dijkstra(dct_ids_price_dates,departureNode.code)
-        print(sol_dijkstra)
 
 
 
         for arrivalNode in filter_arrivalNodes:
-            if arrivalNode.code in sol_dijkstra.keys():
-                sol_trips=get_list_trips(sol_dijkstra,arrivalNode.code)
-                print(sol_trips)
+            sol_trips=get_list_trips(sol_dijkstra,arrivalNode.code)
+
+            list_oflist_travelswithTransfer.append(sol_trips)
 
 
+    return list_oflist_travelswithTransfer
+
+
+
+
+
+
+    
 
 
    
