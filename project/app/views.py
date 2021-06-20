@@ -47,14 +47,14 @@ def home(request):
             #     messages.error(request,'Error al procesar los viajes en skyscanner')
 
 
-            try:
-                trips_busTrain=save_train_bus_trips(start_coordinates,end_coordinates,start_date)
-            except:
-                exist_busTrainTrip=False
-                messages.error(request,'Error al procesar los viajes en bus y tren')
+            # try:
+            #     trips_busTrain=save_train_bus_trips(start_coordinates,end_coordinates,start_date)
+            # except:
+            #     exist_busTrainTrip=False
+            #     messages.error(request,'Error al procesar los viajes en bus y tren')
 
                 
-            # more_Trips(start_date,start_coordinates,end_coordinates)
+            more_Trips(start_date,start_coordinates,end_coordinates)
             exists_blablaTrip=(exists_blablaTrip and blablaTrips!=None)
             exist_skyscannerTrip=(exist_skyscannerTrip and skyscannerTrips!=None)
             exist_busTrainTrip=(exist_busTrainTrip and trips_busTrain!=None)

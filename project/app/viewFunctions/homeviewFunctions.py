@@ -114,7 +114,7 @@ def save_busTrainTrip(departureNode,arrivalNode,start_date_local,getBusTrainTrip
     for system in system_transport_dict:
         searchDict['systems']=system_transport_dict[system]
         tripGenerator=getBusTrainTrips.executeFunction(['EUR',searchDict],typeOfData='str')
-
+        
         if tripGenerator!=None:
             for price,departureDate_str,arrivalDate_str in tripGenerator:
 
@@ -429,22 +429,23 @@ def get_list_trips(solution_dijkstra,code_arrivalNode):
     # print('The path between A to F')
     # print(code_arrivalNode, end = '<-')
 
-    set_trips_ids=set()
+    set_trips_ids=list()
     x=code_arrivalNode
-
+    set_trips_ids.append(solution_dijkstra[x][1])
+    print(x)
     while True:
-        try:
-            x = solution_dijkstra[x][0]
-        except:
-            return set_trips_ids
+        x = solution_dijkstra[x][0]
+       
         if x is None:
             # print("")
             break
-        set_trips_ids.add(solution_dijkstra[x][1])
+        set_trips_ids.append(solution_dijkstra[x][1])
         
         # print(x, end='<-')
+    set_trips_ids.remove(None)    
 
-    return set_trips_ids
+
+    return set_trips_ids[:: -1]
 
 
 
@@ -487,16 +488,17 @@ def dijkstra(graph,initial):
 
         cur = key_min
         queue.remove(cur)
+        print("Current "+cur)
 
         if cur in graph.keys():
             for i in graph[cur]:
-
+                print(i)
                 #Elijo de todos los viaje entre el nodo actual y el nodo i el más conveniente
 
                 #Primero ordeno los viajes según la clave (precio/duration)
                 sorted_trips={k: v for k, v in sorted(graph[cur][i].items(), key=lambda item: item[1])}
                 for trip_id in sorted_trips:
-
+                    print("     Trip_id "+str(trip_id))
                     trip_price_or_duration=sorted_trips[trip_id][0]
 
                     alternate=trip_price_or_duration+path[cur]
@@ -514,6 +516,9 @@ def dijkstra(graph,initial):
                     # print("Alternativa "+str(alternate))
                     # print("Camino "+str(path[i]))
                     if alternate<path[i]: #Si la alternativa es mejor a la actual
+                        print("         Mejor que el actual en precio ")
+
+
                         '''
                         Comprobamos si es además factible teniendo en cuenta
                         horarios.
@@ -521,7 +526,7 @@ def dijkstra(graph,initial):
                         Recorremos los nodos desde el destino al origen recursivamente.
                         '''
                         trip_date_start_previous=sorted_trips[trip_id][1]
-                        # print(trip_date_start_previous)
+                        print("             Fecha inicio: "+str(trip_date_start_previous))
                         
                         actual_node=cur
                         previous=i
@@ -536,13 +541,16 @@ def dijkstra(graph,initial):
                             if actual_node is None:
                                 break
                             
-                            actual_trip_id=adj_node[actual_node][1]
+                            actual_trip_id=adj_node[previous][1]
 
                             if actual_trip_id is not None:
                                 departureTime_actualTrip=graph[actual_node][previous][actual_trip_id][0]
                                 arrivalTime_actualTrip=graph[actual_node][previous][actual_trip_id][1]
                             else:
                                 arrivalTime_actualTrip=None
+
+                            print("             Arrival time actual trip: "+str(arrivalTime_actualTrip))
+                            print("             Trip date start previous: "+str(trip_date_start_previous))
 
 
                             if arrivalTime_actualTrip is not None and arrivalTime_actualTrip<trip_date_start_previous:
@@ -553,12 +561,13 @@ def dijkstra(graph,initial):
                                 break
 
                         if is_solution:
-                            # print('Es solucion')
+                            print('             Es solucion')
                             # print(i)
                             # print(cur)
                             # print(trip_id)
                             path[i] = alternate
                             adj_node[i] = [cur,trip_id]
+                            break
                             
         
         elif initial==cur:
@@ -687,19 +696,17 @@ def more_Trips(start_date,start_coordinates,end_coordinates):
     #     print(i)
     # print(dct_ids_price_dates)
     # print(dct_ids_price_dates['6627'])
-    for arrivalNode in filter_departureNodes:
+    for departureNode in filter_departureNodes:
 
-        sol_dijkstra=dijkstra(dct_ids_price_dates,arrivalNode.code)
+        sol_dijkstra=dijkstra(dct_ids_price_dates,departureNode.code)
         print(sol_dijkstra)
-        
 
 
 
-
-        # for arrivalNode in filter_departureNodes:
-        #     if arrivalNode.code in sol_dijkstra.keys():
-        #         sol_trips=get_list_trips(sol_dijkstra,arrivalNode.code)
-        #         print(sol_trips)
+        for arrivalNode in filter_arrivalNodes:
+            if arrivalNode.code in sol_dijkstra.keys():
+                sol_trips=get_list_trips(sol_dijkstra,arrivalNode.code)
+                print(sol_trips)
 
 
 

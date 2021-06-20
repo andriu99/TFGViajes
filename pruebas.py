@@ -1,3 +1,6 @@
-a=[1,2,3,4,5,6,7,8,9]
+a=set()
+a.add(1)
+a.add(2)
+a.add(3)
 print(a)
-print([z for z in reversed(a)])
+print(reversed(a))
