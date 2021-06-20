@@ -192,7 +192,13 @@ def save_train_bus_trips(start_coordinates,end_coordinates,start_date_local):
     return query_set_bustrain_Trips
 
 
+'''
+Con los arcos obtengo un diccionario cuya clave es el nodo de origen 
+Y cuyo valor es un diccionario cuyas claves serán los nodos (destino) que tienen viajes con el nodo de origen.
+El valor de este último diccionario será un diccionario con claves igual al id de cada viaje entre nodo origen y destino.
+Para cada viaje se almacena una lista con [precio, fecha de partida, fecha de llegada]
 
+'''
 
 def Convert_listOfList_intoDict(tups):
     dct_ids_price_dates=dict()
@@ -208,10 +214,6 @@ def Convert_listOfList_intoDict(tups):
         dct_ids_price_dates[x][y][trip_id].append(trip_price)
         dct_ids_price_dates[x][y][trip_id].append(Trip.objects.get(pk=trip_id).departureDate)
         dct_ids_price_dates[x][y][trip_id].append(Trip.objects.get(pk=trip_id).arrivalDate)
-
-
-
-  
 
 
     return dct_ids_price_dates
@@ -231,6 +233,11 @@ def init_dijkstra(path,adj_node,queue,node):
 
 
 
+'''
+Recorremos los nodos desde el nodo destino al inicial.
+Vamos almacenando los viajes recursivamente.
+
+'''
 def get_list_trips(solution_dijkstra,code_arrivalNode):
 
     set_trips_ids=list()
@@ -251,17 +258,33 @@ def get_list_trips(solution_dijkstra,code_arrivalNode):
     return set_trips_ids[:: -1]
 
 
+'''
+graph: Diccionario obtenido en Convert_listOfList_intoDict
+initial: código del nodo que queremos considerar como inicial.
 
+
+'''
 def dijkstra(graph,initial):   
 
     path = dict() #Nos indica el coste total hasta llegar a cada nodo
 
-    adj_node = dict() #Diccionario que nos indica para cada nodo en el grafo, el nodo a través del cuál llegamos a él
+
+    '''
+    Diccionario que tedrá como key un nodo y como value una lista [1,2].
+    Donde 1 será el nodo a través del cuál llegamos a el y 2 el viaje en concreto (id),
+    por el que llegamos.
+
+    '''
+    adj_node = dict() 
 
     #Nodos del grafo todavía no chequeados
     queue = list()
 
 
+
+    '''
+    Iniciamos cada nodo en el grafo.
+    '''
     for node in graph.keys():
         init_dijkstra(path,adj_node,queue,node)
 
@@ -302,7 +325,7 @@ def dijkstra(graph,initial):
 
 
 
-                    if alternate<path[i]: #Si la alternativa es mejor a la actual
+                    if alternate<path[i]: #Si la alternativa es mejor a la actual en cuanto a precio/duración
 
 
                         '''
@@ -310,6 +333,9 @@ def dijkstra(graph,initial):
                         horarios.
 
                         Recorremos los nodos desde el destino al origen recursivamente.
+
+                        Previous en un principio es el nodo destino y actual node el nodo anterior al destino.
+                        Recursivamente previous pasa a ser el actual, y así sucesivamente.
                         '''
                         trip_date_start_previous=sorted_trips[trip_id][1]
                         
@@ -321,10 +347,10 @@ def dijkstra(graph,initial):
                             previous = actual_node
                             actual_node=adj_node[actual_node][0]
 
-                            if actual_node is None:
+                            if actual_node is None: 
                                 break
                             
-                            actual_trip_id=adj_node[previous][1]
+                            actual_trip_id=adj_node[previous][1] #Id del viaje que une actual_node con previous
 
                             if actual_trip_id is not None:
                                 departureTime_actualTrip=graph[actual_node][previous][actual_trip_id][0]
@@ -333,7 +359,11 @@ def dijkstra(graph,initial):
                                 arrivalTime_actualTrip=None
 
 
+                            ''' 
+                            Si en tiempo de llegada es mayor que el tiempo de comienzo del viaje siguiente, esta combinación
+                            no es válida
 
+                            '''
                             if arrivalTime_actualTrip is not None and arrivalTime_actualTrip<trip_date_start_previous:
                                 trip_date_start_previous=departureTime_actualTrip
 
@@ -358,13 +388,27 @@ def dijkstra(graph,initial):
 
 
 def more_Trips(start_date,start_coordinates,end_coordinates):
-    list_oflist_travelswithTransfer=list()
+    list_oflist_travelswithTransfer=list() #Lista que guarda listas con los viajes encadenados que son solución
 
     filter_departureNodes=filterNodes(start_coordinates,nodeType='S')
     filter_arrivalNodes=filterNodes(end_coordinates,nodeType='S')
    
+    '''
+    Lista de los viajes guardados en la BD que cumplen:
+        - Su fecha de inicio está dentro del día que el usuario ha marcado.
+
+    '''
     trips=Trip.objects.all().filter(departureDate__year=start_date.year,departureDate__month=start_date.month,departureDate__day=start_date.day)
 
+
+    '''
+    Relleno la lista de arcos del grafo.
+    Cada arco tiene la siguiente estructura, es una lista con:
+        1)Código del nodo de partida
+        2)Código del nodo de destino
+        3)Id del viaje
+        4)Precio del viaje 
+    '''
     list_edges=list()
 
     for trip in trips:
@@ -386,29 +430,25 @@ def more_Trips(start_date,start_coordinates,end_coordinates):
     
     dct_ids_price_dates=Convert_listOfList_intoDict(list_edges)
 
+    
+    '''
+    Por cada posible nodo origen:
+        -Ejecutamos dijkstra para encontramos los caminos óptimos.
+        -Conseguimos para cada posible nodo destino una lista de viajes para llegar a el (si es posible).
 
-  
+    '''
     for departureNode in filter_departureNodes:
 
         sol_dijkstra=dijkstra(dct_ids_price_dates,departureNode.code)
 
 
-
         for arrivalNode in filter_arrivalNodes:
             sol_trips=get_list_trips(sol_dijkstra,arrivalNode.code)
 
-            list_oflist_travelswithTransfer.append(sol_trips)
+            firstTrip_node=Trip.objects.all().get(pk=sol_trips[0]).departureNode.code
+            if firstTrip_node==departureNode.code:
+                list_oflist_travelswithTransfer.append(sol_trips)
+            
 
 
     return list_oflist_travelswithTransfer
-
-
-
-
-
-
-    
-
-
-   
-    
