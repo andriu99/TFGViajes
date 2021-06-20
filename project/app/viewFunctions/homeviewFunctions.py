@@ -1,14 +1,9 @@
-from networkx.algorithms.shortest_paths import weighted
-from ..models import Request,Trip,blablaTrip,skyscannerTrip,busOrTrainTrip,Node
+from ..models import Request,Trip,blablaTrip,skyscannerTrip,busOrTrainTrip
 from datetime import timedelta
 from ..otherFunctions.dateFunctions import parseDate_withTimeZone,calculateDuration
 from ..otherFunctions.nodesFunctions import filterNodes
 from django.utils.dateparse import parse_datetime
 from ..funtionsRequest.googleMapsRequests import get_locat_province
-import networkx as nx
-import matplotlib.pyplot as plt    
-from datetime import datetime as dt
-import random
 
 
 def saveBlablacarTrips(start_coordinates,end_coordinates,start_date_local):
@@ -197,199 +192,9 @@ def save_train_bus_trips(start_coordinates,end_coordinates,start_date_local):
 
 
 
-# def dijkstra(graph,dict_times):   
-
-#     initial = 'B'
-#     dict_arrivalTime_node={}
-
-#     path = {}
-
-#     adj_node = {}
-
-#     queue = []
-
-
-#     for node in graph:
-#         path[node] = float("inf")
-#         adj_node[node] = None
-#         dict_arrivalTime_node[node]=None
-#         queue.append(node)
-        
-#     path[initial] = 0
-
-#     while queue:
-#         # find min distance which wasn't marked as current
-#         # print(adj_node)
-#         key_min = queue[0]
-#         min_val = path[key_min]
-#         for n in range(1, len(queue)):
-#             if path[queue[n]] < min_val:
-#                 # current_time=dict_times[]
-#                 key_min = queue[n]  
-#                 min_val = path[key_min]
-#         cur = key_min
-
-#         queue.remove(cur)
-        
-
-#         for i in graph[cur]:
-#             trip_data_end=dict_times[cur][i]
-#             alternate = graph[cur][i] + path[cur]
-#             # print(dict_arrivalTime_node[i])
-#             # print(trip_data_end)
-#             if path[i] > alternate: #and (dict_arrivalTime_node[i] is None or trip_data_end>dict_arrivalTime_node[i]):
-                
-#                 actual_node=cur
-#                 previus=i
-
-#                 is_better=True
-
-#                 last_time=dict_times[cur][previus]
-#                 print('Tiempo inicial')
-#                 print(last_time)
-#                 while True:
-
-
-#                     print(cur,previus)
-#                     previus = actual_node
-#                     actual_node=adj_node[actual_node]
-#                     # print(previus,actual_node)
-
-
-#                     if actual_node is None:
-#                         print("")
-#                         break
-
-#                     time_actual=dict_times[actual_node][previus]
-#                     print(time_actual,actual_node,previus)
-#                     if last_time>time_actual:
-#                         last_time=time_actual
-#                     else:
-#                         print('Es peor')
-#                         print(last_time)
-#                         print(time_actual)
-#                         is_better=False
-#                         break
-                    
-
-#                 print('Fin bucle')
-              
-
-#                 if is_better:
-#                     path[i] = alternate
-#                     adj_node[i] = cur
-#                     dict_arrivalTime_node[i]=trip_data_end
-                    
-
-#                 # print(graph[cur][i])
-                    
-
-#             # else:
-#             #     print('Eooo')
-                
-                
-#     x = 'F'
-#     # print('The path between B to F')
-#     # print(x, end = '<-')
-#     print(adj_node)
-    
-#     print('The path between A to F')
-#     print(x, end = '<-')
-#     while True:
-#         x = adj_node[x]
-#         if x is None:
-#             print("")
-#             break
-#         print(x, end='<-')
-
-
-
-#     for key in (dict_times):
-#         print(key)
-#         print(dict_times[key])
-
-
-
-# def Convert_listOfList_intoDict(tups):
-#     dct_weights=dict()
-#     dct_times=dict()
-#     # num=0
-#     for x,y,element in tups:
-#         if x not in dct_weights.keys():
-#             dct_weights[x]={}
-#             dct_times[x]={}
-
-#         dct_weights[x][y]=element['weight']
-#         # if random.randint(0,100)>50:
-#         #     dct_times[x][y]=dt(2021,6,15,num)
-#         #     num+=1
-#         # else:
-#         dct_times[x][y]=dt(2021,6,15,random.randint(0,23))
-
-
-#     return dct_weights,dct_times
-
-
-# def get_dict_DateTime(dict_edges):
-#     for key in dict_edges.keys():
-#         for element in key:
-#             print(element)
-
-
-            
-# def more_Trips():
-    
-#     DG=nx.DiGraph()
-#     DG.add_nodes_from(['A', 'B', 'C', 'D', 'E', 'F', 'G'])
-#     list_weight=[['B', 'A', 5], ['B', 'D', 1], ['B', 'G', 2], ['A', 'B', 5], ['A', 'D', 3], ['A', 'E', 12], ['A', 'F', 5], ['D', 'B', 1], ['D', 'G', 1], ['D', 'E', 1], ['D', 'A', 3], ['G', 'B', 2], ['G', 'D', 1], ['G', 'C', 2], ['C', 'G', 2], ['C', 'E', 1], ['C', 'F', 16], ['E', 'A', 12], ['E', 'D', 1], ['E', 'C', 1], ['E', 'F', 2], ['F', 'A', 5], ['F', 'E', 2], ['F', 'C', 16]]
-#     # list_time = [i[:] for i in list_weight]
-
-#     # for i in list_time:
-#     #     i[-1]=dt(2021,6,15,random.randint(0, 23))
-
-
-
-
-#     DG.add_weighted_edges_from(list_weight)
-#     # labels = nx.get_edge_attributes(DG,'weight')
-#     # pos = nx.spring_layout(DG)
-
-#     # nx.draw_networkx(DG,
-#     #              node_color="lightblue",
-#     #              edge_color="gray",
-#     #              font_size=24,
-#     #              width=2, with_labels=True, node_size=3500,
-#     #              pos=pos,
-#     # )
-
-
-    
-#     # nx.draw_networkx_edge_labels(DG,pos, edge_labels=labels)
-
-
-#     # plt.show()
-
-  
-
-#     dict_edges,dict_times=Convert_listOfList_intoDict(DG.edges(data=True))
-
-#     # get_dict_DateTime(dict_edges)
-
-
-#     # print(dict_edges)
-#     # print(id(list_time))
-#     # print(id(list_weight))
-#     # print(list_time==list_weight)
-#     # for i in range(0,20):
-#     (dijkstra(dict_edges,dict_times))
-
-
-
-
-
 def Convert_listOfList_intoDict(tups):
     dct_ids_price_dates=dict()
-    # dct_times=dict()
+
     for x,y,trip_id,trip_price in tups:
         
         if x not in dct_ids_price_dates.keys():
@@ -403,9 +208,6 @@ def Convert_listOfList_intoDict(tups):
         dct_ids_price_dates[x][y][trip_id].append(Trip.objects.get(pk=trip_id).departureDate)
         dct_ids_price_dates[x][y][trip_id].append(Trip.objects.get(pk=trip_id).arrivalDate)
 
-
-
-  
 
 
     return dct_ids_price_dates
@@ -426,22 +228,18 @@ def init_dijkstra(path,adj_node,queue,node):
 
 
 def get_list_trips(solution_dijkstra,code_arrivalNode):
-    # print('The path between A to F')
-    # print(code_arrivalNode, end = '<-')
+  
 
     set_trips_ids=list()
     x=code_arrivalNode
     set_trips_ids.append(solution_dijkstra[x][1])
-    print(x)
     while True:
         x = solution_dijkstra[x][0]
        
         if x is None:
-            # print("")
             break
         set_trips_ids.append(solution_dijkstra[x][1])
         
-        # print(x, end='<-')
     set_trips_ids.remove(None)    
 
 
@@ -488,35 +286,23 @@ def dijkstra(graph,initial):
 
         cur = key_min
         queue.remove(cur)
-        print("Current "+cur)
+        # print("Current "+cur)
 
         if cur in graph.keys():
             for i in graph[cur]:
-                print(i)
+                # print(i)
                 #Elijo de todos los viaje entre el nodo actual y el nodo i el más conveniente
 
                 #Primero ordeno los viajes según la clave (precio/duration)
                 sorted_trips={k: v for k, v in sorted(graph[cur][i].items(), key=lambda item: item[1])}
                 for trip_id in sorted_trips:
-                    print("     Trip_id "+str(trip_id))
+                    # print("     Trip_id "+str(trip_id))
                     trip_price_or_duration=sorted_trips[trip_id][0]
 
                     alternate=trip_price_or_duration+path[cur]
-                    # print(path[cur])
-                    # print(cur)
-                    # # print(cur)
-                     
-
-
-                    
-                    # print('Price: '+str(trip_price_or_duration))
-                    # print("Alternativa "+str(alternate))
-                    # print("path[i]  "+str(path[i]))
-
-                    # print("Alternativa "+str(alternate))
-                    # print("Camino "+str(path[i]))
+                   
                     if alternate<path[i]: #Si la alternativa es mejor a la actual
-                        print("         Mejor que el actual en precio ")
+                        # print("         Mejor que el actual en precio ")
 
 
                         '''
@@ -526,7 +312,7 @@ def dijkstra(graph,initial):
                         Recorremos los nodos desde el destino al origen recursivamente.
                         '''
                         trip_date_start_previous=sorted_trips[trip_id][1]
-                        print("             Fecha inicio: "+str(trip_date_start_previous))
+                        # print("             Fecha inicio: "+str(trip_date_start_previous))
                         
                         actual_node=cur
                         previous=i
@@ -549,8 +335,8 @@ def dijkstra(graph,initial):
                             else:
                                 arrivalTime_actualTrip=None
 
-                            print("             Arrival time actual trip: "+str(arrivalTime_actualTrip))
-                            print("             Trip date start previous: "+str(trip_date_start_previous))
+                            # print("             Arrival time actual trip: "+str(arrivalTime_actualTrip))
+                            # print("             Trip date start previous: "+str(trip_date_start_previous))
 
 
                             if arrivalTime_actualTrip is not None and arrivalTime_actualTrip<trip_date_start_previous:
@@ -561,11 +347,8 @@ def dijkstra(graph,initial):
                                 break
 
                         if is_solution:
-                            print('             Es solucion')
-                            # print(i)
-                            # print(cur)
-                            # print(trip_id)
-                            path[i] = alternate
+                            #print('             Es solucion')
+                           
                             adj_node[i] = [cur,trip_id]
                             break
                             
@@ -573,99 +356,18 @@ def dijkstra(graph,initial):
         elif initial==cur:
             break
         
-    # x = 'F'
-    # print('The path between A to F')
-    # print(x, end = '<-')
-
-    # set_trips_ids=list()
-    # while True:
-    #     x = adj_node[x][0]
-    #     set_trips_ids.append(adj_node[x][1])
-    #     if x is None:
-    #         print("")
-    #         break
-    #     print(x, end='<-')
+ 
     return adj_node
 
             
 
-                    
-
-'''
-            trip_data_end=dict_times[cur][i]
-            alternate = graph[cur][i] + path[cur]
-            # print(dict_arrivalTime_node[i])
-            # print(trip_data_end)
-            if path[i] > alternate: #and (dict_arrivalTime_node[i] is None or trip_data_end>dict_arrivalTime_node[i]):
-                
-                actual_node=cur
-                previus=i
-
-                is_better=True
-
-                last_time=dict_times[cur][previus]
-                print('Tiempo inicial')
-                print(last_time)
-                while True:
-
-
-                    print(cur,previus)
-                    previus = actual_node
-                    actual_node=adj_node[actual_node]
-                    # print(previus,actual_node)
-
-
-                    if actual_node is None:
-                        print("")
-                        break
-
-                    time_actual=dict_times[actual_node][previus]
-                    print(time_actual,actual_node,previus)
-                    if last_time>time_actual:
-                        last_time=time_actual
-                    else:
-                        print('Es peor')
-                        print(last_time)
-                        print(time_actual)
-                        is_better=False
-                        break
-                    
-
-                print('Fin bucle')
-              
-
-                if is_better:
-                    path[i] = alternate
-                    adj_node[i] = cur
-                    dict_arrivalTime_node[i]=trip_data_end
-                    
-
-                
-                
-                
-    x = 'F'
-    # print('The path between B to F')
-    # print(x, end = '<-')
-    print(adj_node)
-    
-    print('The path between A to F')
-    print(x, end = '<-')
-    while True:
-        x = adj_node[x]
-        if x is None:
-            print("")
-            break
-        print(x, end='<-')
-'''
 
 def more_Trips(start_date,start_coordinates,end_coordinates):
     
 
     filter_departureNodes=filterNodes(start_coordinates,nodeType='S')
     filter_arrivalNodes=filterNodes(end_coordinates,nodeType='S')
-    # for node in filter_arrivalNodes:
-    #     print(node.code)
-    #     print(node.name)
+  
 
     trips=Trip.objects.all().filter(departureDate__year=start_date.year,departureDate__month=start_date.month,departureDate__day=start_date.day)
 
@@ -692,10 +394,7 @@ def more_Trips(start_date,start_coordinates,end_coordinates):
     dct_ids_price_dates=Convert_listOfList_intoDict(list_edges)
 
 
-    # for i in dct_ids_price_dates:
-    #     print(i)
-    # print(dct_ids_price_dates)
-    # print(dct_ids_price_dates['6627'])
+  
     for departureNode in filter_departureNodes:
 
         sol_dijkstra=dijkstra(dct_ids_price_dates,departureNode.code)
@@ -709,29 +408,6 @@ def more_Trips(start_date,start_coordinates,end_coordinates):
                 print(sol_trips)
 
 
-
-
-
-    #print(dct_ids_price_dates)
-
-    # for trip_info in (dct_ids_price_dates['22676']['6615']):
-    #     print(dct_ids_price_dates['22676']['6615'][trip_info][2])
-
-    
-    # for i in (dct_ids_price_dates['22676']):
-    #     print('COn '+i)
-    #     aux={k: v for k, v in sorted(dct_ids_price_dates['22676'][i].items(), key=lambda item: item[1])}
-    #     for trip_id in aux:
-    #         print(aux[trip_id][0])
-    #         print(aux[trip_id][1])
-    #         print(aux[trip_id][2])
-
-
-
-
-    # print(len(dct_ids_price_dates['22676']))
-
-    # dijkstra(dct_ids_price_dates)
 
 
    
