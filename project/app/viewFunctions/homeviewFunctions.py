@@ -94,9 +94,10 @@ Guardo los viajes en la BD, y además los incluyo en un array para saber cuáles
 '''
 def save_tripsInfo_DepArriNodes(filter_departureNodes,filter_arrivalNodes,start_date_local,getBusTrainTrips,set_bustrain_Trips=None):
     
-    for departureNode in filter_departureNodes:
-        for arrivalNode in filter_arrivalNodes:
-            save_busTrainTrip(departureNode,arrivalNode,start_date_local,getBusTrainTrips,set_bustrain_Trips)
+    for departure_Node in filter_departureNodes:
+        for arrival_Node in filter_arrivalNodes:
+            trips=Trip.objects.all().filter(departureNode__code=departure_Node.code).filter(arrival_Node__code=arrival_Node.code)
+            save_busTrainTrip(departure_Node,arrival_Node,start_date_local,getBusTrainTrips,set_bustrain_Trips)
 
                         
 def save_busTrainTrip(departureNode,arrivalNode,start_date_local,getBusTrainTrips,set_bustrain_Trips=None):
@@ -167,13 +168,18 @@ def get_systemOfTransport_dict():
 def save_train_bus_trips(start_coordinates,end_coordinates,start_date_local):
 
     locatO,provO=get_locat_province(start_coordinates)
-    locatD,provD=get_locat_province(end_coordinates)
+    locatD,provO=get_locat_province(end_coordinates)
+     
 
-    filter_departureNodes=filterNodes(start_coordinates,nodeType='S')
-    filter_arrivalNodes=filterNodes(end_coordinates,nodeType='S')
+    filter_departureNodes=filterNodes(start_coordinates,nodeType='S',location=locatO,province=provO)
+    filter_arrivalNodes=filterNodes(end_coordinates,nodeType='S',location=locatD,province=locatD)
     
+    '''
+    Buscamos en la caché de la BD:
+        -Viajes que comiencen en el día marcado por el usuario y que su nodo de partida tenga la localización igual a la 
+        de partida del viaje, e igual para el de llegada.
 
-    #Buscamos en la caché de la BD:
+    '''
     set_bustrain_Trips=set()
     for bus_trainTrip in busOrTrainTrip.objects.all():
         actual_trip=bus_trainTrip.trip

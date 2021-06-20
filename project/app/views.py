@@ -53,7 +53,7 @@ def home(request):
             #     exist_busTrainTrip=False
             #     messages.error(request,'Error al procesar los viajes en bus y tren')
 
-                
+            # list_list_travels_with_transfer=list()
             list_list_travels_with_transfer=more_Trips(start_date,start_coordinates,end_coordinates)
 
 
