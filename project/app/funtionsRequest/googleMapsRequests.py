@@ -3,6 +3,7 @@ from ..models import RESTApi
 import time
 import googlemaps as gmaps
 from pytz import timezone
+import timezonefinder
 
 
 def get_province_muni_json(response_json):
@@ -32,15 +33,18 @@ def getTime_between_coordinates(coordinates_origin,coordinates_destination):
 
 
 def parseDate_withTimeZone(date_date,lat,lon):
-    ClientGMaps=gmaps.Client(RESTApi.objects.get(name='googleMapsRESTApi').APIKey)
+    # ClientGMaps=gmaps.Client(RESTApi.objects.get(name='googleMapsRESTApi').APIKey)
 
-    dict_location={
-        "lat" : lat,
-        "lng" : lon,
+    # dict_location={
+    #     "lat" : lat,
+    #     "lng" : lon,
   
-    }
-    dict_timezone=ClientGMaps.timezone(dict_location)
-    date_date=date_date.astimezone(timezone(dict_timezone['timeZoneId']))
+    # }
+    # dict_timezone=ClientGMaps.timezone(dict_location)
+    tf = timezonefinder.TimezoneFinder()
+
+    timezone_str = tf.certain_timezone_at(lat=lat, lng=lon)
+    date_date=date_date.astimezone(timezone(timezone_str))
     return date_date
 
 

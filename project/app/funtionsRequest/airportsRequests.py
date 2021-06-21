@@ -1,5 +1,6 @@
 import numpy as np
-
+import time
+import random
 def getAirportsData(response):
   geoCatalogJson=response.json()
   for continent in geoCatalogJson['Continents']:
@@ -22,25 +23,38 @@ def getAirportID(response):
     return lugares[0]['PlaceId']
 
 def getSessionKey(response):
-    respuestaDict=response.__dict__ #Obtengo el diccionario para posteriormente encontrar la SessionKey
-    CadenaConSessionKey=respuestaDict['headers']['Location']
-    posComienzoSessionKey = np.where(np.array(list(CadenaConSessionKey)) == '/')[0][-1]+1 #Encuentra la posición del último / de la cadena
-    SessionKey=CadenaConSessionKey[posComienzoSessionKey:] #La Session Key será desde la última / hasta el final
 
+    x=3
+    while x>0:
+        try:
+            respuestaDict=response.__dict__ #Obtengo el diccionario para posteriormente encontrar la SessionKey
+            CadenaConSessionKey=respuestaDict['headers']['Location']
+            posComienzoSessionKey = np.where(np.array(list(CadenaConSessionKey)) == '/')[0][-1]+1 #Encuentra la posición del último / de la cadena
+            SessionKey=CadenaConSessionKey[posComienzoSessionKey:] #La Session Key será desde la última / hasta el final
+            break
+        except:
+            time.sleep(random.randint(0,10))
+
+        x-=1
     return SessionKey
 
 def getFlightInformation(response):
-    Json=response.json()
-    ItinerariosJson=Json['Itineraries']
-    DetailsJson=Json['Legs']
-    AirlinesJson=Json['Carriers']
-    
-    for itinerary,details,airline in zip(ItinerariosJson,DetailsJson,AirlinesJson):
-        Precio=itinerary['PricingOptions'][0]['Price']
-        UrlPago=itinerary['PricingOptions'][0]['DeeplinkUrl']
-        FechaSalida=details['Departure']
-        FechaLlegada=details['Arrival']
-        Duracion=details['Duration']
-        AirlineName=airline['Name']
-        AirlineUrlImage=airline['ImageUrl']
-        yield Precio,UrlPago,FechaSalida,FechaLlegada,Duracion,AirlineName,AirlineUrlImage
+    try:
+
+        Json=response.json()
+        ItinerariosJson=Json['Itineraries']
+        DetailsJson=Json['Legs']
+        AirlinesJson=Json['Carriers']
+        
+        for itinerary,details,airline in zip(ItinerariosJson,DetailsJson,AirlinesJson):
+            Precio=itinerary['PricingOptions'][0]['Price']
+            UrlPago=itinerary['PricingOptions'][0]['DeeplinkUrl']
+            FechaSalida=details['Departure']
+            FechaLlegada=details['Arrival']
+            Duracion=details['Duration']
+            AirlineName=airline['Name']
+            AirlineUrlImage=airline['ImageUrl']
+            yield Precio,UrlPago,FechaSalida,FechaLlegada,Duracion,AirlineName,AirlineUrlImage
+
+    except:
+        return None

@@ -60,31 +60,36 @@ def saveSkyscannerFlights(start_coordinates,end_coordinates,start_date_local):
     
     outboundDate='{y}-{m}-{d}'.format(y=str(start_date_local.year),m=str(start_date_local.month).zfill(2),d=str(start_date_local.day).zfill(2))
     
-    filter_DepartureNodes=filterNodes(start_coordinates)
-    filter_ArrivalNodes=filterNodes(end_coordinates)
+    filter_DepartureNodes=filterNodes(start_coordinates)[0:2]
+    filter_ArrivalNodes=filterNodes(end_coordinates)[0:2]
+    print(filter_DepartureNodes)
+    print(filter_ArrivalNodes)
     for departureNode in filter_DepartureNodes:
         for arrivalNode in filter_ArrivalNodes:
             paramsList=['Economy','ES','EUR','es-ES','iata',departureNode.code,arrivalNode.code,outboundDate,1,0,0,token]
             SessionKey=getSessionKeySkyscanner.executeFunction(paramsList)
+            
             getFlightsInformationSkyscanner.PartToaddToBaseUrl+=SessionKey
             results=getFlightsInformationSkyscanner.executeFunction([0,token])
 
-
-            urlList=(getFlightsInformationSkyscanner.PartToaddToBaseUrl.split('/'))
-            urlList.pop()
-            getFlightsInformationSkyscanner.PartToaddToBaseUrl="/".join(urlList)
+            if results is not None:
 
 
-            for price,urlPay,departure_date_str,arrival_date_str,duration,airlineName,airlineUrlImage in results:
-                startData_date = parse_datetime(departure_date_str)
-                endData_date = parse_datetime(arrival_date_str)
-                
+                urlList=(getFlightsInformationSkyscanner.PartToaddToBaseUrl.split('/'))
+                urlList.pop()
+                getFlightsInformationSkyscanner.PartToaddToBaseUrl="/".join(urlList)
 
-                new_trip=Trip(departureNode=departureNode,arrivalNode=arrivalNode,departureDate=startData_date,arrivalDate=endData_date,duration=duration*60,price=float(price))
-                new_trip.save()
-                set_trips_skys.add(new_trip.pk)
-                new_skyscannerTrip=skyscannerTrip(urlPay=urlPay,airlineName=airlineName,airlineUrlImage=airlineUrlImage,trip=new_trip)
-                new_skyscannerTrip.save()
+
+                for price,urlPay,departure_date_str,arrival_date_str,duration,airlineName,airlineUrlImage in results:
+                    startData_date = parse_datetime(departure_date_str)
+                    endData_date = parse_datetime(arrival_date_str)
+                    
+
+                    new_trip=Trip(departureNode=departureNode,arrivalNode=arrivalNode,departureDate=startData_date,arrivalDate=endData_date,duration=duration*60,price=float(price))
+                    new_trip.save()
+                    set_trips_skys.add(new_trip.pk)
+                    new_skyscannerTrip=skyscannerTrip(urlPay=urlPay,airlineName=airlineName,airlineUrlImage=airlineUrlImage,trip=new_trip)
+                    new_skyscannerTrip.save()
 
     return Trip.objects.filter(id__in=set_trips_skys)
 
