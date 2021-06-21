@@ -46,31 +46,30 @@ def home(request):
             
             filter_departureNodes=filterNodes(start_coordinates,nodeType='S',location=locatO,province=provO)
             filter_arrivalNodes=filterNodes(end_coordinates,nodeType='S',location=locatD,province=provD)
-            blablaTrips=saveBlablacarTrips(start_coordinates,end_coordinates,start_date)
 
-            try:
-                blablaTrips=saveBlablacarTrips(start_coordinates,end_coordinates,start_date)
-            except:
-                exists_blablaTrip=False
-                messages.error(request,'Error al procesar los viajes en blablacar')
+            # try:
+            #     blablaTrips=saveBlablacarTrips(start_coordinates,end_coordinates,start_date)
+            # except:
+            #     exists_blablaTrip=False
+            #     messages.error(request,'Error al procesar los viajes en blablacar')
             
 
 
-            try:
-                skyscannerTrips=saveSkyscannerFlights(start_coordinates,end_coordinates,start_date)
-            except:
-                exist_skyscannerTrip=False
-                messages.error(request,'Error al procesar los viajes en skyscanner')
+            # try:
+            #     skyscannerTrips=saveSkyscannerFlights(start_coordinates,end_coordinates,start_date)
+            # except:
+            #     exist_skyscannerTrip=False
+            #     messages.error(request,'Error al procesar los viajes en skyscanner')
 
 
-            try:
-                trips_busTrain= save_train_bus_trips(filter_departureNodes,filter_arrivalNodes,locatO,locatD,start_date)
+            # try:
+            #     trips_busTrain= save_train_bus_trips(filter_departureNodes,filter_arrivalNodes,locatO,locatD,start_date)
 
-            except:
-                exist_busTrainTrip=False
-                messages.error(request,'Error al procesar los viajes en bus y tren')
+            # except:
+            #     exist_busTrainTrip=False
+            #     messages.error(request,'Error al procesar los viajes en bus y tren')
 
-            # list_list_travels_with_transfer=more_Trips(start_date,filter_departureNodes,filter_arrivalNodes)
+            list_list_travels_with_transfer=more_Trips(start_date,filter_departureNodes,filter_arrivalNodes)
 
 
 

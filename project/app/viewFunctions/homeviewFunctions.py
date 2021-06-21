@@ -61,9 +61,8 @@ def saveSkyscannerFlights(start_coordinates,end_coordinates,start_date_local):
     outboundDate='{y}-{m}-{d}'.format(y=str(start_date_local.year),m=str(start_date_local.month).zfill(2),d=str(start_date_local.day).zfill(2))
     
     filter_DepartureNodes=filterNodes(start_coordinates)[0:2]
-    filter_ArrivalNodes=filterNodes(end_coordinates)[0:2]
-    print(filter_DepartureNodes)
-    print(filter_ArrivalNodes)
+    filter_ArrivalNodes=filterNodes(end_coordinates)[0:3]
+    
     for departureNode in filter_DepartureNodes:
         for arrivalNode in filter_ArrivalNodes:
             paramsList=['Economy','ES','EUR','es-ES','iata',departureNode.code,arrivalNode.code,outboundDate,1,0,0,token]
@@ -258,10 +257,12 @@ Vamos almacenando los viajes recursivamente.
 '''
 def get_list_trips(solution_dijkstra,code_arrivalNode):
 
+
+
     list_trips_ids=list()
     x=code_arrivalNode
     while True:
-        if solution_dijkstra[x][1] is None:
+        if x not in solution_dijkstra or solution_dijkstra[x][1] is None:
             break 
 
         list_trips_ids.append(Trip.objects.get(pk=solution_dijkstra[x][1]))
@@ -464,11 +465,12 @@ def more_Trips(start_date,filter_departureNodes,filter_arrivalNodes):
 
         for arrivalNode in filter_arrivalNodes:
             sol_trips=get_list_trips(sol_dijkstra,arrivalNode.code)
+            
+            if len(sol_trips)>1:
 
-
-            firstTrip_node=sol_trips[0].departureNode.code
-            if firstTrip_node==departureNode.code:
-                list_oflist_travelswithTransfer_id.append(sol_trips)
+                firstTrip_node=sol_trips[0].departureNode.code
+                if firstTrip_node==departureNode.code:
+                    list_oflist_travelswithTransfer_id.append(sol_trips)
             
 
 

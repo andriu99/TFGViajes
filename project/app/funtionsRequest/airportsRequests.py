@@ -1,6 +1,6 @@
 import numpy as np
 import time
-import random
+
 def getAirportsData(response):
   geoCatalogJson=response.json()
   for continent in geoCatalogJson['Continents']:
@@ -24,7 +24,7 @@ def getAirportID(response):
 
 def getSessionKey(response):
 
-    x=3
+    x=2
     while x>0:
         try:
             respuestaDict=response.__dict__ #Obtengo el diccionario para posteriormente encontrar la SessionKey
@@ -33,7 +33,7 @@ def getSessionKey(response):
             SessionKey=CadenaConSessionKey[posComienzoSessionKey:] #La Session Key será desde la última / hasta el final
             break
         except:
-            time.sleep(random.randint(0,10))
+            time.sleep(1)
 
         x-=1
     return SessionKey
