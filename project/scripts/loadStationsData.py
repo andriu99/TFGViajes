@@ -2,9 +2,9 @@
 
 import csv
 import urllib.parse
-from ..app.models import Node,Request
+from app.models import Node,Request
 import os
-from ..app.funtionsRequest.googleMapsRequests import get_locat_province
+from app.funtionsRequest.googleMapsRequests import get_locat_province
 
 def run():
     workpath = os.path.dirname(os.path.abspath(__file__)) #Returns the Path your .py file is in
@@ -31,9 +31,10 @@ def run():
                     latitude=jsonEstaciones['stations'][0]['latitude']
                     longitude=jsonEstaciones['stations'][0]['longitude']
                 
-                location,province=get_locat_province(str(latitude)+str(longitude))
+                address,location,province=get_locat_province(str(latitude)+','+str(longitude),True)
+                
 
-                new_node=Node(name=name,code=Id,latitude=float(latitude),longitude=float(longitude),nodeType='S',location=location,province=province)
+                new_node=Node(address=address,name=name,code=Id,latitude=float(latitude),longitude=float(longitude),nodeType='S',location=location,province=province)
                 new_node.save()
             except:
                 print("Error en: "+fila[1])

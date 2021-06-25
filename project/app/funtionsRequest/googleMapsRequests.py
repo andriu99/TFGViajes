@@ -6,7 +6,7 @@ from pytz import timezone
 import timezonefinder
 
 
-def get_province_muni_json(response_json):
+def get_province_muni_json(response_json,required_address=False):
    
     directionData=response_json[0]['address_components']
 
@@ -20,6 +20,8 @@ def get_province_muni_json(response_json):
         if typesList.__contains__('administrative_area_level_2'):
             province=i['long_name']
     
+    if required_address:
+        return response_json[0]['formatted_address'],location,province
     return location,province
 
 
@@ -33,14 +35,7 @@ def getTime_between_coordinates(coordinates_origin,coordinates_destination):
 
 
 def parseDate_withTimeZone(date_date,lat,lon):
-    # ClientGMaps=gmaps.Client(RESTApi.objects.get(name='googleMapsRESTApi').APIKey)
-
-    # dict_location={
-    #     "lat" : lat,
-    #     "lng" : lon,
-  
-    # }
-    # dict_timezone=ClientGMaps.timezone(dict_location)
+   
     tf = timezonefinder.TimezoneFinder()
 
     timezone_str = tf.certain_timezone_at(lat=lat, lng=lon)
@@ -49,16 +44,26 @@ def parseDate_withTimeZone(date_date,lat,lon):
 
 
 
-def get_locat_province(coordinates):
+def get_locat_province(coordinates,required_address=False):
     
     ClientGMaps=gmaps.Client(RESTApi.objects.get(name='googleMapsRESTApi').APIKey)
     x=3
     while x>0:
         try:
-            location,province=get_province_muni_json(ClientGMaps.reverse_geocode(coordinates))
-            break
+            if required_address:
+               
+                address,location,province=get_province_muni_json(ClientGMaps.reverse_geocode(coordinates),required_address)
+                return address,location,province
+
+            else:
+                location,province=get_province_muni_json(ClientGMaps.reverse_geocode(coordinates),required_address)
+                return location,province
+            
         except:
             time.sleep(0.02)
         x-=1
 
-    return location,province
+    if required_address:
+        return 'Unknown','Unknown','Unknown'
+
+    return 'Unknown','Unknown'

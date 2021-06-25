@@ -17,6 +17,7 @@ class userRequest(forms.Form):
     origin_address=forms.CharField(max_length=200,widget=forms.TextInput(attrs={'class':'data_aux data','id':'origin_address'}))
     destination_address=forms.CharField(max_length=200,widget=forms.TextInput(attrs={'class':'data_aux data','id':'destination_address'}))
 
+
     date=forms.DateField(widget=DateInput(attrs={'class':'data_aux data','id':'data_id'}))
 
     maxPrice=forms.FloatField(label='Max price:',widget=forms.NumberInput(attrs={'class':'data_aux data order','step': '0.1'}),required=False)

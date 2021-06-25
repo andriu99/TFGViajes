@@ -1,20 +1,25 @@
-{% extends 'app/layout.html' %}
+ {% extends 'app/layout.html' %} {% block moovit %}
+
+
+<script>
+    (function myfunction(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        js = d.createElement(s);
+        js.id = id;
+        js.src = "https://widgets.moovit.com/wtp/en ";
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'moovit-jsw'));
+</script>
 {% load static %}
-{% block content %}
+
+<script src="{% static 'moovit_script.js'%}"></script>
+
+<div class="mv-wtp" id="mapa_moovit" data-lang="en">
+
+    <script>
+        set_moovitmap();
+    </script>
 
 
-
-<div id="google_map" style="width:500px; height: 500px;"></div>
-
-
-
-
-{% endblock %}
-
-
-{% block extend_footer %}
-
-
-
-
+</div>
 {% endblock %}

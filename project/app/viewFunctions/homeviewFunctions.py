@@ -20,7 +20,6 @@ def saveBlablacarTrips(start_coordinates,end_coordinates,start_date_local):
 
     ) in iterableBlablaCar:
 
-
         departureDate_date=parse_datetime(startData_str)
         arrivalDate_date=parse_datetime(endData_str)
 
@@ -62,6 +61,9 @@ def saveSkyscannerFlights(start_coordinates,end_coordinates,start_date_local):
     
     filter_DepartureNodes=filterNodes(start_coordinates)[0:2]
     filter_ArrivalNodes=filterNodes(end_coordinates)[0:3]
+
+    if not filter_DepartureNodes.exists() or not filter_ArrivalNodes.exists():
+        return Trip.objects.none()
     
     for departureNode in filter_DepartureNodes:
         for arrivalNode in filter_ArrivalNodes:
@@ -100,7 +102,7 @@ def save_tripsInfo_DepArriNodes(filter_departureNodes,filter_arrivalNodes,start_
     
     for departure_Node in filter_departureNodes:
         for arrival_Node in filter_arrivalNodes:
-
+           
             '''
             Solamente buscamos nuevos viajes si no tenemos ningún viaje entre esas dos estaciones en esa fecha.
             Encontramos los viajes entre departure_Node y arrival_NOde en la fecha marcada por el usuario, si no hay buscamos en la api rest.
@@ -113,7 +115,6 @@ def save_tripsInfo_DepArriNodes(filter_departureNodes,filter_arrivalNodes,start_
                         
 def save_busTrainTrip(departureNode,arrivalNode,start_date_local,getBusTrainTrips,set_bustrain_Trips=None):
     searchDict=get_SearchDict()
-
     searchDict['departure_station_id']=int(departureNode.code)
     searchDict['arrival_station_id']=int(arrivalNode.code)
     searchDict['departure_date']=start_date_local.isoformat()
@@ -178,13 +179,6 @@ def get_systemOfTransport_dict():
 
 def save_train_bus_trips(filter_departureNodes,filter_arrivalNodes,locatO,locatD,start_date_local):
 
-    # locatO,provO=get_locat_province(start_coordinates)
-    # locatD,provD=get_locat_province(end_coordinates)
-     
-
-    # filter_departureNodes=filterNodes(start_coordinates,nodeType='S',location=locatO,province=provO)
-    # filter_arrivalNodes=filterNodes(end_coordinates,nodeType='S',location=locatD,province=provD)
-    
     '''
     Buscamos en la caché de la BD:
         -Viajes que comiencen en el día marcado por el usuario y que su nodo de partida tenga la localización igual a la 
@@ -204,7 +198,7 @@ def save_train_bus_trips(filter_departureNodes,filter_arrivalNodes,locatO,locatD
         
       
         save_tripsInfo_DepArriNodes(filter_departureNodes,filter_arrivalNodes,start_date_local,getBusTrainTrips,set_bustrain_Trips)
-    
+   
     query_set_bustrain_Trips=Trip.objects.filter(id__in=set_bustrain_Trips)
     return query_set_bustrain_Trips
 
@@ -361,6 +355,8 @@ def dijkstra(graph,initial):
                         previous=i
 
                         is_solution=True
+                        # print("Inicio")
+                        # print(str(trip_id))
                         while True:
                             previous = actual_node
                             actual_node=adj_node[actual_node][0]
@@ -369,10 +365,13 @@ def dijkstra(graph,initial):
                                 break
                             
                             actual_trip_id=adj_node[previous][1] #Id del viaje que une actual_node con previous
+                            # print("     Previous "+str(previous))
+                            # print("     Actual "+str(actual_node))
+                            # print("     actual_trip_id "+str(actual_trip_id))
 
                             if actual_trip_id is not None:
-                                departureTime_actualTrip=graph[actual_node][previous][actual_trip_id][0]
-                                arrivalTime_actualTrip=graph[actual_node][previous][actual_trip_id][1]
+                                departureTime_actualTrip=graph[actual_node][previous][actual_trip_id][1]
+                                arrivalTime_actualTrip=graph[actual_node][previous][actual_trip_id][2]
                             else:
                                 arrivalTime_actualTrip=None
 
@@ -382,13 +381,21 @@ def dijkstra(graph,initial):
                             no es válida
 
                             '''
+                            # print(graph[actual_node][previous][actual_trip_id])
+                            # print(departureTime_actualTrip)
+                            # print(arrivalTime_actualTrip)
+                            # print(trip_date_start_previous)
                             if arrivalTime_actualTrip is not None and arrivalTime_actualTrip<trip_date_start_previous:
                                 trip_date_start_previous=departureTime_actualTrip
+                                # print('Adecuado')
 
                             else:
+                                # print('No Adecuado')
+
                                 is_solution=False
                                 break
-
+                        
+                        # print('Fin')
                         if is_solution:
                             
                             path[i] = alternate
@@ -411,8 +418,7 @@ Búsqueda de viajes con transbordos.
 def more_Trips(start_date,filter_departureNodes,filter_arrivalNodes):
     list_oflist_travelswithTransfer_id=list() #Lista que guarda listas con los viajes encadenados que son solución
 
-    # filter_departureNodes=filterNodes(start_coordinates,nodeType='S')
-    # filter_arrivalNodes=filterNodes(end_coordinates,nodeType='S')
+ 
    
     '''
     Lista de los viajes guardados en la BD que cumplen:

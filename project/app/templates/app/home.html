@@ -77,7 +77,7 @@
 
         {% load static %}
         <script src="{% static 'google_maps.js'%}"></script>
-        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDwt6CynIHH3UzbX1TLVP2n7__088CprNM&libraries=places&callback=init_autocomplete_map">
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAi0WZL0uYN3vT__dfLObTB67XAaFRUIY4&libraries=places&callback=init_autocomplete_map">
         </script>
 
 
@@ -93,12 +93,21 @@
                     <th>Precio</th>
                     <th>Link al viaje</th>
                 </tr>
+
                 {% for blablaTrip in blablaTrips %}
+
+                <!-- <tr onclick="print_moovitmap(document.getElementById('origin_address').value,'{{blablaTrip.blablaTrip.departureAddress}}',document.getElementById('lat_Origin').value,document.getElementById('lon_Origin').value);"> -->
                 <tr>
-                    <td>{{blablaTrip.departureDate|time:"H:i"}}</td>
-                    <td>{{blablaTrip.arrivalDate|time:"H:i"}}</td>
+                    <td onclick="print_moovitmap(document.getElementById('origin_address').value,'{{blablaTrip.blablaTrip.departureAddress}}',document.getElementById('lat_Origin').value,document.getElementById('lon_Origin').value);">{{blablaTrip.departureDate|time:"H:i"}}</td>
+                    <td onclick="print_moovitmap('{{blablaTrip.blablaTrip.arrivalAddress}}',document.getElementById('destination_address').value,document.getElementById('lat_Dest').value,document.getElementById('lon_Dest').value);">{{blablaTrip.arrivalDate|time:"H:i"}}</td>
                     <td>{{blablaTrip.price}}</td>
-                    <td><a href={{blablaTrip.blablaTrip.link}} target="_blank">{{blablaTrip.blablaTrip.link}}</a></td>
+                    <!-- <td onclick="window.open('{{blablaTrip.blablaTrip.link}}', '_blank')" target="_blank">{{blablaTrip.blablaTrip.link}}</td> -->
+                    <td onclick="window.open('{{blablaTrip.blablaTrip.link}}', '_blank')" target="_blank">{{blablaTrip.blablaTrip.link}}</td>
+
+
+                    <script src="{% static 'moovit_script.js'%}"></script>
+
+
                 </tr>
 
                 {% endfor %}
@@ -125,24 +134,26 @@
                 <tr>
                     <td>{{skyscannerTrip.departureDate|time:"H:i"}}</td>
                     <td>{{skyscannerTrip.arrivalDate|time:"H:i"}}</td>
-                    <td>{{skyscannerTrip.price}}</td>
+                    <td><a href="{{skyscannerTrip.skyscannerTrip.urlPay}}" target="_blank">{{skyscannerTrip.price}}</a></td>
 
                     <td>{{skyscannerTrip.skyscannerTrip.airlineName}}</td>
-                    <td>{{skyscannerTrip.departureNode.name}}</td>
-                    <td>{{skyscannerTrip.arrivalNode.name}}</td>
+                    <td onclick="print_moovitmap(document.getElementById('origin_address').value,'{{skyscannerTrip.departureNode.address}}',document.getElementById('lat_Origin').value,document.getElementById('lon_Origin').value);">{{skyscannerTrip.departureNode.name}}</td>
+                    <td onclick="print_moovitmap('{{skyscannerTrip.arrivalNode.address}}',document.getElementById('destination_address').value,document.getElementById('lat_Dest').value,document.getElementById('lon_Dest').value);">{{skyscannerTrip.arrivalNode.name}}</td>
+                    <script src="{% static 'moovit_script.js'%}"></script>
+
                 </tr>
                 {% endfor %}
 
             </table>
         </div>
         {% endif %} {% if busTrips %}
-        <div class="trips-result-bus">
+        <div class="trips-result-bus ">
 
 
-            <div class="titles">
+            <div class="titles ">
                 <h2>Lista de viajes en bus</h2>
             </div>
-            <table class="trips">
+            <table class="trips ">
                 <tr>
                     <th>Hora Salida</th>
                     <th>Hora Llegada</th>
@@ -152,11 +163,16 @@
                 </tr>
                 {% for busTrip in busTrips %}
                 <tr>
-                    <td>{{ busTrip.departureDate|time:"H:i" }}</td>
-                    <td>{{ busTrip.arrivalDate|time:"H:i" }}</td>
+                    <td>{{ busTrip.departureDate|time:"H:i " }}</td>
+                    <td>{{ busTrip.arrivalDate|time:"H:i " }}</td>
                     <td>{{ busTrip.price}}</td>
-                    <td>{{ busTrip.departureNode.name}}</td>
-                    <td>{{ busTrip.arrivalNode.name}}</td>
+                    <!-- <script type="text/javascript"> 
+                        var a = "{{someDjangoVariable}}";
+                     </script> -->
+                    <td onclick="print_moovitmap(document.getElementById('origin_address').value,'{{ busTrip.departureNode.address }}',document.getElementById('lat_Origin').value,document.getElementById('lon_Origin').value);">{{ busTrip.departureNode.name}}</td>
+                    <td onclick="print_moovitmap('{{ busTrip.arrivalNode.address }}',document.getElementById('destination_address').value,document.getElementById('lat_Dest').value,document.getElementById('lon_Dest').value);">{{ busTrip.arrivalNode.name}}</td>
+                    <script src="{% static 'moovit_script.js'%}"></script>
+
                 </tr>
 
                 {% endfor %}
@@ -165,13 +181,13 @@
             </table>
         </div>
         {% endif %} {% if trainTrips %}
-        <div class="trips-result-train">
-            <div class="titles">
+        <div class="trips-result-train ">
+            <div class="titles ">
 
                 <h2>Lista de viajes en tren</h2>
             </div>
 
-            <table class="trips">
+            <table class="trips ">
                 <tr>
                     <th>Hora Salida</th>
                     <th>Hora Llegada</th>
@@ -181,11 +197,11 @@
                 </tr>
                 {% for trainTrip in trainTrips %}
                 <tr>
-                    <td>{{ trainTrip.departureDate|time:"H:i" }}</td>
-                    <td>{{ trainTrip.arrivalDate|time:"H:i" }}</td>
+                    <td>{{ trainTrip.departureDate|time:"H:i " }}</td>
+                    <td>{{ trainTrip.arrivalDate|time:"H:i " }}</td>
                     <td>{{trainTrip.price}}</td>
-                    <td>{{trainTrip.departureNode.name}}</td>
-                    <td>{{trainTrip.arrivalNode.name}}</td>
+                    <td onclick="print_moovitmap(document.getElementById('origin_address').value,'{{ trainTrip.departureNode.address }}',document.getElementById('lat_Origin').value,document.getElementById('lon_Origin').value);">{{trainTrip.departureNode.name}}</td>
+                    <td onclick="print_moovitmap('{{ trainTrip.arrivalNode.address }}',document.getElementById('destination_address').value,document.getElementById('lat_Dest').value,document.getElementById('lon_Dest').value);">{{trainTrip.arrivalNode.name}}</td>
                 </tr>
 
                 {% endfor %}
@@ -199,15 +215,17 @@
         {% endif %} {% if list_list_travels_with_transfer %}
 
 
-        <div class="transfer_trips_result">
-            <div class="titles">
+        <div class=" transfer_trips_result ">
+            <div class="titles ">
 
                 <h2>Lista de viajes encadenados</h2>
             </div>
 
             {% for list_travels in list_list_travels_with_transfer %}
-            <table class="trips">
+            <table class="trips ">
                 <tr>
+                    <th>System </th>
+
                     <th>Hora Salida</th>
                     <th>Hora Llegada</th>
                     <th>Precio</th>
@@ -218,8 +236,10 @@
 
                 {% for travel in list_travels%}
                 <tr>
-                    <td>{{ travel.departureDate|time:"H:i" }}</td>
-                    <td>{{ travel.arrivalDate|time:"H:i" }}</td>
+
+                    <td>{{ travel.busOrTrainTrip.system}}</td>
+                    <td>{{ travel.departureDate|time:"H:i " }}</td>
+                    <td>{{ travel.arrivalDate|time:"H:i " }}</td>
                     <td>{{travel.price}}</td>
                     <td>{{travel.departureNode.name}}</td>
                     <td>{{travel.arrivalNode.name}}</td>
@@ -242,6 +262,7 @@
 
 
         {% endif %}
+
 
 
     </div>

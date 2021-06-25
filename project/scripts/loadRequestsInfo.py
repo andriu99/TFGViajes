@@ -9,28 +9,9 @@ def run():
 
 
 def importGoogleMapsInfo():
-  googleMapsRESTApi=RESTApi(name='googleMapsRESTApi',BaseUrl='https://maps.googleapis.com/maps/',APIKey='AIzaSyDwt6CynIHH3UzbX1TLVP2n7__088CprNM')
+  googleMapsRESTApi=RESTApi(name='googleMapsRESTApi',BaseUrl='https://maps.googleapis.com/maps/',APIKey='AIzaSyAi0WZL0uYN3vT__dfLObTB67XAaFRUIY4')
   googleMapsRESTApi.save()
-  # paramsGeocodeReverseGoogleMaps={
-
-  #   'latlng':'41.99727014224525,-3.959531186634048',
-  #   'key':'example'
-  # }
-
   
-  # getProvinceLocation=Request(name='getProLocatDataThroughCoordinates',description='Find an andress with coordinates',PartToaddToBaseUrl='api/geocode/json',
-  #                             funcToExtractDataFromJsonName='getProvinceLocationThroughCoordinates',ParamsOrDataDictStructure=paramsGeocodeReverseGoogleMaps,typeRequests='GET',RApi=googleMapsRESTApi)
-  # getProvinceLocation.save()
-
-  # paramsTimeZone={
-  #   'location':'57.394284667472924,44.31051869324758',
-  #   'timestamp':'',
-  #    'key':'example'
-  # }
-
-  # getTimeZone=Request(name='getTimeZone',description='Getting a time zone with coordinates',PartToaddToBaseUrl='api/timezone/json',
-  #                             funcToExtractDataFromJsonName='getTimeZone',ParamsOrDataDictStructure=paramsTimeZone,typeRequests='GET',RApi=googleMapsRESTApi)
-  # getTimeZone.save()
 
 
 

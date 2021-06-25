@@ -55,7 +55,7 @@ function get_currentLocation(map) {
                         lng: current_lng,
                     };
 
-                    get_address_withLocation(current_lat, current_lng, map, true);
+                    set_address_withLocation(current_lat, current_lng, map, true);
                     map.setCenter(pos);
                 },
                 () => {
@@ -69,7 +69,7 @@ function get_currentLocation(map) {
     });
 }
 
-function get_address_withLocation(lat, lng, map, is_origin) {
+function set_address_withLocation(lat, lng, map, is_origin) {
     infoWindow = new google.maps.InfoWindow();
     const geocoder = new google.maps.Geocoder();
     const latlng = {
@@ -96,6 +96,8 @@ function get_address_withLocation(lat, lng, map, is_origin) {
                     document.getElementById('origin_address').value = results[0].formatted_address;
                     document.getElementById("lat_Origin").value = lat;
                     document.getElementById("lon_Origin").value = lng;
+
+
 
                     remove_mapMarkers('origin_address', marker)
 
@@ -170,7 +172,7 @@ function set_origin_dest_throughtMap(map) {
                     list_is_activated[index] = true;
                     var background = "darkgreen";
                     listener = map.addListener("click", (mapsMouseEvent) => {
-                        get_address_withLocation(mapsMouseEvent.latLng.lat(), mapsMouseEvent.latLng.lng(), map, list_is_origin[index]);
+                        set_address_withLocation(mapsMouseEvent.latLng.lat(), mapsMouseEvent.latLng.lng(), map, list_is_origin[index]);
                     });
                 }
 

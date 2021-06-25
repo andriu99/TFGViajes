@@ -71,8 +71,10 @@ class Node(models.Model):
     name=models.CharField(max_length=70)
     latitude=models.FloatField()
     longitude=models.FloatField()
-    location=models.CharField(max_length=50,default='Unknown')
+    location=models.CharField(max_length=50,default='Unknown') #Municipio
     province=models.CharField(max_length=50,default='Unknown')
+    address=models.CharField(max_length=100,default='Unknown')
+
 
     class Suit(models.TextChoices):
         STATION = 'S'

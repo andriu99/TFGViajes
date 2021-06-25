@@ -1,5 +1,5 @@
-from ..app.models import Request,Node
-from ..app.funtionsRequest.googleMapsRequests import get_locat_province
+from app.models import Request,Node
+from app.funtionsRequest.googleMapsRequests import get_locat_province
 
 
 def run():
@@ -14,12 +14,12 @@ def run():
     
     
     for ID,name,lat,lon in airportsInfo:
-        location,province=get_locat_province(str(lat)+str(lon))
+        address,location,province=get_locat_province(str(lat)+','+str(lon),True)
       
 
         if location=='Unknown':
             location=name
         
-        airportNode=Node(code=ID,name=name,latitude=float(lat),longitude=float(lon),nodeType='A',location=location,province=province)
+        airportNode=Node(address=address,code=ID,name=name,latitude=float(lat),longitude=float(lon),nodeType='A',location=location,province=province)
         airportNode.save()
 
