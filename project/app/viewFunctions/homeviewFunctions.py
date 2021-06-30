@@ -112,7 +112,7 @@ def save_tripsInfo_DepArriNodes(filter_departureNodes,filter_arrivalNodes,start_
             if trips.count()==0:
                 save_busTrainTrip(departure_Node,arrival_Node,start_date_local,getBusTrainTrips,set_bustrain_Trips)
 
-                        
+from time import time                       
 def save_busTrainTrip(departureNode,arrivalNode,start_date_local,getBusTrainTrips,set_bustrain_Trips=None):
     searchDict=get_SearchDict()
     searchDict['departure_station_id']=int(departureNode.code)
@@ -122,7 +122,10 @@ def save_busTrainTrip(departureNode,arrivalNode,start_date_local,getBusTrainTrip
     system_transport_dict=get_systemOfTransport_dict()
     for system in system_transport_dict:
         searchDict['systems']=system_transport_dict[system]
+
+        ti=time()
         tripGenerator=getBusTrainTrips.executeFunction(['EUR',searchDict],typeOfData='str')
+        print(time()-ti)
         
         if tripGenerator!=None:
             for price,departureDate_str,arrivalDate_str in tripGenerator:
@@ -355,8 +358,7 @@ def dijkstra(graph,initial):
                         previous=i
 
                         is_solution=True
-                        # print("Inicio")
-                        # print(str(trip_id))
+                   
                         while True:
                             previous = actual_node
                             actual_node=adj_node[actual_node][0]
@@ -365,9 +367,7 @@ def dijkstra(graph,initial):
                                 break
                             
                             actual_trip_id=adj_node[previous][1] #Id del viaje que une actual_node con previous
-                            # print("     Previous "+str(previous))
-                            # print("     Actual "+str(actual_node))
-                            # print("     actual_trip_id "+str(actual_trip_id))
+                           
 
                             if actual_trip_id is not None:
                                 departureTime_actualTrip=graph[actual_node][previous][actual_trip_id][1]
@@ -381,21 +381,15 @@ def dijkstra(graph,initial):
                             no es válida
 
                             '''
-                            # print(graph[actual_node][previous][actual_trip_id])
-                            # print(departureTime_actualTrip)
-                            # print(arrivalTime_actualTrip)
-                            # print(trip_date_start_previous)
+                           
                             if arrivalTime_actualTrip is not None and arrivalTime_actualTrip<trip_date_start_previous:
                                 trip_date_start_previous=departureTime_actualTrip
-                                # print('Adecuado')
 
                             else:
-                                # print('No Adecuado')
 
                                 is_solution=False
                                 break
                         
-                        # print('Fin')
                         if is_solution:
                             
                             path[i] = alternate

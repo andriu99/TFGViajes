@@ -1,0 +1,7 @@
+APScheduler==3.7.0
+Django==3.2.3
+googlemaps==4.4.5
+numpy==1.20.1
+timezonefinder==5.2.0
+requests==2.25.1
+pytz==2021.1

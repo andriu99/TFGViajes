@@ -25,7 +25,7 @@ def home(request):
             id_delete=set()
             for trip in Trip.objects.all():
                 if (hasattr(trip,"busOrTrainTrip")==False):
-                    id_delete.add(trip.id)
+                    id_delete.add(trip.pk)
 
             Trip.objects.all().filter(id__in=id_delete).delete() #Borro los viajes en avión y en blablacar
 

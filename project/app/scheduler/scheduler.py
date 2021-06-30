@@ -24,7 +24,7 @@ def update_trips():
         
         else:
             if (hasattr(trip,"busOrTrainTrip")):
-                trip_set.add(Trip.objects.all().filter(departureNode=trip.departureNode,arrivalNode=trip.arrivalNode))
+                trip_set.add(Trip.objects.all().filter(departureNode=trip.departureNode,arrivalNode=trip.arrivalNode).filter(departureDate__year=trip.departureDate.year,departureDate__month=trip.departureDate.month,departureDate__day=trip.departureDate.day))
 
 
 
@@ -38,11 +38,16 @@ def update_trips():
         departureDate=trip0.departureDate.replace(hour=0).replace(minute=0).replace(second=0)
         getBusTrainTrips=Request.objects.get(name='getbustrainTripsInformationTrainline')
 
-        save_busTrainTrip(trip0.departureNode,trip0.arrivalNode,departureDate,getBusTrainTrips) 
+        save_busTrainTrip(trip0.departureNode,trip0.arrivalNode,departureDate,getBusTrainTrips)
+
+        for trip in queryset:
+            trip.delete()
+
+   
 
 
 def start():
     scheduler = BackgroundScheduler()
-    scheduler.add_job(update_trips, 'interval', hours=24)
+    scheduler.add_job(update_trips, 'interval', minutes=24)
     scheduler.start()
 
