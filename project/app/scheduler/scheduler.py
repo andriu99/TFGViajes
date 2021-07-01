@@ -34,20 +34,21 @@ def update_trips():
         Evaluo sólo el primer viaje del queryset ya que tiene las mismas estaciones de origen y destino que el resto de viajes
         Reseteo esos viajes
         '''
-        trip0=queryset[0]
-        departureDate=trip0.departureDate.replace(hour=0).replace(minute=0).replace(second=0)
-        getBusTrainTrips=Request.objects.get(name='getbustrainTripsInformationTrainline')
+        if queryset.exists():
+            trip0=queryset[0]
+            departureDate=trip0.departureDate.replace(hour=0).replace(minute=0).replace(second=0)
+            getBusTrainTrips=Request.objects.get(name='getbustrainTripsInformationTrainline')
 
-        save_busTrainTrip(trip0.departureNode,trip0.arrivalNode,departureDate,getBusTrainTrips)
+            save_busTrainTrip(trip0.departureNode,trip0.arrivalNode,departureDate,getBusTrainTrips)
 
-        for trip in queryset:
-            trip.delete()
+            for trip in queryset:
+                trip.delete()
 
    
 
 
 def start():
     scheduler = BackgroundScheduler()
-    scheduler.add_job(update_trips, 'interval', hours=24)
+    scheduler.add_job(update_trips, 'interval', minutes=10)
     scheduler.start()
 
