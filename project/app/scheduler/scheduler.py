@@ -49,6 +49,6 @@ def update_trips():
 
 def start():
     scheduler = BackgroundScheduler()
-    scheduler.add_job(update_trips, 'interval', minutes=10)
+    scheduler.add_job(update_trips, 'interval', hours=24)
     scheduler.start()
 
