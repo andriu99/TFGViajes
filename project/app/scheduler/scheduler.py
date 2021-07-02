@@ -66,4 +66,4 @@ def start():
     scheduler.add_job(update_trips, 'interval', hours=24)
     scheduler.start()
 
-#Script
+#Script de actualización de viajes
