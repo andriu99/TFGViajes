@@ -65,5 +65,3 @@ def start():
     scheduler = BackgroundScheduler()
     scheduler.add_job(update_trips, 'interval', hours=24)
     scheduler.start()
-
-#Script de actualización de viajes
