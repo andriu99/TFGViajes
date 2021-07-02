@@ -27,7 +27,7 @@ def is_old_date(date,lat,lon):
     timezone_UT0 = pytz.timezone("UTC")
     date_UTC0 = timezone_UT0.localize(date_withoutTZ)
 
-
+    
     return now>=date_UTC0
 
 

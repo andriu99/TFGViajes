@@ -3,7 +3,6 @@ from datetime import timedelta
 from ..otherFunctions.dateFunctions import parseDate_withTimeZone,calculateDuration
 from ..otherFunctions.nodesFunctions import filterNodes
 from django.utils.dateparse import parse_datetime
-from ..funtionsRequest.googleMapsRequests import get_locat_province
 
 
 
@@ -112,7 +111,6 @@ def save_tripsInfo_DepArriNodes(filter_departureNodes,filter_arrivalNodes,start_
             if trips.count()==0:
                 save_busTrainTrip(departure_Node,arrival_Node,start_date_local,getBusTrainTrips,set_bustrain_Trips)
 
-from time import time                       
 def save_busTrainTrip(departureNode,arrivalNode,start_date_local,getBusTrainTrips,set_bustrain_Trips=None):
     searchDict=get_SearchDict()
     searchDict['departure_station_id']=int(departureNode.code)
@@ -123,10 +121,8 @@ def save_busTrainTrip(departureNode,arrivalNode,start_date_local,getBusTrainTrip
     for system in system_transport_dict:
         searchDict['systems']=system_transport_dict[system]
 
-        ti=time()
         tripGenerator=getBusTrainTrips.executeFunction(['EUR',searchDict],typeOfData='str')
-        print(time()-ti)
-        
+       
         if tripGenerator!=None:
             for price,departureDate_str,arrivalDate_str in tripGenerator:
 
