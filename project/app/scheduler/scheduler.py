@@ -42,10 +42,7 @@ def update_trips():
 
         if queryset.exists():
 
-            
-
             trip0=queryset.first()
-           
             departureDate=trip0.departureDate.replace(hour=0).replace(minute=0).replace(second=0)
             getBusTrainTrips=Request.objects.get(name='getbustrainTripsInformationTrainline')
 

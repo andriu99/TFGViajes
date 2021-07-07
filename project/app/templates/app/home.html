@@ -96,7 +96,6 @@
 
                 {% for blablaTrip in blablaTrips %}
 
-                <!-- <tr onclick="print_moovitmap(document.getElementById('origin_address').value,'{{blablaTrip.blablaTrip.departureAddress}}',document.getElementById('lat_Origin').value,document.getElementById('lon_Origin').value);"> -->
                 <tr>
                     <td onclick="print_moovitmap(document.getElementById('origin_address').value,'{{blablaTrip.blablaTrip.departureAddress}}',document.getElementById('lat_Origin').value,document.getElementById('lon_Origin').value);">{{blablaTrip.departureDate|time:"H:i"}}</td>
                     <td onclick="print_moovitmap('{{blablaTrip.blablaTrip.arrivalAddress}}',document.getElementById('destination_address').value,document.getElementById('lat_Dest').value,document.getElementById('lon_Dest').value);">{{blablaTrip.arrivalDate|time:"H:i"}}</td>
@@ -134,7 +133,7 @@
                 <tr>
                     <td>{{skyscannerTrip.departureDate|time:"H:i"}}</td>
                     <td>{{skyscannerTrip.arrivalDate|time:"H:i"}}</td>
-                    <td><a href="{{skyscannerTrip.skyscannerTrip.urlPay}}" target="_blank">{{skyscannerTrip.price}}</a></td>
+                    <td><a style="color:white;" href="{{skyscannerTrip.skyscannerTrip.urlPay}}" target="_blank">{{skyscannerTrip.price}}</a></td>
 
                     <td>{{skyscannerTrip.skyscannerTrip.airlineName}}</td>
                     <td onclick="print_moovitmap(document.getElementById('origin_address').value,'{{skyscannerTrip.departureNode.address}}',document.getElementById('lat_Origin').value,document.getElementById('lon_Origin').value);">{{skyscannerTrip.departureNode.name}}</td>
@@ -166,9 +165,7 @@
                     <td>{{ busTrip.departureDate|time:"H:i " }}</td>
                     <td>{{ busTrip.arrivalDate|time:"H:i " }}</td>
                     <td>{{ busTrip.price}}</td>
-                    <!-- <script type="text/javascript"> 
-                        var a = "{{someDjangoVariable}}";
-                     </script> -->
+
                     <td onclick="print_moovitmap(document.getElementById('origin_address').value,'{{ busTrip.departureNode.address }}',document.getElementById('lat_Origin').value,document.getElementById('lon_Origin').value);">{{ busTrip.departureNode.name}}</td>
                     <td onclick="print_moovitmap('{{ busTrip.arrivalNode.address }}',document.getElementById('destination_address').value,document.getElementById('lat_Dest').value,document.getElementById('lon_Dest').value);">{{ busTrip.arrivalNode.name}}</td>
                     <script src="{% static 'moovit_script.js'%}"></script>
@@ -200,8 +197,8 @@
                     <td>{{ trainTrip.departureDate|time:"H:i " }}</td>
                     <td>{{ trainTrip.arrivalDate|time:"H:i " }}</td>
                     <td>{{trainTrip.price}}</td>
-                    <td onclick="print_moovitmap(document.getElementById('origin_address').value,'{{ trainTrip.departureNode.address }}',document.getElementById('lat_Origin').value,document.getElementById('lon_Origin').value);">{{trainTrip.departureNode.name}}</td>
-                    <td onclick="print_moovitmap('{{ trainTrip.arrivalNode.address }}',document.getElementById('destination_address').value,document.getElementById('lat_Dest').value,document.getElementById('lon_Dest').value);">{{trainTrip.arrivalNode.name}}</td>
+                    <td onclick="print_moovitmap(document.getElementById('origin_address').value,'{{trainTrip.departureNode.address}}',document.getElementById('lat_Origin').value,document.getElementById('lon_Origin').value);">{{trainTrip.departureNode.name}}</td>
+                    <td onclick="print_moovitmap('{{trainTrip.arrivalNode.address}}',document.getElementById('destination_address').value,document.getElementById('lat_Dest').value,document.getElementById('lon_Dest').value);">{{trainTrip.arrivalNode.name}}</td>
                 </tr>
 
                 {% endfor %}

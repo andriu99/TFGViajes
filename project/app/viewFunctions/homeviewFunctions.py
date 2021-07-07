@@ -11,7 +11,8 @@ def saveBlablacarTrips(start_coordinates,end_coordinates,start_date_local):
     getBlablaCarTrips=Request.objects.get(name='getBlablaCarTrips')
 
     end_date_local_string=(start_date_local+timedelta(days=1)).isoformat()
-    iterableBlablaCar=getBlablaCarTrips.executeFunction([getBlablaCarTrips.RApi.APIKey,start_coordinates,end_coordinates,'EUR',start_date_local.isoformat(),end_date_local_string])
+    iterableBlablaCar=getBlablaCarTrips.executeFunction([getBlablaCarTrips.RApi.APIKey,'EUR',start_coordinates,end_coordinates,start_date_local.isoformat(),end_date_local_string])
+    
     for (   url,
             startData_str,startData_city,startData_address,startData_latitude,startData_longitude,
             endData_str,endData_city,endData_address,endData_latitude,endData_longitude,

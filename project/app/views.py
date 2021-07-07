@@ -47,6 +47,8 @@ def home(request):
             filter_departureNodes=filterNodes(start_coordinates,nodeType='S',location=locatO,province=provO)
             filter_arrivalNodes=filterNodes(end_coordinates,nodeType='S',location=locatD,province=provD)
 
+            blablaTrips=saveBlablacarTrips(start_coordinates,end_coordinates,start_date)
+
             try:
                 blablaTrips=saveBlablacarTrips(start_coordinates,end_coordinates,start_date)
             except:
@@ -54,6 +56,7 @@ def home(request):
                 messages.error(request,'Error al procesar los viajes en blablacar')
       
 
+            skyscannerTrips=saveSkyscannerFlights(start_coordinates,end_coordinates,start_date)
 
             try:
 

@@ -23,9 +23,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-^t^h-zwp0d7)rc3$f!rd$6@d^)$7=gh2q#8ddj3+-=nsxtmixr'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -98,12 +98,19 @@ WSGI_APPLICATION = 'project.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
+# DATABASES = {
+#      'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'project',
+#         'USER': 'postgres',
+#         'PASSWORD': 'example',
+#         'HOST': '127.0.0.1',
+#         'PORT': '5432',
+#     }
+# }
+import dj_database_url
+from decouple import config
+DATABASES = { 'default': dj_database_url.config( default=config('DATABASE_URL') )}
 
 
 # Password validation
@@ -142,14 +149,14 @@ USE_TZ = False
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
-STATIC_URL = 'app/static/'
+# STATIC_URL = 'app/static/'
 
-import os
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'app/static'),
-]
+# import os
+# STATICFILES_DIRS = [
+#     os.path.join(BASE_DIR, 'app/static'),
+# ]
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'assets')
+# STATIC_ROOT = os.path.join(BASE_DIR, 'assets')
 
 
 # Default primary key field type

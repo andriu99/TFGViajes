@@ -1,5 +1,5 @@
 from app.models import Request,RESTApi
-
+import json
 
 def run():
   importGoogleMapsInfo()
@@ -19,16 +19,17 @@ def importBlablacarInfo():
   blablaCarRESTApi=RESTApi(name='BlablaCarRESTApi',BaseUrl='https://public-api.blablacar.com',APIKey='UIbM2vkhEdrrTLiLnrQkBqgPxrv7S4mI')
   blablaCarRESTApi.save()
   paramsblabla={
-      'key': 'example', 
-      'from_coordinate': '41.3887900,2.1589900', 
-      'to_coordinate': '40.416775,-3.703791', 
-      'currency': 'EUR', 
-      'start_date_local': '2021-05-05T00:00:00', 
-      'end_date_local': '2021-05-06T00:00:00'
+      "key": "example", 
+      "currency": "EUR", 
+
+      "from_coordinate": "41.3887900,2.1589900", 
+      "to_coordinate": "40.416775,-3.703791", 
+      "start_date_local": "2021-05-05T00:00:00", 
+      "end_date_local": "2021-05-06T00:00:00"
       }
 
   findBlablaTrips=Request(name='getBlablaCarTrips',description='Find blablacar´s trips with dates and coordinates',PartToaddToBaseUrl='/api/v3/trips',
-                          funcToExtractDataFromJsonName='findBlablaTrips',ParamsOrDataDictStructure=paramsblabla,typeRequests='GET',RApi=blablaCarRESTApi)
+                          funcToExtractDataFromJsonName='findBlablaTrips',ParamsOrDataDictStructure=json.dumps(paramsblabla),typeRequests='GET',RApi=blablaCarRESTApi)
 
   findBlablaTrips.save()
 
@@ -67,16 +68,16 @@ def importSkyscannerInfo():
   }
 
   getToken=Request(name='getTokenSkyscanner',description='Get a token with the API-key',PartToaddToBaseUrl='token/v2/gettoken',
-                   funcToExtractDataFromJsonName='getTokenOrFlightData',ParamsOrDataDictStructure=paramsGetSkyscToken,typeRequests='GET',RApi=skyscannerRESTApi)
+                   funcToExtractDataFromJsonName='getTokenOrFlightData',ParamsOrDataDictStructure=json.dumps(paramsGetSkyscToken),typeRequests='GET',RApi=skyscannerRESTApi)
 
   getSessionKey=Request(name='getSessionKeySkyscanner',description='Get the session key',PartToaddToBaseUrl='pricing/v1.0',
-                        funcToExtractDataFromJsonName='getSessionKey',ParamsOrDataDictStructure=datagetSessionKey,typeRequests='POST',headers={'Content-Type': 'application/x-www-form-urlencoded'},RApi=skyscannerRESTApi)
+                        funcToExtractDataFromJsonName='getSessionKey',ParamsOrDataDictStructure=json.dumps(datagetSessionKey),typeRequests='POST',headers={'Content-Type': 'application/x-www-form-urlencoded'},RApi=skyscannerRESTApi)
 
   getFlightsInformation=Request(name='getFlightsInformationSkyscanner',description='Get information about flights',PartToaddToBaseUrl='pricing/v1.0/',
-                                funcToExtractDataFromJsonName='getFlightInformation',ParamsOrDataDictStructure=getFlightInformationparams,typeRequests='GET',RApi=skyscannerRESTApi)##
+                                funcToExtractDataFromJsonName='getFlightInformation',ParamsOrDataDictStructure=json.dumps(getFlightInformationparams),typeRequests='GET',RApi=skyscannerRESTApi)##
 
   getGeoCatalogInformation=Request(name='getSkyscannerGeocatalog',description='Get information about airports',PartToaddToBaseUrl='geo/v1.0',
-                                  funcToExtractDataFromJsonName='getAirportsData',ParamsOrDataDictStructure=getGeoCatalogparams,typeRequests='GET',RApi=skyscannerRESTApi)
+                                  funcToExtractDataFromJsonName='getAirportsData',ParamsOrDataDictStructure=json.dumps(getGeoCatalogparams),typeRequests='GET',RApi=skyscannerRESTApi)
 
   getToken.save()
   getSessionKey.save()
@@ -91,7 +92,7 @@ def importTrainlineInfo():
       'q':'Place',
   }
   getStationInformation=Request(name='getStationInformationTrainline',description='Get information about a station',PartToaddToBaseUrl='stations?context=search',
-                                funcToExtractDataFromJsonName='getStationInformation',ParamsOrDataDictStructure=paramsgetStation,typeRequests='GET',RApi=trainlineRESTApi)
+                                funcToExtractDataFromJsonName='getStationInformation',ParamsOrDataDictStructure=json.dumps(paramsgetStation),typeRequests='GET',RApi=trainlineRESTApi)
 
   dataFindTrip = {
     
@@ -120,7 +121,7 @@ def importTrainlineInfo():
   }
 
   getbustrainTripsInformation=Request(name='getbustrainTripsInformationTrainline',description='Get trips information by train or bus',PartToaddToBaseUrl='search',
-                                      funcToExtractDataFromJsonName='findbustrainTrips',ParamsOrDataDictStructure=dataFindTrip,typeRequests='POST',headers=headersTrainline,RApi=trainlineRESTApi)
+                                      funcToExtractDataFromJsonName='findbustrainTrips',ParamsOrDataDictStructure=json.dumps(dataFindTrip),typeRequests='POST',headers=headersTrainline,RApi=trainlineRESTApi)
   getStationInformation.save()
   getbustrainTripsInformation.save()
 
